@@ -60,7 +60,7 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
 
   bot.command("group", async (ctx) => {
     await ctx
-      .reply("[👥 Join ART\\-404 Chat Group](https://t.me/meme_club_chat) ", {
+      .reply("[👥 Join Chat Group](https://t.me/meme_club_chat) ", {
         parse_mode: "MarkdownV2",
       })
       .catch((reason) => {
@@ -70,7 +70,7 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
 
   bot.command("news", async (ctx) => {
     await ctx
-      .reply("[🎉 Join ART\\-404 Official Channel](https://t.me/meme_club_news) ", {
+      .reply("[🎉 Join Official Channel](https://t.me/meme_club_news) ", {
         parse_mode: "MarkdownV2",
       })
       .catch((reason) => {
