@@ -14,5 +14,5 @@ vars = { ENVIRONMENT = "gram404bot", TELEGRAM_BOT_NAME="gram404bot",  TELEGRAM_B
 d1_databases = [{ binding = "DB", database_name = "d1-memeclub-prod", database_id = "73efd550-ae9f-46a2-841a-098a4f438f26" }]
 
 [env.memeclubbot]
-vars = { ENVIRONMENT = "memeclubbot", TELEGRAM_BOT_NAME="memeclubbot", TELEGRAM_BOT_API_TOKEN = "6873507190:AAFr6gFQdESZzsdNCXGzKkaBVU65jiR87lc", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_404_probably_not_found"}
+vars = { ENVIRONMENT = "memeclubbot", TELEGRAM_BOT_NAME="memeclubbot", TELEGRAM_BOT_API_TOKEN = "6873507190:AAFr6gFQdESZzsdNCXGzKkaBVU65jiR87lc", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_CODE_NOT_FOUND"}
 d1_databases = [{ binding = "DB", database_name = "d1-memeclub-prod", database_id = "73efd550-ae9f-46a2-841a-098a4f438f26" }]
