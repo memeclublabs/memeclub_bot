@@ -1,13 +1,13 @@
 
 # 1. Create DB
-npx wrangler d1 create d1-art404-prod
+npx wrangler d1 create d1-memeclub-prod
 
 # 2.1 Local
-npx wrangler d1 execute d1-art404-prod --local --file=./schema.sql
-npx wrangler d1 execute d1-art404-prod --local --command="SELECT * FROM ArtUser"
+npx wrangler d1 execute d1-memeclub-prod --local --file=./schema.sql
+npx wrangler d1 execute d1-memeclub-prod --local --command="SELECT * FROM ArtUser"
 
 
 
 # 2.2 Deploy
-npx wrangler d1 execute d1-art404-prod --file=./schema.sql
-npx wrangler d1 execute d1-art404-prod --command="SELECT * FROM Customers"
+npx wrangler d1 execute d1-memeclub-prod --file=./schema.sql
+npx wrangler d1 execute d1-memeclub-prod --command="SELECT * FROM Customers"

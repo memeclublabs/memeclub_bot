@@ -5,7 +5,7 @@ import { Menu } from "@grammyjs/menu";
 export function bind_command_help(bot: Bot<MyContext>) {
   bot.command(["help", "community"], async (ctx) => {
     await ctx
-      .reply("Community & Helpdesk [ART 404 Group](https://t.me/art404chat) ", {
+      .reply("Community & Helpdesk [Memeclub Group](https://t.me/memeclub_chat) ", {
         parse_mode: "MarkdownV2",
       })
       .catch((reason) => {

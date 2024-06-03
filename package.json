@@ -8,7 +8,7 @@
     "deploy_dev": "wrangler deploy",
     "deploy_openvip": "wrangler deploy --env openvip",
     "deploy_gram404bot": "wrangler deploy --env gram404bot",
-    "deploy_art404bot": "wrangler deploy --env art404bot",
+    "deploy_memeclubbot": "wrangler deploy --env memeclubbot",
     "test": "vitest"
   },
   "keywords": [],

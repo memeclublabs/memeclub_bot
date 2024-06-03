@@ -4,4 +4,4 @@ https://api.telegram.org/bot6696032314:AAE5GO4Oxua9IWIrFl2MaSG1cPs4tKEcBZ0/setWe
 
 
 
-https://art404bot-art404bot.andrew-sideby.workers.dev/
+https://memeclubbot-memeclubbot.andrew-sideby.workers.dev/

@@ -9,7 +9,7 @@ export function bind_command_profile(bot: Bot<MyContext>, env: Env) {
     // let isPublicChat = ctx.message?.chat?.type != "private";
     // if (isPublicChat) {
     //   await ctx
-    //     .reply("Click @art404bot and open the bot to send 'profile' command.  ")
+    //     .reply("Click @memeclubbot and open the bot to send 'profile' command.  ")
     //     .catch((reason) => {
     //       console.error(reason);
     //     });

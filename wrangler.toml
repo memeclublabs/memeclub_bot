@@ -1,5 +1,5 @@
 account_id = 'd96a38e52c83fcffe44f947b1d476a4f'
-name = "art404bot"
+name = "memeclubbot"
 main = "src/entrypoint/entrypoint.cloudflare.ts"
 node_compat = true
 compatibility_date = "2023-12-18"
@@ -7,12 +7,12 @@ compatibility_date = "2023-12-18"
 
 
 vars = { ENVIRONMENT = "local", TELEGRAM_BOT_API_TOKEN = "NO NEED LOCAL", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_404_token_not_found" }
-d1_databases = [{ binding = "DB", database_name = "d1-art404-dev", database_id = "73efd550-ae9f-46a2-841a-098a4f438f26" }]
+d1_databases = [{ binding = "DB", database_name = "d1-memeclub-dev", database_id = "73efd550-ae9f-46a2-841a-098a4f438f26" }]
 
 [env.gram404bot]
 vars = { ENVIRONMENT = "gram404bot", TELEGRAM_BOT_NAME="gram404bot",  TELEGRAM_BOT_API_TOKEN = "6534299790:AAEe9qbQrqjMZhQcE3blt51b3Tu2V_L_cVk", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_404_token_not_found"}
-d1_databases = [{ binding = "DB", database_name = "d1-art404-prod", database_id = "73efd550-ae9f-46a2-841a-098a4f438f26" }]
+d1_databases = [{ binding = "DB", database_name = "d1-memeclub-prod", database_id = "73efd550-ae9f-46a2-841a-098a4f438f26" }]
 
-[env.art404bot]
-vars = { ENVIRONMENT = "art404bot", TELEGRAM_BOT_NAME="art404bot", TELEGRAM_BOT_API_TOKEN = "7167797885:AAH_b5eWsYoUs4jEmDKEORA6_PnP4EFe7N8", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_404_probably_not_found"}
-d1_databases = [{ binding = "DB", database_name = "d1-art404-prod", database_id = "73efd550-ae9f-46a2-841a-098a4f438f26" }]
+[env.memeclubbot]
+vars = { ENVIRONMENT = "memeclubbot", TELEGRAM_BOT_NAME="memeclubbot", TELEGRAM_BOT_API_TOKEN = "6873507190:AAFr6gFQdESZzsdNCXGzKkaBVU65jiR87lc", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_404_probably_not_found"}
+d1_databases = [{ binding = "DB", database_name = "d1-memeclub-prod", database_id = "73efd550-ae9f-46a2-841a-098a4f438f26" }]

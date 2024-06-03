@@ -11,22 +11,22 @@ import {
 } from "../static404";
 
 export function bind_command_start(bot: Bot<MyContext>, env: Env) {
-  let withPleasure = "*ART\\-404*:  Make NFT Flow and Fly\\!";
+  let withPleasure = "*Meme Club AI*:  Bring AI and utility to Memes\\!";
 
   const home_menu = new Menu<MyContext>("home_menu")
-    .url("💎 Open App  ", "https://t.me/art404bot/app")
+    .url("💎 Open App  ", "https://t.me/meme_club_bot/app")
     .row()
 
     .submenu("🎉 Join Community", "community_menu")
     .row();
   const community_menu = new Menu<MyContext>("community_menu")
-    .url("👥 Chat Group", "https://t.me/art404chat")
+    .url("👥 Chat Group", "https://t.me/meme_club_chat")
     .row()
-    .url("🎉 Official Channel", "https://t.me/art404news")
+    .url("🎉 Official Channel", "https://t.me/meme_club_news")
     .row()
-    .url("𝕏 Twitter @art404xyz", "https://x.com/art404xyz")
+    .url("𝕏 Twitter @memeclubxyz", "https://x.com/memeclubai")
     .row()
-    .url("🌎 Official Website", "https://art-404.xyz/")
+    .url("🌎 Official Website", "https://memeclub.ai/")
     .row()
     .back("◀️ Go Back");
 
@@ -35,7 +35,7 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
   bot.use(home_menu);
 
   bot.command("start", async (ctx) => {
-    await ctx.replyWithPhoto("https://art-404.xyz/diamonds/A2_FrancescoPetrarca.webp");
+    await ctx.replyWithPhoto("https://memeclub-website.pages.dev/greenpink-with-black-bg.png");
     await ctx
       .reply(withPleasure, {
         parse_mode: "MarkdownV2",
@@ -50,7 +50,7 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
 
   bot.command("twitter", async (ctx) => {
     await ctx
-      .reply("[𝕏 Twitter](https://x.com/art404xyz) ", {
+      .reply("[𝕏 Twitter](https://x.com/memeclubai) ", {
         parse_mode: "MarkdownV2",
       })
       .catch((reason) => {
@@ -60,7 +60,7 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
 
   bot.command("group", async (ctx) => {
     await ctx
-      .reply("[👥 Join ART\\-404 Chat Group](https://t.me/art404chat) ", {
+      .reply("[👥 Join ART\\-404 Chat Group](https://t.me/meme_club_chat) ", {
         parse_mode: "MarkdownV2",
       })
       .catch((reason) => {
@@ -70,7 +70,7 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
 
   bot.command("news", async (ctx) => {
     await ctx
-      .reply("[🎉 Join ART\\-404 Official Channel](https://t.me/art404news) ", {
+      .reply("[🎉 Join ART\\-404 Official Channel](https://t.me/meme_club_news) ", {
         parse_mode: "MarkdownV2",
       })
       .catch((reason) => {
