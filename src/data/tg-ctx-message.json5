@@ -1,0 +1,146 @@
+// 有如下3？种更新
+// 1. 私聊 message
+   // 1.1 命令
+   // 1.2 文本-文件等
+   // 1.3 回复类消息
+// 2. 群聊
+// 3. 内联 inline_query
+
+{
+  "ok": true,
+  "result": [
+    {
+      "update_id": 476465975,
+      "message": {
+        "message_id": 203,
+        "from": {
+          "id": 5499157826,
+          "is_bot": false,
+          "first_name": "Andrew",
+          "last_name": "Tonx 💎",
+          "username": "andrew_tonx",
+          "language_code": "en",
+          "is_premium": true
+        },
+        "chat": {
+          "id": 5499157826,
+          "first_name": "Andrew",
+          "last_name": "Tonx 💎",
+          "username": "andrew_tonx",
+          "type": "private"
+        },
+        "date": 1703842733,
+        "text": "我私聊你一下"
+      }
+    },
+    {
+      "update_id": 476465976,
+      "message": {
+        "message_id": 204,
+        "from": {
+          "id": 5499157826,
+          "is_bot": false,
+          "first_name": "Andrew",
+          "last_name": "Tonx 💎",
+          "username": "andrew_tonx",
+          "language_code": "en",
+          "is_premium": true
+        },
+        "chat": {
+          "id": 5499157826,
+          "first_name": "Andrew",
+          "last_name": "Tonx 💎",
+          "username": "andrew_tonx",
+          "type": "private"
+        },
+        "date": 1703842736,
+        "text": "/start",
+        "entities": [
+          {
+            "offset": 0,
+            "length": 6,
+            "type": "bot_command"
+          }
+        ]
+      }
+    },
+    {
+      "update_id": 476465977,
+      "message": {
+        "message_id": 449,
+        "from": {
+          "id": 5499157826,
+          "is_bot": false,
+          "first_name": "Andrew",
+          "last_name": "Tonx 💎",
+          "username": "andrew_tonx",
+          "language_code": "en",
+          "is_premium": true
+        },
+        "chat": {
+          "id": -1002103603147,
+          "title": "The Open VIP",
+          "username": "the_open_vip",
+          "type": "supergroup"
+        },
+        "date": 1703842859,
+        "text": "/start@OpenVipBot",
+        "entities": [
+          {
+            "offset": 0,
+            "length": 17,
+            "type": "bot_command"
+          }
+        ]
+      }
+    },
+    {
+      "update_id": 476465979,
+      "message": {
+        "message_id": 453,
+        "from": {
+          "id": 5499157826,
+          "is_bot": false,
+          "first_name": "Andrew",
+          "last_name": "Tonx 💎",
+          "username": "andrew_tonx",
+          "language_code": "en",
+          "is_premium": true
+        },
+        "chat": {
+          "id": -1002103603147,
+          "title": "The Open VIP",
+          "username": "the_open_vip",
+          "type": "supergroup"
+        },
+        "date": 1703842918,
+        "text": "/wallet@OpenVipBot",
+        "entities": [
+          {
+            "offset": 0,
+            "length": 18,
+            "type": "bot_command"
+          }
+        ]
+      }
+    },
+    {
+      "update_id": 476465982,
+      "inline_query": {
+        "id": "5171958945140888018",
+        "from": {
+          "id": 5499157826,
+          "is_bot": false,
+          "first_name": "Andrew",
+          "last_name": "Tonx 💎",
+          "username": "andrew_tonx",
+          "language_code": "en",
+          "is_premium": true
+        },
+        "chat_type": "supergroup",
+        "query": "dbc",
+        "offset": ""
+      }
+    }
+  ]
+}

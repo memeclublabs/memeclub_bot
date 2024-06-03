@@ -1,0 +1,19 @@
+{
+  "token": "6534299790:",
+  "pollingRunning": false,
+  "lastTriedUpdateId": 0,
+  "api": {
+    "raw": {},
+    "config": {}
+  },
+  "me": {
+    "id": 6534299790,
+    "is_bot": true,
+    "first_name": "gram404bot",
+    "username": "gram404bot",
+    "can_join_groups": true,
+    "can_read_all_group_messages": false,
+    "supports_inline_queries": false
+  },
+  "observedUpdateTypes": {}
+}

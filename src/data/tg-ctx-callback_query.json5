@@ -1,0 +1,35 @@
+//20231229
+
+{
+  "update": {
+    "update_id": 476465956,
+    "callback_query": {
+      "id": "5171958947471121543",
+      "from": {
+        "id": 5499157826,
+        "is_bot": false,
+        "first_name": "Andrew",
+        "last_name": "Tonx 💎",
+        "username": "andrew_tonx",
+        "language_code": "zh-hans",
+        "is_premium": true
+      },
+      "inline_message_id": "BQAAAEJ9xkcBAAAA8kAAAIEAKmdsrnbz",
+      "chat_instance": "-8784643593130143533",
+      "game_short_name": "opengame_shortname"
+    }
+  },
+  "api": {
+    "raw": {},
+    "config": {}
+  },
+  "me": {
+    "id": 6848653110,
+    "is_bot": true,
+    "first_name": "The Open VIP",
+    "username": "OpenVipBot",
+    "can_join_groups": true,
+    "can_read_all_group_messages": false,
+    "supports_inline_queries": true
+  },
+}

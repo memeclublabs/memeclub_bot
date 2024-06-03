@@ -1,0 +1,137 @@
+{
+  "ok": true,
+  "result": [
+    {
+      "update_id": 476465980,
+      "message": {
+        "message_id": 458,
+        "from": {
+          "id": 5499157826,
+          "is_bot": false,
+          "first_name": "Andrew",
+          "last_name": "Tonx 💎",
+          "username": "andrew_tonx",
+          "language_code": "en",
+          "is_premium": true
+        },
+        "chat": {
+          "id": -1002103603147,
+          "title": "The Open VIP",
+          "username": "the_open_vip",
+          "type": "supergroup"
+        },
+        "date": 1703843140,
+        "message_thread_id": 457,
+        "reply_to_message": {
+          "message_id": 457,
+          "from": {
+            "id": 6848653110,
+            "is_bot": true,
+            "first_name": "The Open VIP",
+            "username": "OpenVipBot"
+          },
+          "chat": {
+            "id": -1002103603147,
+            "title": "The Open VIP",
+            "username": "the_open_vip",
+            "type": "supergroup"
+          },
+          "date": 1703843117,
+          "text": "Your wallet address?"
+        },
+        "text": "ac"
+      }
+    },
+    {
+      "update_id": 476465981,
+      "message": {
+        "message_id": 460,
+        "from": {
+          "id": 5499157826,
+          "is_bot": false,
+          "first_name": "Andrew",
+          "last_name": "Tonx 💎",
+          "username": "andrew_tonx",
+          "language_code": "en",
+          "is_premium": true
+        },
+        "chat": {
+          "id": -1002103603147,
+          "title": "The Open VIP",
+          "username": "the_open_vip",
+          "type": "supergroup"
+        },
+        "date": 1703843172,
+        "text": "grammY is the best way to create your own Telegram bots.\nThey even have a pretty website! 👇",
+        "entities": [
+          {
+            "offset": 0,
+            "length": 6,
+            "type": "bold"
+          }
+        ],
+        "reply_markup": {
+          "inline_keyboard": [
+            [
+              {
+                "text": "grammY website",
+                "url": "https://grammy.dev/"
+              }
+            ]
+          ]
+        },
+        "via_bot": {
+          "id": 6848653110,
+          "is_bot": true,
+          "first_name": "The Open VIP",
+          "username": "OpenVipBot"
+        }
+      }
+    },
+    {
+      "update_id": 476465983,
+      "callback_query": {
+        "id": "5171958947802760571",
+        "from": {
+          "id": 5499157826,
+          "is_bot": false,
+          "first_name": "Andrew",
+          "last_name": "Tonx 💎",
+          "username": "andrew_tonx",
+          "language_code": "en",
+          "is_premium": true
+        },
+        "message": {
+          "message_id": 201,
+          "from": {
+            "id": 6848653110,
+            "is_bot": true,
+            "first_name": "The Open VIP",
+            "username": "OpenVipBot"
+          },
+          "chat": {
+            "id": 5499157826,
+            "first_name": "Andrew",
+            "last_name": "Tonx 💎",
+            "username": "andrew_tonx",
+            "type": "private"
+          },
+          "date": 1703842320,
+          "text": "Click to Play Our Fantastic Game",
+          "reply_markup": {
+            "inline_keyboard": [
+              [
+                {
+                  "text": "测试游戏",
+                  "callback_data": "callback-opengame_shortname"
+                }
+              ]
+            ]
+          }
+        },
+        "chat_instance": "-3217569637530512058",
+        "data": "callback-opengame_shortname"
+      }
+    }
+  ]
+}

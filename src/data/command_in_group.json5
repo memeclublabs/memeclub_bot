@@ -1,0 +1,49 @@
+{
+  "update": {
+    "update_id": 925706159,
+    "message": {
+      "message_id": 991,
+      "from": {
+        "id": 5499157826,
+        "is_bot": false,
+        "first_name": "Andrew",
+        "last_name": "Tonx 💎",
+        "username": "andrew_tonx",
+        "language_code": "en",
+        "is_premium": true
+      },
+      "chat": {
+        "id": -1002103603147,
+        "title": "The Open VIP",
+        "type": "supergroup"
+      },
+      "date": 1711691383,
+      "text": "/referral@gram404bot",
+      "entities": [
+        {
+          "offset": 0,
+          "length": 20,
+          "type": "bot_command"
+        }
+      ]
+    }
+  },
+  "api": {
+    "raw": {},
+    "config": {}
+  },
+  "me": {
+    "id": 6534299790,
+    "is_bot": true,
+    "first_name": "gram404bot",
+    "username": "gram404bot",
+    "can_join_groups": true,
+    "can_read_all_group_messages": false,
+    "supports_inline_queries": false
+  },
+  "match": "",
+  "config": {
+    "botAdminId": 5499157826,
+    "isDeveloper": true
+  }
+}

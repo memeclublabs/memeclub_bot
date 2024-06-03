@@ -1,0 +1,60 @@
+{
+  "update": {
+    "update_id": 624568002,
+    "my_chat_member": {
+      "chat": {
+        "id": 5499157826,
+        "first_name": "Andrew",
+        "last_name": "Tonx 💎",
+        "username": "andrew_tonx",
+        "type": "private"
+      },
+      "from": {
+        "id": 5499157826,
+        "is_bot": false,
+        "first_name": "Andrew",
+        "last_name": "Tonx 💎",
+        "username": "andrew_tonx",
+        "language_code": "en",
+        "is_premium": true
+      },
+      "date": 1705731592,
+      "old_chat_member": {
+        "user": {
+          "id": 6913454221,
+          "is_bot": true,
+          "first_name": "Dev Ton Master",
+          "username": "DevTonMasterBot"
+        },
+        "status": "kicked",
+        "until_date": 0
+      },
+      "new_chat_member": {
+        "user": {
+          "id": 6913454221,
+          "is_bot": true,
+          "first_name": "Dev Ton Master",
+          "username": "DevTonMasterBot"
+        },
+        "status": "member"
+      }
+    }
+  },
+  "api": {
+    "raw": {},
+    "config": {}
+  },
+  "me": {
+    "id": 6913454221,
+    "is_bot": true,
+    "first_name": "Dev Ton Master",
+    "username": "DevTonMasterBot",
+    "can_join_groups": true,
+    "can_read_all_group_messages": true,
+    "supports_inline_queries": false
+  },
+  "config": {
+    "botAdminId": 5499157826,
+    "isDeveloper": true
+  }
+}

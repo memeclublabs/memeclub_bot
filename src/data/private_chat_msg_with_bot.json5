@@ -1,0 +1,42 @@
+{
+  "update": {
+    "update_id": 434236390,
+    "message": {
+      "message_id": 600,
+      "from": {
+        "id": 5499157826,
+        "is_bot": false,
+        "first_name": "Andrew",
+        "username": "andrew_tonx",
+        "language_code": "en",
+        "is_premium": true
+      },
+      "chat": {
+        "id": 5499157826,
+        "first_name": "Andrew",
+        "username": "andrew_tonx",
+        "type": "private"
+      },
+      "date": 1715092197,
+      "text": "group_info"
+    }
+  },
+  "api": {
+    "raw": {},
+    "config": {}
+  },
+  "me": {
+    "id": 7139592991,
+    "is_bot": true,
+    "first_name": "Diamond 404",
+    "username": "diamond404bot",
+    "can_join_groups": true,
+    "can_read_all_group_messages": false,
+    "supports_inline_queries": false,
+    "can_connect_to_business": false
+  },
+  "config": {
+    "botAdminId": 5499157826,
+    "isDeveloper": true
+  }
+}

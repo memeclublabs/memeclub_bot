@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Webpage</title>
+    <script>
+        window.onload = function() {
+            // 在页面加载后执行的代码
+            // 通过创建隐藏的 iframe 元素来触发打开第三方应用程序
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = 'tg://resolve?domain=tonx_fans';
+            document.body.appendChild(iframe);
+        };
+    </script>
+</head>
+<body>
+打开本页面，会自动打开Telegram，并且唤起TON心粉群组
+</body>
+</html>
