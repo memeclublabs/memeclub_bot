@@ -26,7 +26,7 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
     .row()
     .url("𝕏 Twitter @memeclubai", "https://x.com/memeclubai")
     .row()
-    .url("🌎 Official Website", "https://memeclub.ai/")
+    .url("🌎 Official Website", "https://www.memeclub.ai/")
     .row()
     .back("◀️ Go Back");
 
