@@ -24,7 +24,7 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
     .row()
     .url("🎉 Official Channel", "https://t.me/meme_club_news")
     .row()
-    .url("𝕏 Twitter @memeclubxyz", "https://x.com/memeclubai")
+    .url("𝕏 Twitter @memeclubai", "https://x.com/memeclubai")
     .row()
     .url("🌎 Official Website", "https://memeclub.ai/")
     .row()
@@ -35,7 +35,7 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
   bot.use(home_menu);
 
   bot.command("start", async (ctx) => {
-    await ctx.replyWithPhoto("https://memeclub-website.pages.dev/greenpink-with-black-bg.png");
+    await ctx.replyWithPhoto("https://memeclub-website.pages.dev/bot_msg.png");
     await ctx
       .reply(withPleasure, {
         parse_mode: "MarkdownV2",
