@@ -14,9 +14,11 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
   let withPleasure = "*Meme Club AI*:  Bring AI and utility to Memes\\!";
 
   const home_menu = new Menu<MyContext>("home_menu")
-    .url("💎 Open App  ", "https://t.me/meme_club_bot/app")
+    .url("💎 Open App ", "https://t.me/meme_club_bot/app")
     .row()
-
+    .row()
+    .url("Add to Your Group", "https://t.me/diamond404bot?startgroup=true")
+    .row()
     .submenu("🎉 Join Community", "community_menu")
     .row();
   const community_menu = new Menu<MyContext>("community_menu")
