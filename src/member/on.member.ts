@@ -1,7 +1,8 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
+import Env from "../env.cloudflare";
 
-export function on_member(bot: Bot<MyContext>) {
+export function on_member(bot: Bot<MyContext>, env: Env) {
   // bot.on("my_chat_member", async (ctx) => {
   //   let botAdminId = ctx.config.botAdminId;
   //   let ctx_info = JSON.stringify(ctx);
@@ -63,7 +64,6 @@ export function on_member(bot: Bot<MyContext>) {
   //       console.error(e);
   //     });
   // });
-
   // bot.on("chat_member", async (ctx) => {
   //   let ctx_info = JSON.stringify(ctx);
   //   console.info("============== chat_member ================== ");

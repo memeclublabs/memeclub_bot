@@ -11,8 +11,8 @@ d1_databases = [{ binding = "DB", database_name = "d1-memeclub-dev", database_id
 
 [env.gram404bot]
 vars = { ENVIRONMENT = "gram404bot", TELEGRAM_BOT_NAME="gram404bot",  TELEGRAM_BOT_API_TOKEN = "6534299790:AAEe9qbQrqjMZhQcE3blt51b3Tu2V_L_cVk", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_404_token_not_found"}
-d1_databases = [{ binding = "DB", database_name = "d1-memeclub-prod", database_id = "73efd550-ae9f-46a2-841a-098a4f438f26" }]
+d1_databases = [{ binding = "DB", database_name = "d1-gram404-prod", database_id = "73efd550-ae9f-46a2-841a-098a4f438f26" }]
 
 [env.memeclubbot]
-vars = { ENVIRONMENT = "memeclubbot", TELEGRAM_BOT_NAME="memeclubbot", TELEGRAM_BOT_API_TOKEN = "6873507190:AAFr6gFQdESZzsdNCXGzKkaBVU65jiR87lc", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_CODE_NOT_FOUND"}
+vars = { ENVIRONMENT = "memeclubbot", TELEGRAM_BOT_NAME="meme_club_bot", TELEGRAM_BOT_API_TOKEN = "6873507190:AAFr6gFQdESZzsdNCXGzKkaBVU65jiR87lc", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_CODE_NOT_FOUND"}
 d1_databases = [{ binding = "DB", database_name = "d1-memeclub-prod", database_id = "73efd550-ae9f-46a2-841a-098a4f438f26" }]

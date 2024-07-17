@@ -9,7 +9,6 @@ import Env from "../env.cloudflare";
 // ===========================================================================
 let config = {};
 
-
 if (process.env.NODE_ENV === "dev") {
   config = {
     client: {
@@ -21,6 +20,7 @@ if (process.env.NODE_ENV === "dev") {
   };
 }
 const token = process.env.BOT_TOKEN;
+const telegramBotName = process.env.TELEGRAM_BOT_NAME;
 if (!token) throw new Error("BOT_TOKEN is unset");
 export const bot = new Bot<MyContext>(token, config);
 // ###########################################################################
@@ -30,7 +30,9 @@ export const bot = new Bot<MyContext>(token, config);
 // ===========================================================================
 //                        Main Start
 // ===========================================================================
-main_entry_point(bot, {} as Env);
+main_entry_point(bot, {
+  TELEGRAM_BOT_NAME: telegramBotName,
+} as Env);
 // ###########################################################################
 //                        Main End
 // ###########################################################################

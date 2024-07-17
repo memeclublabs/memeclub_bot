@@ -1,3 +1,9 @@
+// bot1 DevTonMasterBot 在群里监听到群有成员变动消息 chat_member
+// 消息的内容是 bot2 ton_master_bot 加入到群里
+// 操作人是 from andrew_tonx
+// 监听到消息的是 "me" bot1
+
+
 {
   "update": {
     "update_id": 624568012,

@@ -9,9 +9,10 @@ import {
   WalletContractV4,
 } from "@ton/ton";
 import { mnemonicToPrivateKey } from "@ton/crypto";
-import {Menu} from "@grammyjs/menu";
+import { Menu } from "@grammyjs/menu";
+import Env from "../env.cloudflare";
 
-export function on_message(bot: Bot<MyContext>) {
+export function on_message(bot: Bot<MyContext>, env: Env) {
   // bot.on("message", async (ctx) => {
   //   let msg_text = ctx.message.text;
   //

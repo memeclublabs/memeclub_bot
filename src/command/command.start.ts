@@ -10,17 +10,52 @@ import {
   USER_FOUND,
 } from "../static404";
 
-export function bind_command_start(bot: Bot<MyContext>, env: Env) {
-  let withPleasure = "*Meme Club AI*:  Bring AI and utility to Memes\\!";
+const startCaptionText: string =
+  "<b>#1 Meme launchpad on TON </b>\n\nMake Memecoins Great Again";
 
-  const home_menu = new Menu<MyContext>("home_menu")
-    .url("💎 Open App ", "https://t.me/meme_club_bot/app")
+const backCaptionText: string =
+  "<b>#1 Meme launchpad on TON </b>\n\nMake sure the memecoins revolution happens on TON";
+
+let newMemeCaption = `
+<b>[ How it works ?]</b>\n
+Step 1: Add this bot to your group or channel.\n
+Step 2: Create new meme coin with few or ZERO gas cost.\n
+Step 3: Buy the meme coin on the bonding curve.\n
+Step 4: Sell at any time to lock in your profits or losses.\n
+Step 5: When enough people buy on the bonding curve it reaches a pool of 1,000 TON.\n
+Step 6: All liquidity is then deposited in DEX(DeDust or STON fi) and burned.\n
+`;
+
+export function bind_command_start(bot: Bot<MyContext>, env: Env) {
+  const start_menu = new Menu<MyContext>("start_menu")
+    .submenu("🚀 Create Meme ", "create_meme_menu", async (ctx) => {
+      await ctx
+        .editMessageCaption({ caption: newMemeCaption, parse_mode: "HTML" })
+        .then((r) => {});
+    })
     .row()
+    .webApp("🌟 New Listing", "https://develop.memeclub-app.pages.dev/create")
+    .webApp("🦄 Popular Memes", "https://develop.memeclub-app.pages.dev/create")
     .row()
-    .url("Add to Your Group", "https://t.me/diamond404bot?startgroup=true")
+    .submenu("💎 My Wallet", "my_wallet_menu")
+    .submenu("🤡 My Memes", "my_memes_menu")
     .row()
-    .submenu("🎉 Join Community", "community_menu")
-    .row();
+    .submenu("🇬🇧 Language", "language_menu")
+    .submenu("⚙️ Setting", "settings_menu")
+    .row()
+    .submenu("🎁 Airdrop", "airdrop_menu");
+
+  let addGroupUrl = `https://t.me/${env.TELEGRAM_BOT_NAME}?startgroup=true`;
+  console.info(addGroupUrl);
+  const create_meme_menu = new Menu<MyContext>("create_meme_menu")
+    .url("Step 1: Add bot to your group", addGroupUrl)
+    .row()
+    .back("◀️ Go Back", async (ctx) => {
+      await ctx
+        .editMessageCaption({ caption: backCaptionText, parse_mode: "HTML" })
+        .then((r) => {});
+    });
+
   const community_menu = new Menu<MyContext>("community_menu")
     .url("👥 Chat Group", "https://t.me/meme_club_chat")
     .row()
@@ -30,53 +65,30 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
     .row()
     .url("🌎 Official Website", "https://www.memeclub.ai/")
     .row()
-    .back("◀️ Go Back");
+    .back("◀️ Go Back", async (ctx) => {
+      await ctx
+        .editMessageCaption({ caption: startCaptionText, parse_mode: "HTML" })
+        .then((r) => {});
+    });
 
-
-  home_menu.register(community_menu);
-  bot.use(home_menu);
+  start_menu.register(create_meme_menu);
+  start_menu.register(community_menu);
+  bot.use(start_menu);
 
   bot.command("start", async (ctx) => {
-    await ctx.replyWithPhoto("https://memeclub-website.pages.dev/bot_msg.png");
     await ctx
-      .reply(withPleasure, {
-        parse_mode: "MarkdownV2",
-        reply_markup: home_menu,
-      })
+      .replyWithPhoto(
+        "https://art404app.pages.dev/memebot/bot-img-memeclub.png",
+        {
+          caption: startCaptionText,
+          parse_mode: "HTML",
+          reply_markup: start_menu,
+        },
+      )
       .catch((reason) => {
         console.error(reason);
       });
 
     let match = ctx.match;
-  });
-
-  bot.command("twitter", async (ctx) => {
-    await ctx
-      .reply("[𝕏 Twitter](https://x.com/memeclubai) ", {
-        parse_mode: "MarkdownV2",
-      })
-      .catch((reason) => {
-        console.error(reason);
-      });
-  });
-
-  bot.command("group", async (ctx) => {
-    await ctx
-      .reply("[👥 Join Chat Group](https://t.me/meme_club_chat) ", {
-        parse_mode: "MarkdownV2",
-      })
-      .catch((reason) => {
-        console.error(reason);
-      });
-  });
-
-  bot.command("news", async (ctx) => {
-    await ctx
-      .reply("[🎉 Join Official Channel](https://t.me/meme_club_news) ", {
-        parse_mode: "MarkdownV2",
-      })
-      .catch((reason) => {
-        console.error(reason);
-      });
   });
 }
