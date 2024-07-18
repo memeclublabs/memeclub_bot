@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "export BOT_TOKEN=7139592991:AAF-L3tfqCxGzQLeJibr5k4hZWVGcEijcq0 && export TELEGRAM_BOT_NAME=diamond404bot && export NODE_ENV=dev && export DEBUG='grammy*' && open https://t.me/diamond404bot && nodemon src/entrypoint/entrypoint.local.ts",
-    "wrangler_dev": "wrangler dev",
     "deploy_dev": "wrangler deploy",
     "deploy_openvip": "wrangler deploy --env openvip",
     "deploy_gram404bot": "wrangler deploy --env gram404bot",

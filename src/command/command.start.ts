@@ -89,6 +89,13 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
         console.error(reason);
       });
 
-    let match = ctx.match;
+    //   test
+    let db = env?.DB;
+    let result404Promise = await queryUser(db, "1 Alfreds Futterkiste");
+    await ctx.reply(
+      JSON.stringify(
+        "1 Alfreds Futterkiste = " + JSON.stringify(result404Promise),
+      ),
+    );
   });
 }

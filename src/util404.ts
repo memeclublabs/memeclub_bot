@@ -24,7 +24,7 @@ export async function queryUser(
   };
   // @ts-ignore
   let d1Response = await db
-    .prepare("select * from ArtUser where tgId=?")
+    .prepare("select * from User where tgId=?")
     .bind(tgId)
     .all();
   if (d1Response.success) {
@@ -53,7 +53,7 @@ export async function queryUserByRefCode(
 
   // @ts-ignore
   let d1Response = await db
-    .prepare("select * from ArtUser where refCode=?")
+    .prepare("select * from User where refCode=?")
     .bind(refCode)
     .all();
   if (d1Response.success) {
@@ -81,7 +81,7 @@ export async function queryUserListByRefTgId(
 
   // @ts-ignore
   let d1Response = await db
-    .prepare("select * from ArtUser where refTgId=?")
+    .prepare("select * from User where refTgId=?")
     .bind(refTgId)
     .all();
   if (d1Response.success) {
@@ -118,7 +118,7 @@ export async function createUser(
     // @ts-ignore
     let d1Response: D1Response = await db
       .prepare(
-        "INSERT INTO ArtUser (userId, tgId, tgUsername, refCode, refTgId, refTgUsername,createBy,createDt) VALUES (?, ?,?,?,?, ?, ?, ?)",
+        "INSERT INTO User (userId, tgId, tgUsername, refCode, refTgId, refTgUsername,createBy,createDt) VALUES (?, ?,?,?,?, ?, ?, ?)",
       )
       .bind(
         userId,
@@ -144,7 +144,7 @@ export async function createUser(
     // @ts-ignore
     let d1Response: D1Response = await db
       .prepare(
-        "INSERT INTO ArtUser (userId, tgId, tgUsername, refCode, createBy,createDt) VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO User (userId, tgId, tgUsername, refCode, createBy,createDt) VALUES (?, ?, ?, ?, ?, ?)",
       )
       .bind(userId, tgId, tgUsername, refCode, tgId, current)
       .run();
