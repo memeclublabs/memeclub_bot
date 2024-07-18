@@ -8,43 +8,74 @@ export function on_add_to_group(bot: Bot<MyContext>, env: Env) {
     //1. 读取 chat 发生地，是私聊还是群聊
     //1.1 忽略私聊 chat_type == "private"
     //1.2 不管是群组还是频道，都算有效的添加
-    let chat_id = ctx.myChatMember.chat?.id;
-    let chat_type = ctx.myChatMember.chat?.type;
-    let chat_title = ctx.myChatMember.chat?.title;
-    let chat_username = ctx.myChatMember.chat?.username;
+    let chatId = ctx.myChatMember.chat?.id;
+    let chatType = ctx.myChatMember.chat?.type;
+    let chatTitle = ctx.myChatMember.chat?.title;
+    let chatUsername = ctx.myChatMember.chat?.username;
     if (
-      chat_type == "channel" ||
-      chat_type == "group" ||
-      chat_type == "supergroup"
+      chatType == "channel" ||
+      chatType == "group" ||
+      chatType == "supergroup"
     ) {
-      let operatorId = ctx.myChatMember.from.id;
-      let firstName = ctx.myChatMember.from.first_name;
-      let lastName = ctx.myChatMember.from.last_name;
-      let displayName = `${firstName} ${lastName}`;
+      let opId = ctx.myChatMember.from.id;
+      let opFirstName = ctx.myChatMember.from.first_name;
+      let opLastName = ctx.myChatMember.from.last_name;
+      let opDisplayName = `${opFirstName} ${opLastName}`;
 
-      await ctx.api
-        .sendMessage(
-          operatorId,
-          `Added by ${displayName} to ${chat_type} ${chat_title} \n\n`,
-          {
-            parse_mode: "HTML",
-          },
-        )
-        .catch((e) => {
-          console.error(e);
-        });
+      // let status: "member" | "creator" | "administrator" | "restricted" | "left" | "kicked"
+      let status = ctx.myChatMember.new_chat_member.status;
+      if (status == "member" || status == "administrator") {
+        let adminList = await ctx.api.getChatAdministrators(
+          ctx.myChatMember.chat.id,
+        );
+        // creator of group/channel: "status": "creator",
+        // admin of group/channel added by creator: "status": "administrator",
+        let admins = JSON.stringify(adminList);
+        let memberCount = await ctx.api.getChatMemberCount(
+          ctx.myChatMember.chat.id,
+        );
 
-      await ctx.api
-        .sendMessage(
-          chat_id,
-          `added by ${displayName} to this group, will fair launch memecoins. \n\n`,
-          {
-            parse_mode: "HTML",
-          },
-        )
-        .catch((e) => {
-          console.error(e);
-        });
-    }
+        await ctx.api
+          .sendMessage(
+            opId,
+            `Added by ${opDisplayName} to ${chatType} ${chatTitle} \n\n ${admins} \n memberCount=${memberCount}`,
+            {
+              parse_mode: "HTML",
+            },
+          )
+          .catch((e) => {
+            console.error(e);
+          });
+
+        await ctx.api
+          .sendMessage(
+            chatId,
+            `added by ${opDisplayName} to this group, will fair launch memecoins. \n\n\n ${admins} \n${memberCount}`,
+            {
+              parse_mode: "HTML",
+            },
+          )
+          .catch((e) => {
+            console.error(e);
+          });
+      }
+    } //end group / channel loop
   });
 }
+
+//
+// [
+//   {
+//     user: {
+//       id: 5499157826,
+//       is_bot: false,
+//       first_name: "Andrew 💎",
+//       last_name: "Memeclub",
+//       username: "andrew_tonx",
+//       language_code: "en",
+//       is_premium: true,
+//     },
+//     status: "creator",
+//     is_anonymous: false,
+//   },
+// ];

@@ -34,16 +34,16 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
         .then((r) => {});
     })
     .row()
-    .webApp("🌟 New Listing", "https://develop.memeclub-app.pages.dev/create")
-    .webApp("🦄 Popular Memes", "https://develop.memeclub-app.pages.dev/create")
+    .url("🌟 New Listing", "https://develop.memeclub-app.pages.dev/create")
+    .url("🦄 Popular Memes", "https://develop.memeclub-app.pages.dev/create")
     .row()
-    .submenu("💎 My Wallet", "my_wallet_menu")
-    .submenu("🤡 My Memes", "my_memes_menu")
+    .submenu("💎 My Wallet", "create_meme_menu")
+    .submenu("🤡 My Memes", "create_meme_menu")
     .row()
-    .submenu("🇬🇧 Language", "language_menu")
-    .submenu("⚙️ Setting", "settings_menu")
+    .submenu("🇬🇧 Language", "create_meme_menu")
+    .submenu("⚙️ Setting", "create_meme_menu")
     .row()
-    .submenu("🎁 Airdrop", "airdrop_menu");
+    .submenu("🎁 Airdrop", "create_meme_menu");
 
   let addGroupUrl = `https://t.me/${env.TELEGRAM_BOT_NAME}?startgroup=true`;
   console.info(addGroupUrl);
