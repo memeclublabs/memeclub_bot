@@ -4,9 +4,8 @@
   "scripts": {
     "dev": "export BOT_TOKEN=7139592991:AAF-L3tfqCxGzQLeJibr5k4hZWVGcEijcq0 && export TELEGRAM_BOT_NAME=diamond404bot && export NODE_ENV=dev && export DEBUG='grammy*' && open https://t.me/diamond404bot && nodemon src/entrypoint/entrypoint.local.ts",
     "deploy_dev": "wrangler deploy",
-    "deploy_openvip": "wrangler deploy --env openvip",
-    "deploy_gram404bot": "wrangler deploy --env gram404bot",
-    "deploy_memeclubbot": "wrangler deploy --env memeclubbot",
+    "deploy_gram404bot": "npx prisma generate && wrangler deploy --env gram404bot",
+    "deploy_memeclubbot": " wrangler deploy --env memeclubbot",
     "test": "vitest"
   },
   "keywords": [],
@@ -17,6 +16,8 @@
     "@grammyjs/i18n": "^1.0.1",
     "@grammyjs/menu": "^1.2.1",
     "@grammyjs/types": "^3.4.4",
+    "@prisma/adapter-d1": "5.16.1",
+    "@prisma/client": "5.16.1",
     "@ton/core": "^0.56.2",
     "@ton/crypto": "^3.2.0",
     "@ton/ton": "^13.11.1",
@@ -33,6 +34,7 @@
     "@types/node": "^20.10.6",
     "@types/uuid": "^9.0.8",
     "prettier": "3.1.1",
+    "prisma": "5.16.1",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",

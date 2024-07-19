@@ -5,7 +5,7 @@ npx wrangler d1 create d1-memeclub-prod
 
 # 2.1 Local
 npx wrangler d1 execute d1-memeclub-dev --local --file=./schema.sql
-npx wrangler d1 execute d1-memeclub-dev --local --command="SELECT * FROM Customers"
+npx wrangler d1 execute d1-memeclub-dev --local --command="SELECT * FROM User"
 
 
 # 2.2 Deploy

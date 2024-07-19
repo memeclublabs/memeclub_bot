@@ -1,0 +1,141 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+// This `datasource` file isn't used but Prisma ORM still requires the `datasource` definition.
+// Your SQLite database file will be managed by D1:
+// - A local version will exist in `.wrangler`.
+// - The remote version is managed by Cloudflare in the Cloud.
+datasource db {
+  provider = "sqlite"
+  url      = "no use"
+}
+
+model User {
+  id            Int     @id @default(autoincrement())
+  tgId          Int?
+  tgUsername    String?
+  firstName     String?
+  lastName      String?
+  profileImg    String?
+  refCode       String?
+  referBy       String?
+  langCode      String?
+  walletNetwork String?
+  walletAddress String?
+  walletBalance Int?
+  totalPoints   Int?
+  extInfo       String?
+  traceId       String?
+  createBy      Int?
+  createDt      Int?
+  modifyBy      Int?
+  modifyDt      Int?
+}
+
+model UserAction {
+  id                Int     @id @default(autoincrement())
+  opTgId            Int?
+  opDisplayName     String?
+  actionType        String?
+  selfReward        Int?
+  targetTgId        Int?
+  targetReward      Int?
+  targetDisplayName String?
+  extInfo           String?
+  traceId           String?
+  createBy          Int?
+  createDt          Int?
+  modifyBy          Int?
+  modifyDt          Int?
+}
+
+model Wallet {
+  id         Int     @id @default(autoincrement())
+  network    String?
+  address    String?
+  balance    Int?
+  privateKey String?
+  mnemonic   String?
+  extInfo    String?
+  traceId    String?
+  createBy   Int?
+  createDt   Int?
+  modifyBy   Int?
+  modifyDt   Int?
+}
+
+model WalletOrder {
+  id       Int     @id @default(autoincrement())
+  type     String?
+  walletId Int?
+  opAmount Int?
+  opTgId   Int?
+  txHash   String?
+  extInfo  String?
+  traceId  String?
+  createBy Int?
+  createDt Int?
+  modifyBy Int?
+  modifyDt Int?
+}
+
+model Memecoin {
+  id               Int     @id @default(autoincrement())
+  network          String?
+  name             String?
+  ticker           String?
+  description      String?
+  image            String?
+  devTgId          Int?
+  chatId           String?
+  chatType         String?
+  chatTitle        String?
+  chatUsername     String?
+  chatStatus       String?
+  contractVersion  String?
+  deployTxHash     String?
+  masterAddress    String?
+  devWalletAddress String?
+  opWalletAddress  String?
+  extInfo          String?
+  traceId          String?
+  createBy         Int?
+  createDt         Int?
+  modifyBy         Int?
+  modifyDt         Int?
+}
+
+model BuyOrder {
+  id         Int     @id @default(autoincrement())
+  memecoinId Int?
+  buyAmt     Int?
+  fromCoin   String?
+  fromAmt    Int?
+  txHash     String?
+  extInfo    String?
+  traceId    String?
+  createBy   Int?
+  createDt   Int?
+  modifyBy   Int?
+  modifyDt   Int?
+}
+
+model SellOrder {
+  id         Int     @id @default(autoincrement())
+  memecoinId Int?
+  sellAmt    Int?
+  toCoin     String?
+  toAmt      Int?
+  txHash     String?
+  extInfo    String?
+  traceId    String?
+  createBy   Int?
+  createDt   Int?
+  modifyBy   Int?
+  modifyDt   Int?
+}

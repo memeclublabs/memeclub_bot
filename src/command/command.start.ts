@@ -2,13 +2,8 @@ import { Bot, InputFile } from "grammy";
 import { MyContext } from "../global.types";
 import { Menu } from "@grammyjs/menu";
 import Env from "../env.cloudflare";
-import { createUser, queryUser, queryUserByRefCode } from "../util404";
-import {
-  User404,
-  USER_CREATED,
-  USER_CREATED_WITH_REF,
-  USER_FOUND,
-} from "../static404";
+
+import { dbClient } from "../db-prisma";
 
 const startCaptionText: string =
   "<b>#1 Meme launchpad on TON </b>\n\nMake Memecoins Great Again";
@@ -91,11 +86,8 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
 
     //   test
     let db = env?.DB;
-    let result404Promise = await queryUser(db, "1 Alfreds Futterkiste");
-    await ctx.reply(
-      JSON.stringify(
-        "1 Alfreds Futterkiste = " + JSON.stringify(result404Promise),
-      ),
-    );
+    let prismaClient = dbClient(env?.DB);
+    let prismaPromise = await prismaClient.user.findMany();
+    await ctx.reply(JSON.stringify("user: " + JSON.stringify(prismaPromise)));
   });
 }
