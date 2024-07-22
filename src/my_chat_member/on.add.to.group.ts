@@ -2,6 +2,7 @@ import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import Env from "../env.cloudflare";
 import { getPrismaClient } from "../db-prisma";
+import { CoinStatus } from "../enums";
 
 export function on_add_to_group(bot: Bot<MyContext>, env: Env) {
   bot.on("my_chat_member", async (ctx) => {

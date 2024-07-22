@@ -1,10 +1,10 @@
-enum CoinStatus {
+export enum CoinStatus {
   Initialized = "Initialized",
   Deployed = "Deployed",
 }
 
 // : "member" | "creator" | "administrator" | "restricted" | "left" | "kicked"
-enum ChatStatus {
+export enum ChatStatus {
   creator = "creator",
   member = "member",
   administrator = "administrator",

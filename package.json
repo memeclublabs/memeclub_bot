@@ -4,10 +4,13 @@
   "scripts": {
     "test": "vitest",
     "prisma": "npx prisma generate",
-    "dev": "export BOT_TOKEN=7139592991:AAF-L3tfqCxGzQLeJibr5k4hZWVGcEijcq0 && export TELEGRAM_BOT_NAME=diamond404bot && export NODE_ENV=dev && export DEBUG='grammy*' && open https://t.me/diamond404bot && nodemon src/entrypoint/entrypoint.local.ts",
+    "dev": "export DATABASE_URL=postgresql://postgres.zavnmmwwbdwsllfcsfvu:ndjIAz2AwZNoJox4@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true &&  export BOT_TOKEN=7139592991:AAF-L3tfqCxGzQLeJibr5k4hZWVGcEijcq0 && export DIRECT_URL=postgresql://postgres.zavnmmwwbdwsllfcsfvu:ndjIAz2AwZNoJox4@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres && export TELEGRAM_BOT_NAME=diamond404bot && export NODE_ENV=dev && export DEBUG='grammy*' && open https://t.me/diamond404bot && nodemon src/entrypoint/entrypoint.local.ts",
     "deploy_dev": "wrangler deploy",
     "deploy_appbot": "wrangler deploy --env appbot",
     "deploy_memeclubbot": " wrangler deploy --env memeclubbot"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
@@ -32,13 +35,13 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20231218.0",
     "@types/express": "^4.17.21",
-    "@types/node": "^20.10.6",
+    "@types/node": "^20.14.0",
     "@types/uuid": "^9.0.8",
     "prettier": "3.1.1",
     "prisma": "5.17.0",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.2",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.5",
     "vitest": "^1.2.0",
     "wrangler": "3.39.0"
   }
