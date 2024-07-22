@@ -18,20 +18,17 @@ export function on_add_to_group(bot: Bot<MyContext>, env: Env) {
       chatType == "group" ||
       chatType == "supergroup"
     ) {
-      let opId = ctx.myChatMember.from.id;
+      let opIgId = ctx.myChatMember.from.id;
       let opFirstName = ctx.myChatMember.from.first_name;
       let opLastName = ctx.myChatMember.from.last_name;
       let opDisplayName = `${opFirstName} ${opLastName}`;
 
       // let status: "member" | "creator" | "administrator" | "restricted" | "left" | "kicked"
-      let status = ctx.myChatMember.new_chat_member.status;
-      if (status == "member" || status == "administrator") {
+      let chatMemberStatus = ctx.myChatMember.new_chat_member.status;
+      if (chatMemberStatus == "member" || chatMemberStatus == "administrator") {
         let memberCount = await ctx.api.getChatMemberCount(
           ctx.myChatMember.chat.id,
         );
-
-        let prismaClient = getPrismaClient(env.DB);
-        prismaClient.memecoin;
 
         // let adminList = await ctx.api.getChatAdministrators(
         //   ctx.myChatMember.chat.id,
@@ -43,9 +40,25 @@ export function on_add_to_group(bot: Bot<MyContext>, env: Env) {
         //   ctx.myChatMember.chat.id,
         // );
 
+        // test;
+        let client = getPrismaClient(env?.DB);
+        await client.memecoin.create({
+          data: {
+            devTgId: opIgId,
+            coinStatus: CoinStatus.Initialized,
+            chatId: chatId,
+            chatType: chatType,
+            chatTitle: chatTitle,
+            chatUsername: chatUsername,
+            chatStatus: chatMemberStatus,
+            createBy: opIgId,
+            createDt: Date.now(),
+          },
+        });
+
         await ctx.api
           .sendMessage(
-            opId,
+            opIgId,
             `Added by ${opDisplayName} to ${chatType} ${chatTitle} \n\n`,
             {
               parse_mode: "HTML",
