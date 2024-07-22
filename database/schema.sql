@@ -99,6 +99,7 @@ CREATE TABLE IF NOT EXISTS Memecoin
     description         TEXT,
     image               TEXT,
     devTgId             INTEGER,
+    coinStatus          TEXT,
     chatId              TEXT,
     chatType            TEXT,
     chatTitle           TEXT,

@@ -2,8 +2,7 @@ import { Bot, InputFile } from "grammy";
 import { MyContext } from "../global.types";
 import { Menu } from "@grammyjs/menu";
 import Env from "../env.cloudflare";
-
-import { dbClient } from "../db-prisma";
+import { getPrismaClient } from "../db-prisma";
 
 const startCaptionText: string =
   "<b>#1 Meme launchpad on TON </b>\n\nMake Memecoins Great Again";
@@ -14,11 +13,10 @@ const backCaptionText: string =
 let newMemeCaption = `
 <b>[ How it works ?]</b>\n
 Step 1: Add this bot to your group or channel.\n
-Step 2: Create new meme coin with few or ZERO gas cost.\n
-Step 3: Buy the meme coin on the bonding curve.\n
-Step 4: Sell at any time to lock in your profits or losses.\n
-Step 5: When enough people buy on the bonding curve it reaches a pool of 1,000 TON.\n
-Step 6: All liquidity is then deposited in DEX(DeDust or STON fi) and burned.\n
+Step 2: Create new meme coin with few or zero gas cost.\n
+Step 3: Buy the meme coin on the bonding curve. Sell at any time to lock in your profits or losses.\n
+Step 4: When enough people buy on the bonding curve it reaches a pool of 1,000 TON.\n
+Step 5: All liquidity is then deposited in DEX(DeDust or STON fi) and burned.\n
 `;
 
 export function bind_command_start(bot: Bot<MyContext>, env: Env) {
@@ -84,10 +82,10 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
         console.error(reason);
       });
 
-    //   test
+    // test;
     let db = env?.DB;
-    let prismaClient = dbClient(env?.DB);
+    let prismaClient = getPrismaClient(env?.DB);
     let prismaPromise = await prismaClient.user.findMany();
-    await ctx.reply(JSON.stringify("user: " + JSON.stringify(prismaPromise)));
+    // await ctx.reply(JSON.stringify("user: " + JSON.stringify(prismaPromise)));
   });
 }

@@ -1,6 +1,7 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import Env from "../env.cloudflare";
+import { getPrismaClient } from "../db-prisma";
 
 export function on_add_to_group(bot: Bot<MyContext>, env: Env) {
   bot.on("my_chat_member", async (ctx) => {
@@ -25,20 +26,27 @@ export function on_add_to_group(bot: Bot<MyContext>, env: Env) {
       // let status: "member" | "creator" | "administrator" | "restricted" | "left" | "kicked"
       let status = ctx.myChatMember.new_chat_member.status;
       if (status == "member" || status == "administrator") {
-        let adminList = await ctx.api.getChatAdministrators(
-          ctx.myChatMember.chat.id,
-        );
-        // creator of group/channel: "status": "creator",
-        // admin of group/channel added by creator: "status": "administrator",
-        let admins = JSON.stringify(adminList);
         let memberCount = await ctx.api.getChatMemberCount(
           ctx.myChatMember.chat.id,
         );
 
+        let prismaClient = getPrismaClient(env.DB);
+        prismaClient.memecoin;
+
+        // let adminList = await ctx.api.getChatAdministrators(
+        //   ctx.myChatMember.chat.id,
+        // );
+        // // creator of group/channel: "status": "creator",
+        // // admin of group/channel added by creator: "status": "administrator",
+        // let admins = JSON.stringify(adminList);
+        // let memberCount = await ctx.api.getChatMemberCount(
+        //   ctx.myChatMember.chat.id,
+        // );
+
         await ctx.api
           .sendMessage(
             opId,
-            `Added by ${opDisplayName} to ${chatType} ${chatTitle} \n\n ${admins} \n memberCount=${memberCount}`,
+            `Added by ${opDisplayName} to ${chatType} ${chatTitle} \n\n`,
             {
               parse_mode: "HTML",
             },
@@ -50,7 +58,7 @@ export function on_add_to_group(bot: Bot<MyContext>, env: Env) {
         await ctx.api
           .sendMessage(
             chatId,
-            `added by ${opDisplayName} to this group, will fair launch memecoins. \n\n\n ${admins} \n${memberCount}`,
+            `added by ${opDisplayName} to this group, will fair launch memecoins. `,
             {
               parse_mode: "HTML",
             },
@@ -58,8 +66,8 @@ export function on_add_to_group(bot: Bot<MyContext>, env: Env) {
           .catch((e) => {
             console.error(e);
           });
-      }
-    } //end group / channel loop
+      } //end join group / channel
+    } //end chat in group / channel loop
   });
 }
 

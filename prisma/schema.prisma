@@ -92,6 +92,7 @@ model Memecoin {
   description      String?
   image            String?
   devTgId          Int?
+  coinStatus       String?
   chatId           String?
   chatType         String?
   chatTitle        String?

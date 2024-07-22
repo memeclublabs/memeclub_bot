@@ -9,9 +9,9 @@ compatibility_date = "2023-12-18"
 vars = { ENVIRONMENT = "local", TELEGRAM_BOT_API_TOKEN = "7139592991:AAF-L3tfqCxGzQLeJibr5k4hZWVGcEijcq0", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_CODE_NOT_FOUND" }
 d1_databases = [{ binding = "DB", database_name = "d1-memeclub-dev", database_id = "30deca0c-1500-4e4f-ae2f-3c109a3ab13d" }]
 
-[env.gram404bot]
-vars = { ENVIRONMENT = "gram404bot", TELEGRAM_BOT_NAME="gram404bot",  TELEGRAM_BOT_API_TOKEN = "6534299790:AAEe9qbQrqjMZhQcE3blt51b3Tu2V_L_cVk", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_CODE_NOT_FOUND"}
-d1_databases = [{ binding = "DB", database_name = "d1-gram404-sit", database_id = "30deca0c-1500-4e4f-ae2f-" }]
+[env.appbot]
+vars = { ENVIRONMENT = "appbot", TELEGRAM_BOT_NAME="MemeClubAppBot",  TELEGRAM_BOT_API_TOKEN = "7212911867:AAFHAhMXnt3p-lVPp_EBiWTiLoI5qSHN4bM", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_CODE_NOT_FOUND"}
+d1_databases = [{ binding = "DB", database_name = "d1-memeclub-prod", database_id = "a6426943-0762-410f-bd89-a16676dd5600" }]
 
 [env.memeclubbot]
 vars = { ENVIRONMENT = "memeclubbot", TELEGRAM_BOT_NAME="meme_club_bot", TELEGRAM_BOT_API_TOKEN = "6873507190:AAFr6gFQdESZzsdNCXGzKkaBVU65jiR87lc", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_CODE_NOT_FOUND"}
