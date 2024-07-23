@@ -21,6 +21,7 @@
     "@grammyjs/menu": "^1.2.1",
     "@grammyjs/types": "^3.4.4",
     "@prisma/adapter-d1": "5.16.1",
+    "@prisma/adapter-pg": "^5.17.0",
     "@prisma/client": "5.17.0",
     "@supabase/supabase-js": "^2.44.4",
     "@ton/core": "^0.56.2",

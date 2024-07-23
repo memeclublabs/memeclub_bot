@@ -10,7 +10,7 @@ vars = { ENVIRONMENT = "local", TELEGRAM_BOT_API_TOKEN = "7139592991:AAF-L3tfqCx
 d1_databases = [{ binding = "DB", database_name = "d1-memeclub-dev", database_id = "30deca0c-1500-4e4f-ae2f-3c109a3ab13d" }]
 
 [env.appbot]
-vars = { ENVIRONMENT = "appbot", TELEGRAM_BOT_NAME="MemeClubAppBot",  TELEGRAM_BOT_API_TOKEN = "7212911867:AAFHAhMXnt3p-lVPp_EBiWTiLoI5qSHN4bM", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_CODE_NOT_FOUND"}
+vars = { ENVIRONMENT = "appbot", TELEGRAM_BOT_NAME="MemeClubAppBot",  TELEGRAM_BOT_API_TOKEN = "7212911867:AAFHAhMXnt3p-lVPp_EBiWTiLoI5qSHN4bM", TELEGRAM_BOT_SECRET_TOKEN = "ERROR_CODE_NOT_FOUND", DATABASE_URL="postgresql://postgres.zavnmmwwbdwsllfcsfvu:ndjIAz2AwZNoJox4@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true",DIRECT_URL="postgresql://postgres.zavnmmwwbdwsllfcsfvu:ndjIAz2AwZNoJox4@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"}
 d1_databases = [{ binding = "DB", database_name = "d1-memeclub-prod", database_id = "a6426943-0762-410f-bd89-a16676dd5600" }]
 
 [env.memeclubbot]
