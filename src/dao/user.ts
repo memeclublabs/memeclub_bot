@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client/edge";
+import { PrismaClient } from "@prisma/client";
 
 export async function findUserById(tgId: number) {
   const prisma = new PrismaClient();

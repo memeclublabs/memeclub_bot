@@ -4,10 +4,12 @@ const prisma = new PrismaClient();
 
 const userData = [
   {
-    tgId: 1,
+    tgId: 11,
+    firstName: "John",
   },
   {
-    tgId: 2,
+    tgId: 22,
+    lastName: "Kevin",
   },
 ] satisfies Prisma.UserCreateInput[];
 

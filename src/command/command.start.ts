@@ -2,7 +2,7 @@ import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import { Menu } from "@grammyjs/menu";
 import Env from "../env.cloudflare";
-import { createClient } from "@supabase/supabase-js";
+import { findUserById } from "../dao/user";
 
 const startCaptionText: string =
   "<b>#1 Meme launchpad on TON </b>\n\nMake Memecoins Great Again";
@@ -83,13 +83,7 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
       });
 
     // test;
-    // let promise = await findUserById(1);
-    // const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_KEY);
-    // const { data, error } = await supabase.from("User").select("*");
-    // await ctx.reply(
-    //   JSON.stringify(
-    //     "user: " + JSON.stringify(data) + " error:" + JSON.stringify(error),
-    //   ),
-    // );
+    let promise = await findUserById(1);
+    await ctx.reply(JSON.stringify("user: " + JSON.stringify(promise)));
   });
 }

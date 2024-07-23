@@ -1,13 +1,11 @@
 {
-  "name": "ton_master_bot",
+  "name": "memeclub_bot",
   "version": "1.0.0",
   "scripts": {
     "test": "vitest",
     "prisma": "npx prisma generate",
-    "dev": "open https://t.me/diamond404bot && nodemon src/entrypoint/local.pull.ts",
-    "deploy_dev": "wrangler deploy",
-    "deploy_appbot": "wrangler deploy --env appbot",
-    "deploy_memeclubbot": " wrangler deploy --env memeclubbot"
+    "seed": "npx prisma db seed",
+    "dev": "open https://t.me/diamond404bot && nodemon src/entrypoint/local.pull.ts"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
