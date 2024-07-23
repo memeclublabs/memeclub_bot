@@ -26,6 +26,9 @@ importers:
       '@prisma/client':
         specifier: 5.17.0
         version: 5.17.0(prisma@5.17.0)
+      '@supabase/supabase-js':
+        specifier: ^2.44.4
+        version: 2.44.4
       '@ton/core':
         specifier: ^0.56.2
         version: 0.56.3(@ton/crypto@3.2.0)
@@ -1643,6 +1646,28 @@ packages:
   '@sinonjs/fake-timers@10.3.0':
     resolution: {integrity: sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==}
 
+  '@supabase/auth-js@2.64.4':
+    resolution: {integrity: sha512-9ITagy4WP4FLl+mke1rchapOH0RQpf++DI+WSG2sO1OFOZ0rW3cwAM0nCrMOxu+Zw4vJ4zObc08uvQrXx590Tg==}
+
+  '@supabase/functions-js@2.4.1':
+    resolution: {integrity: sha512-8sZ2ibwHlf+WkHDUZJUXqqmPvWQ3UHN0W30behOJngVh/qHHekhJLCFbh0AjkE9/FqqXtf9eoVvmYgfCLk5tNA==}
+
+  '@supabase/node-fetch@2.6.15':
+    resolution: {integrity: sha512-1ibVeYUacxWYi9i0cf5efil6adJ9WRyZBLivgjs+AUpewx1F3xPi7gLgaASI2SmIQxPoCEjAsLAzKPgMJVgOUQ==}
+    engines: {node: 4.x || >=6.0.0}
+
+  '@supabase/postgrest-js@1.15.8':
+    resolution: {integrity: sha512-YunjXpoQjQ0a0/7vGAvGZA2dlMABXFdVI/8TuVKtlePxyT71sl6ERl6ay1fmIeZcqxiuFQuZw/LXUuStUG9bbg==}
+
+  '@supabase/realtime-js@2.10.2':
+    resolution: {integrity: sha512-qyCQaNg90HmJstsvr2aJNxK2zgoKh9ZZA8oqb7UT2LCh3mj9zpa3Iwu167AuyNxsxrUE8eEJ2yH6wLCij4EApA==}
+
+  '@supabase/storage-js@2.6.0':
+    resolution: {integrity: sha512-REAxr7myf+3utMkI2oOmZ6sdplMZZ71/2NEIEMBZHL9Fkmm3/JnaOZVSRqvG4LStYj2v5WhCruCzuMn6oD/Drw==}
+
+  '@supabase/supabase-js@2.44.4':
+    resolution: {integrity: sha512-vqtUp8umqcgj+RPUc7LiEcQmgsEWFDPJdJizRJF/5tf2zSlVB+3YbUwyQE/hLagYA8TLvGXe7oAqtYyFde6llw==}
+
   '@ton/core@0.56.3':
     resolution: {integrity: sha512-HVkalfqw8zqLLPehtq0CNhu5KjVzc7IrbDwDHPjGoOSXmnqSobiWj8a5F+YuWnZnEbQKtrnMGNOOjVw4LG37rg==}
     peerDependencies:
@@ -1711,6 +1736,9 @@ packages:
   '@types/node@20.14.0':
     resolution: {integrity: sha512-5cHBxFGJx6L4s56Bubp4fglrEpmyJypsqI6RgzMfBHWUJQGWAAi8cWcgetEbZXHYXo9C2Fa4EEds/uSyS4cxmA==}
 
+  '@types/phoenix@1.6.5':
+    resolution: {integrity: sha512-xegpDuR+z0UqG9fwHqNoy3rI7JDlvaPh2TY47Fl80oq6g+hXT+c/LEuE43X48clZ6lOfANl5WrPur9fYO1RJ/w==}
+
   '@types/qs@6.9.15':
     resolution: {integrity: sha512-uXHQKES6DQKKCLh441Xv/dwxOq1TVS3JPUMlEqoEglvlhR6Mxnlew/Xq/LRVHpLyk7iK3zODe1qYHIMltO7XGg==}
 
@@ -1728,6 +1756,9 @@ packages:
 
   '@types/uuid@9.0.8':
     resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
+
+  '@types/ws@8.5.11':
+    resolution: {integrity: sha512-4+q7P5h3SpJxaBft0Dzpbr6lmMaqh0Jr2tbhJZ/luAwvD7ohSCniYkwz/pLxuT2h0EOa6QADgJj1Ko+TzRfZ+w==}
 
   '@types/yargs-parser@21.0.3':
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
@@ -7256,6 +7287,48 @@ snapshots:
       '@sinonjs/commons': 3.0.1
     optional: true
 
+  '@supabase/auth-js@2.64.4':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+
+  '@supabase/functions-js@2.4.1':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+
+  '@supabase/node-fetch@2.6.15':
+    dependencies:
+      whatwg-url: 5.0.0
+
+  '@supabase/postgrest-js@1.15.8':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+
+  '@supabase/realtime-js@2.10.2':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+      '@types/phoenix': 1.6.5
+      '@types/ws': 8.5.11
+      ws: 8.17.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
+  '@supabase/storage-js@2.6.0':
+    dependencies:
+      '@supabase/node-fetch': 2.6.15
+
+  '@supabase/supabase-js@2.44.4':
+    dependencies:
+      '@supabase/auth-js': 2.64.4
+      '@supabase/functions-js': 2.4.1
+      '@supabase/node-fetch': 2.6.15
+      '@supabase/postgrest-js': 1.15.8
+      '@supabase/realtime-js': 2.10.2
+      '@supabase/storage-js': 2.6.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+
   '@ton/core@0.56.3(@ton/crypto@3.2.0)':
     dependencies:
       '@ton/crypto': 3.2.0
@@ -7346,6 +7419,8 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
+  '@types/phoenix@1.6.5': {}
+
   '@types/qs@6.9.15': {}
 
   '@types/range-parser@1.2.7': {}
@@ -7365,6 +7440,10 @@ snapshots:
     optional: true
 
   '@types/uuid@9.0.8': {}
+
+  '@types/ws@8.5.11':
+    dependencies:
+      '@types/node': 20.14.0
 
   '@types/yargs-parser@21.0.3':
     optional: true

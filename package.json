@@ -4,7 +4,7 @@
   "scripts": {
     "test": "vitest",
     "prisma": "npx prisma generate",
-    "dev": "export DATABASE_URL=postgresql://postgres.zavnmmwwbdwsllfcsfvu:ndjIAz2AwZNoJox4@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true &&  export BOT_TOKEN=7139592991:AAF-L3tfqCxGzQLeJibr5k4hZWVGcEijcq0 && export DIRECT_URL=postgresql://postgres.zavnmmwwbdwsllfcsfvu:ndjIAz2AwZNoJox4@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres && export TELEGRAM_BOT_NAME=diamond404bot && export NODE_ENV=dev && export DEBUG='grammy*' && open https://t.me/diamond404bot && nodemon src/entrypoint/entrypoint.local.ts",
+    "dev": "export SUPABASE_URL=https://zavnmmwwbdwsllfcsfvu.supabase.co  && export SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inphdm5tbXd3YmR3c2xsZmNzZnZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE2MzQxNjcsImV4cCI6MjAzNzIxMDE2N30.xzoY4XKjIHEn_oNYJtXtXrtixGhJNjjrQAQatUrdNA4 &&  export DATABASE_URL=postgresql://postgres.zavnmmwwbdwsllfcsfvu:ndjIAz2AwZNoJox4@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true &&  export BOT_TOKEN=7139592991:AAF-L3tfqCxGzQLeJibr5k4hZWVGcEijcq0 && export DIRECT_URL=postgresql://postgres.zavnmmwwbdwsllfcsfvu:ndjIAz2AwZNoJox4@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres && export TELEGRAM_BOT_NAME=diamond404bot && export NODE_ENV=dev && export DEBUG='grammy*' && open https://t.me/diamond404bot && nodemon src/entrypoint/entrypoint.local.ts",
     "deploy_dev": "wrangler deploy",
     "deploy_appbot": "wrangler deploy --env appbot",
     "deploy_memeclubbot": " wrangler deploy --env memeclubbot"
@@ -22,6 +22,7 @@
     "@grammyjs/types": "^3.4.4",
     "@prisma/adapter-d1": "5.16.1",
     "@prisma/client": "5.17.0",
+    "@supabase/supabase-js": "^2.44.4",
     "@ton/core": "^0.56.2",
     "@ton/crypto": "^3.2.0",
     "@ton/ton": "^13.11.1",

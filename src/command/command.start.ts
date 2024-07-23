@@ -1,8 +1,8 @@
-import { Bot, InputFile } from "grammy";
+import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import { Menu } from "@grammyjs/menu";
 import Env from "../env.cloudflare";
-import { getPrismaClient } from "../db-prisma";
+import { createClient } from "@supabase/supabase-js";
 
 const startCaptionText: string =
   "<b>#1 Meme launchpad on TON </b>\n\nMake Memecoins Great Again";
@@ -83,9 +83,13 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
       });
 
     // test;
-    let db = env?.DB;
-    let prismaClient = getPrismaClient(env?.DB);
-    let prismaPromise = await prismaClient.user.findMany();
-    // await ctx.reply(JSON.stringify("user: " + JSON.stringify(prismaPromise)));
+    // let promise = await findUserById(1);
+    // const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_KEY);
+    // const { data, error } = await supabase.from("User").select("*");
+    // await ctx.reply(
+    //   JSON.stringify(
+    //     "user: " + JSON.stringify(data) + " error:" + JSON.stringify(error),
+    //   ),
+    // );
   });
 }

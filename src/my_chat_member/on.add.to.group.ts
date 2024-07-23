@@ -1,7 +1,6 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import Env from "../env.cloudflare";
-import { getPrismaClient } from "../db-prisma";
 import { CoinStatus } from "../enums";
 
 export function on_add_to_group(bot: Bot<MyContext>, env: Env) {
@@ -42,20 +41,19 @@ export function on_add_to_group(bot: Bot<MyContext>, env: Env) {
         // );
 
         // test;
-        let client = getPrismaClient(env?.DB);
-        await client.memecoin.create({
-          data: {
-            devTgId: opIgId,
-            coinStatus: CoinStatus.Initialized,
-            chatId: chatId,
-            chatType: chatType,
-            chatTitle: chatTitle,
-            chatUsername: chatUsername,
-            chatStatus: chatMemberStatus,
-            createBy: opIgId,
-            createDt: Date.now(),
-          },
-        });
+        // await client.memecoin.create({
+        //   data: {
+        //     devTgId: opIgId,
+        //     coinStatus: CoinStatus.Initialized,
+        //     chatId: chatId,
+        //     chatType: chatType,
+        //     chatTitle: chatTitle,
+        //     chatUsername: chatUsername,
+        //     chatStatus: chatMemberStatus,
+        //     createBy: opIgId,
+        //     createDt: Date.now(),
+        //   },
+        // });
 
         await ctx.api
           .sendMessage(

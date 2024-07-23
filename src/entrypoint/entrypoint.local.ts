@@ -31,7 +31,11 @@ export const bot = new Bot<MyContext>(token, config);
 //                        Main Start
 // ===========================================================================
 main_entry_point(bot, {
-  TELEGRAM_BOT_NAME: telegramBotName,
+  TELEGRAM_BOT_NAME: process.env.TELEGRAM_BOT_NAME,
+  TELEGRAM_BOT_API_TOKEN: process.env.TELEGRAM_BOT_API_TOKEN,
+  TELEGRAM_BOT_SECRET_TOKEN: process.env.TELEGRAM_BOT_SECRET_TOKEN,
+  SUPABASE_URL: process.env.SUPABASE_URL,
+  SUPABASE_KEY: process.env.SUPABASE_KEY,
 } as Env);
 // ###########################################################################
 //                        Main End
