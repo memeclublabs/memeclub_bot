@@ -177,13 +177,16 @@ cat  pg_hba.conf | grep "host"
 ```bash
 psql -d postgres
 
-ALTER USER andrew WITH PASSWORD 'memeclub@local#DB';
+# 密钥不要搞特殊字符，比如@#之类的容易造成链接字符串解析失败
+ALTER USER andrew WITH PASSWORD 'memeclub2024localDB';
 
 \q 
 
 psql postgres -c "SHOW hba_file;"
 #/usr/local/var/postgresql@16/pg_hba.conf
 # 修改 pg_hba.conf，将 trust 改为 scram-sha-256
+#重启生效
+brew services restart postgresql@16
 
 #https://blog.csdn.net/fxtxz2/article/details/140312962
 ```

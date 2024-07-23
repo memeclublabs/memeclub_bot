@@ -3,10 +3,14 @@ import { MyContext } from "../global.types";
 import { main_entry_point } from "./main";
 import { Bot } from "grammy";
 import Env from "../env.cloudflare";
+import * as dotenv from "dotenv";
 
 // ===========================================================================
 //                        Bot Init Section Start
 // ===========================================================================
+
+dotenv.config(); // Load the environment variables
+console.log(`process.env: ${JSON.stringify(process.env)}`);
 let config = {};
 
 if (process.env.NODE_ENV === "dev") {
