@@ -2,10 +2,12 @@
   "name": "memeclub_bot",
   "version": "1.0.0",
   "scripts": {
-    "test": "vitest",
-    "prisma": "npx prisma generate",
-    "seed": "npx prisma db seed",
-    "dev": "open https://t.me/diamond404bot && nodemon src/entrypoint/local.pull.ts"
+    "prisma_migrate": "npx prisma migrate dev",
+    "prisma_generate": "npx prisma generate",
+    "prisma_seed": "npx prisma db seed",
+    "prisma_studio": "npx prisma studio",
+    "dev": "open https://t.me/diamond404bot && nodemon src/main/main.pull.ts",
+    "test": "vitest"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

@@ -1,16 +1,15 @@
 import { SocksProxyAgent } from "socks-proxy-agent";
 import { MyContext } from "../global.types";
-import { main_entry_point } from "./main";
 import { Bot } from "grammy";
 import Env from "../env.cloudflare";
 import * as dotenv from "dotenv";
+import { register } from "./register";
 
 // ===========================================================================
 //                        Bot Init Section Start
 // ===========================================================================
 
 dotenv.config(); // Load the environment variables
-console.log(`process.env: ${JSON.stringify(process.env)}`);
 let config = {};
 
 if (process.env.NODE_ENV === "dev") {
@@ -34,7 +33,7 @@ export const bot = new Bot<MyContext>(token, config);
 // ===========================================================================
 //                        Main Start
 // ===========================================================================
-main_entry_point(bot, {
+register(bot, {
   TELEGRAM_BOT_NAME: process.env.TELEGRAM_BOT_NAME,
   TELEGRAM_BOT_API_TOKEN: process.env.TELEGRAM_BOT_API_TOKEN,
   TELEGRAM_BOT_SECRET_TOKEN: process.env.TELEGRAM_BOT_SECRET_TOKEN,

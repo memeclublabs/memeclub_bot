@@ -11,32 +11,32 @@ datasource db {
 }
 
 model User {
-  id            Int     @id @default(autoincrement())
-  tgId          Int?
+  id            Int      @id @default(autoincrement())
+  tgId          Int      @unique
   tgUsername    String?
   firstName     String?
   lastName      String?
   profileImg    String?
-  refCode       String?
+  refCode       String   @unique
   referBy       String?
   langCode      String?
   walletNetwork String?
   walletAddress String?
   walletBalance Int?
-  totalPoints   Int?
+  totalPoints   Int      @default(0)
   extInfo       String?
   traceId       String?
   createBy      Int?
-  createDt      Int?
+  createDt      DateTime @default(now())
   modifyBy      Int?
-  modifyDt      Int?
+  modifyDt      DateTime @updatedAt
 }
 
 model UserAction {
-  id                Int     @id @default(autoincrement())
-  opTgId            Int?
+  id                Int      @id @default(autoincrement())
+  opTgId            Int      @unique
   opDisplayName     String?
-  actionType        String?
+  actionType        String
   selfReward        Int?
   targetTgId        Int?
   targetReward      Int?
@@ -44,43 +44,43 @@ model UserAction {
   extInfo           String?
   traceId           String?
   createBy          Int?
-  createDt          Int?
+  createDt          DateTime @default(now())
   modifyBy          Int?
-  modifyDt          Int?
+  modifyDt          DateTime @updatedAt
 }
 
 model Wallet {
-  id         Int     @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   network    String?
-  address    String?
+  address    String   @unique
   balance    Int?
   privateKey String?
   mnemonic   String?
   extInfo    String?
   traceId    String?
   createBy   Int?
-  createDt   Int?
+  createDt   DateTime @default(now())
   modifyBy   Int?
-  modifyDt   Int?
+  modifyDt   DateTime @updatedAt
 }
 
 model WalletOrder {
-  id       Int     @id @default(autoincrement())
-  type     String?
-  walletId Int?
+  id       Int      @id @default(autoincrement())
+  type     String
+  walletId Int
   opAmount Int?
   opTgId   Int?
   txHash   String?
   extInfo  String?
   traceId  String?
   createBy Int?
-  createDt Int?
+  createDt DateTime @default(now())
   modifyBy Int?
-  modifyDt Int?
+  modifyDt DateTime @updatedAt
 }
 
 model Memecoin {
-  id               Int     @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
   network          String?
   name             String?
   ticker           String?
@@ -93,6 +93,7 @@ model Memecoin {
   chatTitle        String?
   chatUsername     String?
   chatStatus       String?
+  chatLangCode     String?
   contractVersion  String?
   deployTxHash     String?
   masterAddress    String?
@@ -101,14 +102,14 @@ model Memecoin {
   extInfo          String?
   traceId          String?
   createBy         Int?
-  createDt         Int?
+  createDt         DateTime @default(now())
   modifyBy         Int?
-  modifyDt         Int?
+  modifyDt         DateTime @updatedAt
 }
 
 model BuyOrder {
-  id         Int     @id @default(autoincrement())
-  memecoinId Int?
+  id         Int      @id @default(autoincrement())
+  memecoinId Int
   buyAmt     Int?
   fromCoin   String?
   fromAmt    Int?
@@ -116,14 +117,14 @@ model BuyOrder {
   extInfo    String?
   traceId    String?
   createBy   Int?
-  createDt   Int?
+  createDt   DateTime @default(now())
   modifyBy   Int?
-  modifyDt   Int?
+  modifyDt   DateTime @updatedAt
 }
 
 model SellOrder {
-  id         Int     @id @default(autoincrement())
-  memecoinId Int?
+  id         Int      @id @default(autoincrement())
+  memecoinId Int
   sellAmt    Int?
   toCoin     String?
   toAmt      Int?
@@ -131,7 +132,7 @@ model SellOrder {
   extInfo    String?
   traceId    String?
   createBy   Int?
-  createDt   Int?
+  createDt   DateTime @default(now())
   modifyBy   Int?
-  modifyDt   Int?
+  modifyDt   DateTime @updatedAt
 }

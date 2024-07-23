@@ -69,6 +69,20 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
   bot.use(start_menu);
 
   bot.command("start", async (ctx) => {
+    //#1. 判断消息来源的operator，按需创建用户
+    //#2. 判断是私聊还是群聊，发送不同的菜单
+
+    //1.  判断消息来源的operator，按需创建用户
+    let id = ctx.from?.id;
+    if (id) {
+      let userById = await findUserById(id);
+      if (userById) {
+        // user found
+      } else {
+        //create user
+      }
+    }
+
     await ctx
       .replyWithPhoto(
         "https://art404app.pages.dev/memebot/bot-img-memeclub.png",

@@ -7,7 +7,7 @@ import { on_member } from "../member/on.member";
 import Env from "../env.cloudflare";
 import { on_add_to_group } from "../my_chat_member/on.add.to.group";
 
-export function main_entry_point(bot: Bot<MyContext>, env: Env) {
+export function register(bot: Bot<MyContext>, env: Env) {
   register_config(bot);
   bind_command(bot, env);
   on_message(bot, env);
