@@ -2,7 +2,7 @@ import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import { Menu } from "@grammyjs/menu";
 import Env from "../env.cloudflare";
-import { findUserById } from "../dao/user";
+import prisma from "../prisma";
 
 const startCaptionText: string =
   "<b>#1 Meme launchpad on TON </b>\n\nMake Memecoins Great Again";
@@ -75,7 +75,7 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
     //1.  判断消息来源的operator，按需创建用户
     let id = ctx.from?.id;
     if (id) {
-      let userById = await findUserById(id);
+      let userById = await prisma.user.findUnique({ where: { tgId: id } });
       if (userById) {
         // user found
       } else {
@@ -95,9 +95,5 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
       .catch((reason) => {
         console.error(reason);
       });
-
-    // test;
-    let promise = await findUserById(1);
-    await ctx.reply(JSON.stringify("user: " + JSON.stringify(promise)));
   });
 }

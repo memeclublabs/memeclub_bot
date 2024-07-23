@@ -4,6 +4,7 @@ import { Bot } from "grammy";
 import Env from "../env.cloudflare";
 import * as dotenv from "dotenv";
 import { register } from "./register";
+import prisma from "../prisma";
 
 // ===========================================================================
 //                        Bot Init Section Start
@@ -47,8 +48,14 @@ register(bot, {
 // ===========================================================================
 //                        Startup Section Start
 // ===========================================================================
-process.once("SIGINT", () => bot.stop());
-process.once("SIGTERM", () => bot.stop());
+process.once("SIGINT", async () => {
+  await prisma.$disconnect();
+  return bot.stop();
+});
+process.once("SIGTERM", async () => {
+  await prisma.$disconnect();
+  return bot.stop();
+});
 bot
   //   telegram bot update type full list
   //   https://core.telegram.org/bots/api#update
@@ -56,6 +63,7 @@ bot
   .start()
   .then((e) => {
     console.info(e);
+    process.exit(0);
   })
   .catch((e) => {
     console.error(e);
