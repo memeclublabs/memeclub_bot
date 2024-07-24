@@ -85,11 +85,12 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
         //create user
         // https://t.me/your_bot?start=MEME_ABCDEFGHIJK
         let match = ctx.match;
-        let referByTgId: number = -1;
+        let referByTgId: bigint = -1n;
         if (match.startsWith(MEME_)) {
           let userByRefCode = await prisma.user.findUnique({
             where: { refCode: match },
           });
+          // if not find, userByRefCode is null
           if (userByRefCode) {
             referByTgId = userByRefCode.tgId;
           }
@@ -100,9 +101,10 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
           firstName: ctx.from.first_name,
           lastName: ctx.from.last_name,
           refCode: generateReferralCode(tgId),
-          ...(referByTgId != -1 ? { referBy: referByTgId } : {}),
+          ...(referByTgId != -1n ? { referBy: referByTgId } : {}),
         } satisfies Prisma.UserCreateInput;
-        prisma.user.create({ data: userData });
+        let newUser = await prisma.user.create({ data: userData });
+        console.info(`new user created. ${newUser.id}`);
       }
     }
 

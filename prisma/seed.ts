@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -12,6 +12,11 @@ const userData = [
     tgId: 222,
     lastName: "Kevin",
     refCode: "ref_22",
+  },
+  {
+    tgId: 999147483647,
+    lastName: "big int user",
+    refCode: "ref_999147483647",
   },
 ] satisfies Prisma.UserCreateInput[];
 

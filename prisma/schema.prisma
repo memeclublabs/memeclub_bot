@@ -11,84 +11,84 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  tgId          Int      @unique
+  id            BigInt   @id @default(autoincrement())
+  tgId          BigInt   @unique
   tgUsername    String?
   firstName     String?
   lastName      String?
   profileImg    String?
   refCode       String   @unique
-  referBy       Int?
+  referBy       BigInt?
   langCode      String?
   walletNetwork String?
   walletAddress String?
-  walletBalance Int?
-  totalPoints   Int      @default(0)
+  walletBalance BigInt?
+  totalPoints   BigInt   @default(0)
   extInfo       String?
   traceId       String?
-  createBy      Int?
+  createBy      BigInt?
   createDt      DateTime @default(now())
-  modifyBy      Int?
+  modifyBy      BigInt?
   modifyDt      DateTime @updatedAt
 }
 
 model UserAction {
-  id                Int      @id @default(autoincrement())
-  opTgId            Int      @unique
+  id                BigInt   @id @default(autoincrement())
+  opTgId            BigInt   @unique
   opDisplayName     String?
   actionType        String
-  selfReward        Int?
-  targetTgId        Int?
-  targetReward      Int?
+  selfReward        BigInt?
+  targetTgId        BigInt?
+  targetReward      BigInt?
   targetDisplayName String?
   extInfo           String?
   traceId           String?
-  createBy          Int?
+  createBy          BigInt?
   createDt          DateTime @default(now())
-  modifyBy          Int?
+  modifyBy          BigInt?
   modifyDt          DateTime @updatedAt
 }
 
 model Wallet {
-  id         Int      @id @default(autoincrement())
+  id         BigInt   @id @default(autoincrement())
   network    String?
   address    String   @unique
-  balance    Int?
+  balance    BigInt?
   privateKey String?
   mnemonic   String?
   extInfo    String?
   traceId    String?
-  createBy   Int?
+  createBy   BigInt?
   createDt   DateTime @default(now())
-  modifyBy   Int?
+  modifyBy   BigInt?
   modifyDt   DateTime @updatedAt
 }
 
 model WalletOrder {
-  id       Int      @id @default(autoincrement())
+  id       BigInt   @id @default(autoincrement())
   type     String
-  walletId Int
-  opAmount Int?
-  opTgId   Int?
+  walletId BigInt
+  opAmount BigInt?
+  opTgId   BigInt?
   txHash   String?
   extInfo  String?
   traceId  String?
-  createBy Int?
+  createBy BigInt?
   createDt DateTime @default(now())
-  modifyBy Int?
+  modifyBy BigInt?
   modifyDt DateTime @updatedAt
 }
 
 model Memecoin {
-  id               Int      @id @default(autoincrement())
+  id               BigInt   @id @default(autoincrement())
   network          String?
   name             String?
   ticker           String?
   description      String?
   image            String?
-  devTgId          Int?
+  devTgId          BigInt?
   coinStatus       String?
-  chatId           Int?
+  chatId           BigInt?
   chatType         String?
   chatTitle        String?
   chatUsername     String?
@@ -101,38 +101,38 @@ model Memecoin {
   opWalletAddress  String?
   extInfo          String?
   traceId          String?
-  createBy         Int?
+  createBy         BigInt?
   createDt         DateTime @default(now())
-  modifyBy         Int?
+  modifyBy         BigInt?
   modifyDt         DateTime @updatedAt
 }
 
 model BuyOrder {
-  id         Int      @id @default(autoincrement())
-  memecoinId Int
-  buyAmt     Int?
+  id         BigInt   @id @default(autoincrement())
+  memecoinId BigInt
+  buyAmt     BigInt?
   fromCoin   String?
-  fromAmt    Int?
+  fromAmt    BigInt?
   txHash     String?
   extInfo    String?
   traceId    String?
-  createBy   Int?
+  createBy   BigInt?
   createDt   DateTime @default(now())
-  modifyBy   Int?
+  modifyBy   BigInt?
   modifyDt   DateTime @updatedAt
 }
 
 model SellOrder {
-  id         Int      @id @default(autoincrement())
-  memecoinId Int
-  sellAmt    Int?
+  id         BigInt   @id @default(autoincrement())
+  memecoinId BigInt
+  sellAmt    BigInt?
   toCoin     String?
-  toAmt      Int?
+  toAmt      BigInt?
   txHash     String?
   extInfo    String?
   traceId    String?
-  createBy   Int?
+  createBy   BigInt?
   createDt   DateTime @default(now())
-  modifyBy   Int?
+  modifyBy   BigInt?
   modifyDt   DateTime @updatedAt
 }

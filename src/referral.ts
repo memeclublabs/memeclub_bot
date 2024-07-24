@@ -1,4 +1,5 @@
 // Function to convert big integer to alphabetic string
+
 import { MEME_ } from "./static";
 
 export function generateReferralCode(tgId: number): string {
@@ -13,8 +14,9 @@ export function generateReferralCode(tgId: number): string {
     hexString = hexString.slice(1); // Remove the negative sign
   }
   // Convert each hex digit to its corresponding letter
-  const alphabeticString = hexString.split("").map(hexDigitToLetter).join("");
-  return MEME_ + isNegative ? "_" + alphabeticString : alphabeticString;
+  const alphabeticString =
+    MEME_ + hexString.split("").map(hexDigitToLetter).join("");
+  return isNegative ? "_" + alphabeticString : alphabeticString;
 }
 
 // Function to map hex digits to letters

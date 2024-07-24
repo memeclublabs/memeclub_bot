@@ -1,1 +1,1 @@
-export const MEME_ = "MEME_";
+export const MEME_: string = "MEME_";

@@ -8,7 +8,6 @@ import prisma from "../prisma";
 
 // ===========================================================================
 //                        Bot Init Section Start
-// ===========================================================================
 
 dotenv.config(); // Load the environment variables
 let config = {};
@@ -27,13 +26,13 @@ const token = process.env.BOT_TOKEN;
 const telegramBotName = process.env.TELEGRAM_BOT_NAME;
 if (!token) throw new Error("BOT_TOKEN is unset");
 export const bot = new Bot<MyContext>(token, config);
-// ###########################################################################
+//
 //                        Bot Init Section End
 // ###########################################################################
 
 // ===========================================================================
 //                        Main Start
-// ===========================================================================
+//
 register(bot, {
   TELEGRAM_BOT_NAME: process.env.TELEGRAM_BOT_NAME,
   TELEGRAM_BOT_API_TOKEN: process.env.TELEGRAM_BOT_API_TOKEN,
@@ -41,13 +40,21 @@ register(bot, {
   SUPABASE_URL: process.env.SUPABASE_URL,
   SUPABASE_KEY: process.env.SUPABASE_KEY,
 } as Env);
-// ###########################################################################
+
+bot.catch((err) => {
+  console.error("===============================");
+  console.error("uncaught error occurred", err);
+  console.error("// ############################");
+});
+
+//
 //                        Main End
 // ###########################################################################
 
 // ===========================================================================
-//                        Startup Section Start
-// ===========================================================================
+//                        Exit Section Start
+//
+
 process.once("SIGINT", async () => {
   await prisma.$disconnect();
   return bot.stop();
@@ -68,6 +75,6 @@ bot
   .catch((e) => {
     console.error(e);
   });
-// ###########################################################################
-//                        Startup Section End
+//
+//                        Exit Section End
 // ###########################################################################
