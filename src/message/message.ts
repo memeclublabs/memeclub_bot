@@ -1,18 +1,7 @@
 import { Bot } from "grammy";
-import { MyContext, MyConversation } from "../global.types";
-import TonWeb from "tonweb";
-import {
-  beginCell,
-  internal,
-  toNano,
-  TonClient4,
-  WalletContractV4,
-} from "@ton/ton";
-import { mnemonicToPrivateKey } from "@ton/crypto";
-import { Menu } from "@grammyjs/menu";
-import Env from "../env.cloudflare";
+import { MyContext } from "../global.types";
 
-export function on_message(bot: Bot<MyContext>, env: Env) {
+export function on_message(bot: Bot<MyContext>) {
   // bot.on("message", async (ctx) => {
   //   let msg_text = ctx.message.text;
   //

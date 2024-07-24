@@ -1,7 +1,6 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import { Menu } from "@grammyjs/menu";
-import Env from "../env.cloudflare";
 import prisma from "../prisma";
 import { generateReferralCode } from "../referral";
 import { MEME_ } from "../static";
@@ -22,7 +21,7 @@ Step 4: When enough people buy on the bonding curve it reaches a pool of 1,000 T
 Step 5: All liquidity is then deposited in DEX(DeDust or STON fi) and burned.\n
 `;
 
-export function bind_command_start(bot: Bot<MyContext>, env: Env) {
+export function bind_command_start(bot: Bot<MyContext>) {
   const start_menu = new Menu<MyContext>("start_menu")
     .submenu("🚀 Create Meme ", "create_meme_menu", async (ctx) => {
       await ctx
@@ -41,7 +40,7 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
     .row()
     .submenu("🎁 Airdrop", "create_meme_menu");
 
-  let addGroupUrl = `https://t.me/${env.TELEGRAM_BOT_NAME}?startgroup=true`;
+  let addGroupUrl = `https://t.me/${process.env.TELEGRAM_BOT_NAME}?startgroup=true`;
   console.info(addGroupUrl);
   const create_meme_menu = new Menu<MyContext>("create_meme_menu")
     .url("Step 1: Add bot to your group", addGroupUrl)

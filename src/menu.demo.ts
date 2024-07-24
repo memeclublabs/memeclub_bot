@@ -1,5 +1,5 @@
 import { Dish, MyContext, SessionData } from "./global.types";
-import { Bot, Context, session, SessionFlavor } from "grammy";
+import { Bot, session } from "grammy";
 import { Menu, MenuRange } from "@grammyjs/menu";
 
 export function menuDemo(bot: Bot<MyContext>) {
@@ -32,9 +32,9 @@ export function menuDemo(bot: Bot<MyContext>) {
           { text: dish.name, payload: dish.id }, // label and payload
           "dish", // navigation target menu
           async (ctx) =>
-              await ctx.editMessageText(dishText(dish.name), {
-                parse_mode: "HTML",
-              }), // handler
+            await ctx.editMessageText(dishText(dish.name), {
+              parse_mode: "HTML",
+            }), // handler
         )
         .row();
     }
@@ -55,7 +55,7 @@ export function menuDemo(bot: Bot<MyContext>) {
       .text(
         {
           text: async (ctx) =>
-              await ctx.session.favoriteIds.includes(dish) ? "Yummy!" : "Meh.",
+            (await ctx.session.favoriteIds.includes(dish)) ? "Yummy!" : "Meh.",
           payload: dish,
         },
         async (ctx) => {
@@ -77,8 +77,9 @@ export function menuDemo(bot: Bot<MyContext>) {
 
   mainMenu.register(dishMenu);
   bot.use(mainMenu);
-  bot.command("start", async (ctx) =>
-      await ctx.reply(mainText, {reply_markup: mainMenu}),
+  bot.command(
+    "start",
+    async (ctx) => await ctx.reply(mainText, { reply_markup: mainMenu }),
   );
 
   bot.catch(console.error.bind(console));

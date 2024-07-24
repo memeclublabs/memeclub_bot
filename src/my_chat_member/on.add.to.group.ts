@@ -1,9 +1,7 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
-import Env from "../env.cloudflare";
-import { CoinStatus } from "../enums";
 
-export function on_add_to_group(bot: Bot<MyContext>, env: Env) {
+export function on_add_to_group(bot: Bot<MyContext>) {
   bot.on("my_chat_member", async (ctx) => {
     console.info("my_chat_member，");
     //1. 读取 chat 发生地，是私聊还是群聊

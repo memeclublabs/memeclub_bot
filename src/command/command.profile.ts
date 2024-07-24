@@ -1,8 +1,7 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
-import Env from "../env.cloudflare";
 
-export function bind_command_profile(bot: Bot<MyContext>, env: Env) {
+export function bind_command_profile(bot: Bot<MyContext>) {
   bot.command("profile", async (ctx) => {
     // let isPublicChat = ctx.message?.chat?.type != "private";
     // if (isPublicChat) {

@@ -1,7 +1,6 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
-import Env from "../env.cloudflare";
 
-export function bind_command_referral(bot: Bot<MyContext>, env: Env) {
+export function bind_command_referral(bot: Bot<MyContext>) {
   bot.command("referral", async (ctx) => {});
 }

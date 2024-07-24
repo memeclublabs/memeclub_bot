@@ -1,10 +1,13 @@
 import { SocksProxyAgent } from "socks-proxy-agent";
-import { MyContext } from "../global.types";
+import { MyContext } from "./global.types";
 import { Bot } from "grammy";
-import Env from "../env.cloudflare";
 import * as dotenv from "dotenv";
-import { register } from "./register";
-import prisma from "../prisma";
+import prisma from "./prisma";
+import { bind_command } from "./command/command";
+import { on_message } from "./message/message";
+import { on_member } from "./member/on.member";
+import { on_add_to_group } from "./my_chat_member/on.add.to.group";
+import { use_time_tracer } from "./middleware.tracker";
 
 // ===========================================================================
 //                        Bot Init Section Start
@@ -23,7 +26,6 @@ if (process.env.NODE_ENV === "dev") {
   };
 }
 const token = process.env.BOT_TOKEN;
-const telegramBotName = process.env.TELEGRAM_BOT_NAME;
 if (!token) throw new Error("BOT_TOKEN is unset");
 export const bot = new Bot<MyContext>(token, config);
 //
@@ -33,13 +35,13 @@ export const bot = new Bot<MyContext>(token, config);
 // ===========================================================================
 //                        Main Start
 //
-register(bot, {
-  TELEGRAM_BOT_NAME: process.env.TELEGRAM_BOT_NAME,
-  TELEGRAM_BOT_API_TOKEN: process.env.TELEGRAM_BOT_API_TOKEN,
-  TELEGRAM_BOT_SECRET_TOKEN: process.env.TELEGRAM_BOT_SECRET_TOKEN,
-  SUPABASE_URL: process.env.SUPABASE_URL,
-  SUPABASE_KEY: process.env.SUPABASE_KEY,
-} as Env);
+
+use_time_tracer(bot);
+
+bind_command(bot);
+on_message(bot);
+on_member(bot);
+on_add_to_group(bot);
 
 bot.catch((err) => {
   console.error("===============================");

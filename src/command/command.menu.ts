@@ -1,8 +1,7 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
-import Env from "../env.cloudflare";
 
-export function bind_command_profile(bot: Bot<MyContext>, env: Env) {
+export function bind_command_profile(bot: Bot<MyContext>) {
   bot.command("menu", async (ctx) => {
     await ctx.reply("Choose an option:", {
       reply_markup: {
