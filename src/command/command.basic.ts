@@ -3,16 +3,19 @@ import { MyContext } from "../global.types";
 
 export function bind_command_basic(bot: Bot<MyContext>) {
   bot.command(["help", "community"], async (ctx) => {
-    await ctx
-      .reply(
-        "Community & Helpdesk [Memeclub Group](https://t.me/memeclub_chat) ",
-        {
-          parse_mode: "MarkdownV2",
-        },
-      )
-      .catch((reason) => {
-        console.error(reason);
-      });
+    //   ============== Conversation start ======================
+    await ctx.conversation.enter("movie");
+    //   ============== Conversation end ========================
+    // await ctx
+    //   .reply(
+    //     "Community & Helpdesk [Memeclub Group](https://t.me/memeclub_chat) ",
+    //     {
+    //       parse_mode: "MarkdownV2",
+    //     },
+    //   )
+    //   .catch((reason) => {
+    //     console.error(reason);
+    //   });
   });
 
   bot.command("twitter", async (ctx) => {

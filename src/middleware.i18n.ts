@@ -1,4 +1,4 @@
-import { Bot, NextFunction } from "grammy";
+import { Bot } from "grammy";
 import { MyContext } from "./global.types";
 import { I18n } from "@grammyjs/i18n";
 

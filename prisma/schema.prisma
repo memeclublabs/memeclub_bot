@@ -17,6 +17,7 @@ model User {
   firstName     String?
   lastName      String?
   profileImg    String?
+  isPremium     Boolean  @default(false)
   refCode       String   @unique
   referBy       BigInt?
   langCode      String?
