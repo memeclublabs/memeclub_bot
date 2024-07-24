@@ -18,7 +18,7 @@ model User {
   lastName      String?
   profileImg    String?
   refCode       String   @unique
-  referBy       String?
+  referBy       Int?
   langCode      String?
   walletNetwork String?
   walletAddress String?

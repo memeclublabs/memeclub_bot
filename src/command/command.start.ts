@@ -3,6 +3,9 @@ import { MyContext } from "../global.types";
 import { Menu } from "@grammyjs/menu";
 import Env from "../env.cloudflare";
 import prisma from "../prisma";
+import { generateReferralCode } from "../referral";
+import { MEME_ } from "../static";
+import { Prisma } from "@prisma/client";
 
 const startCaptionText: string =
   "<b>#1 Meme launchpad on TON </b>\n\nMake Memecoins Great Again";
@@ -73,13 +76,33 @@ export function bind_command_start(bot: Bot<MyContext>, env: Env) {
     //#2. 判断是私聊还是群聊，发送不同的菜单
 
     //1.  判断消息来源的operator，按需创建用户
-    let id = ctx.from?.id;
-    if (id) {
-      let userById = await prisma.user.findUnique({ where: { tgId: id } });
+    let tgId = ctx.from?.id;
+    if (tgId && ctx.from) {
+      let userById = await prisma.user.findUnique({ where: { tgId: tgId } });
       if (userById) {
         // user found
       } else {
         //create user
+        // https://t.me/your_bot?start=MEME_ABCDEFGHIJK
+        let match = ctx.match;
+        let referByTgId: number = -1;
+        if (match.startsWith(MEME_)) {
+          let userByRefCode = await prisma.user.findUnique({
+            where: { refCode: match },
+          });
+          if (userByRefCode) {
+            referByTgId = userByRefCode.tgId;
+          }
+        }
+        const userData = {
+          tgId: tgId,
+          tgUsername: ctx.from.username,
+          firstName: ctx.from.first_name,
+          lastName: ctx.from.last_name,
+          refCode: generateReferralCode(tgId),
+          ...(referByTgId != -1 ? { referBy: referByTgId } : {}),
+        } satisfies Prisma.UserCreateInput;
+        prisma.user.create({ data: userData });
       }
     }
 

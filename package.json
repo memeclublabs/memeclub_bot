@@ -13,7 +13,9 @@
     "prisma_db_seed": "npx prisma db seed",
     "prisma_studio": "npx prisma studio",
     "dev": "open https://t.me/diamond404bot && nodemon src/main/main.pull.ts",
-    "test": "vitest"
+    "build": "pnpm run build",
+    "test": "vitest",
+    "app_test": "ts-node app.ts"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

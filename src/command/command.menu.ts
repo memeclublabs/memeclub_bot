@@ -1,8 +1,6 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
-import { createUser, queryUser, queryUserListByRefTgId } from "../util404";
 import Env from "../env.cloudflare";
-import { REF_USER_LIST_FOUND, User404, USER_FOUND } from "../static404";
 
 export function bind_command_profile(bot: Bot<MyContext>, env: Env) {
   bot.command("menu", async (ctx) => {
