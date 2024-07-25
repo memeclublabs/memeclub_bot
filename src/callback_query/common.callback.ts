@@ -2,16 +2,9 @@ import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
 
-//  ⚠️注意： 通用的 bot.on('callback_query') 优先级低于明确的 bot.callbackQuery
-//  ⚠️注意： 通用的 bot.on('callback_query') 优先级低于明确的 bot.callbackQuery
-//  ⚠️注意： 通用的 bot.on('callback_query') 优先级低于明确的 bot.callbackQuery
-
-// 也就是说，通用的不会影响到具体的 bot.callbackQuery
-
-// 在 grammy 中，bot.on('callback_query') 和 bot.callbackQuery('some_callback_data') 处理器可以共存，
-// 但它们的处理方式和优先级有一些关键点需要注意。
-// bot.callbackQuery('some_callback_data') 是对特定回调数据的专门处理器，
-// 而 bot.on('callback_query') 是一个通用处理器，处理所有的回调查询。
+// ⚠️注意：需要把具体的 bot.callbackQuery 放到 通用的 bot.on('callback_query') 前面，否则会被通用的处理掉
+// ⚠️注意：需要把具体的 bot.callbackQuery 放到 通用的 bot.on('callback_query') 前面，否则会被通用的处理掉
+// ⚠️注意：需要把具体的 bot.callbackQuery 放到 通用的 bot.on('callback_query') 前面，否则会被通用的处理掉
 
 export function on_callback_query(bot: Bot<MyContext>) {
   // 处理 create_meme_callback
@@ -20,7 +13,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
     // await ctx.conversation.enter("movie");
   });
 
-  // 处理按钮点击事件
+  // 处理通用的按钮点击事件 callback_query
   bot.on("callback_query", async (ctx) => {
     const callbackData = ctx.callbackQuery.data;
 
