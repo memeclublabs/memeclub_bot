@@ -124,7 +124,7 @@ async function newMemeWithValidation(
     );
 
     const keyboard = new InlineKeyboard().text(
-      "Confirm to Create",
+      "Confirm to Create Memecoin",
       `callback_confirm_deploy_${newMemecoin.id}`,
     );
     await ctx.reply(

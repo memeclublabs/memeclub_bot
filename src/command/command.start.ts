@@ -2,15 +2,15 @@ import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import { Menu } from "@grammyjs/menu";
 import prisma from "../prisma";
-import { generateReferralCode } from "../referral";
-import { MEME_ } from "../static";
 import { Prisma, User } from "@prisma/client";
+import { MEME_ } from "../static";
+import { generateReferralCode } from "../referral";
 
 const startCaptionText: string =
-  "<b>#1 Meme launchpad on TON </b>\n\nMake Memecoins Great Again";
+  "<b>#1 Memecoin launchpad on TON </b>\n\nMake Memecoins Great Again";
 
 const backCaptionText: string =
-  "<b>#1 Meme launchpad on TON </b>\n\nMake sure the memecoins revolution happens on TON";
+  "<b>#1 Memecoin launchpad on TON </b>\n\nMake sure the memecoins revolution happens on TON";
 
 let newMemeCaption = `
 <b>[ How it works ?]</b>\n
@@ -22,6 +22,26 @@ Step 5: All liquidity is then deposited in DEX(DeDust or STON fi) and burned.\n
 `;
 
 export function bind_command_start(bot: Bot<MyContext>) {
+  const group_start_menu = new Menu<MyContext>("group_start_menu")
+    .submenu("🤡 How it works?", `how_it_works_menu`, async (ctx) => {
+      await ctx
+        .editMessageCaption({ caption: newMemeCaption, parse_mode: "HTML" })
+        .then((r) => {});
+    })
+    .row()
+    .url(
+      "🎁 Airdrop & Referral",
+      `https://t.me/${process.env.TELEGRAM_BOT_NAME}?start=MEME_RUXCWXDUS5`,
+    );
+  const how_it_works_menu = new Menu<MyContext>("how_it_works_menu").back(
+    "◀️ Go Back",
+    async (ctx) => {
+      await ctx
+        .editMessageCaption({ caption: startCaptionText, parse_mode: "HTML" })
+        .then((r) => {});
+    },
+  );
+
   const start_menu = new Menu<MyContext>("start_menu")
     .submenu("🚀 Create Memecoin", "create_meme_menu", async (ctx) => {
       await ctx
@@ -69,66 +89,83 @@ export function bind_command_start(bot: Bot<MyContext>) {
   start_menu.register(community_menu);
   bot.use(start_menu);
 
+  group_start_menu.register(how_it_works_menu);
+  bot.use(group_start_menu);
+
   bot.command("start", async (ctx) => {
-    //#1. 判断消息来源的operator，按需创建用户
-    //#2. 判断是私聊还是群聊，发送不同的菜单 TODO
-    //#2. 判断是私聊还是群聊，发送不同的菜单 TODO
-    //#2. 判断是私聊还是群聊，发送不同的菜单 TODO
-    //#2. 判断是私聊还是群聊，发送不同的菜单 TODO
+    //判断是私聊还是群聊，发送不同的菜单
 
-    //1.  判断消息来源的operator，按需创建用户
-    let tgId = ctx.from?.id;
-    if (tgId && ctx.from) {
-      let userById = await prisma.user.findUnique({ where: { tgId: tgId } });
-      if (userById) {
-        // user found
-        await ctx.reply("Welcome back!");
-      } else {
-        //create user
-        // https://t.me/your_bot?start=MEME_ABCDEFGHIJK
-        let match = ctx.match;
-        let haveRefer = false;
-        let referUser: User | undefined = undefined;
-        if (match.startsWith(MEME_)) {
-          let userByRefCode = await prisma.user.findUnique({
-            where: { refCode: match },
-          });
-          // if not find, userByRefCode is null
-          if (userByRefCode) {
-            haveRefer = true;
-            referUser = userByRefCode;
-            await ctx.reply(
-              `You are invited by ${userByRefCode.firstName} ${userByRefCode.lastName}`,
-            );
+    if (ctx.chat.type == "private") {
+      // 这是私聊，发送全量菜单，创建用户
+      //1.  判断消息来源的operator，按需创建用户
+      let tgId = ctx.from?.id;
+      if (tgId && ctx.from) {
+        let userById = await prisma.user.findUnique({ where: { tgId: tgId } });
+        if (userById) {
+          // user found
+          await ctx.reply("Welcome back!");
+        } else {
+          //create user
+          // https://t.me/your_bot?start=MEME_ABCDEFGHIJK
+          let match = ctx.match;
+          let haveRefer = false;
+          let referUser: User | undefined = undefined;
+          if (match.startsWith(MEME_)) {
+            let userByRefCode = await prisma.user.findUnique({
+              where: { refCode: match },
+            });
+            // if not find, userByRefCode is null
+            if (userByRefCode) {
+              haveRefer = true;
+              referUser = userByRefCode;
+              await ctx.reply(
+                `You are invited by ${userByRefCode.firstName} ${userByRefCode.lastName}`,
+              );
+            }
           }
+          const userData = {
+            tgId: tgId,
+            tgUsername: ctx.from.username,
+            firstName: ctx.from.first_name,
+            lastName: ctx.from.last_name,
+            refCode: generateReferralCode(tgId),
+            isPremium: ctx.from.is_premium,
+            langCode: ctx.from.language_code,
+            createBy: tgId,
+            ...(referUser ? { referBy: referUser.tgId } : {}),
+          } satisfies Prisma.UserCreateInput;
+          let newUser = await prisma.user.create({ data: userData });
+          console.info(`new user created. ${newUser.id}`);
         }
-        const userData = {
-          tgId: tgId,
-          tgUsername: ctx.from.username,
-          firstName: ctx.from.first_name,
-          lastName: ctx.from.last_name,
-          refCode: generateReferralCode(tgId),
-          isPremium: ctx.from.is_premium,
-          langCode: ctx.from.language_code,
-          createBy: tgId,
-          ...(referUser ? { referBy: referUser.tgId } : {}),
-        } satisfies Prisma.UserCreateInput;
-        let newUser = await prisma.user.create({ data: userData });
-        console.info(`new user created. ${newUser.id}`);
       }
-    }
 
-    await ctx
-      .replyWithPhoto(
-        "https://art404app.pages.dev/memebot/bot-img-memeclub.png",
-        {
-          caption: startCaptionText,
-          parse_mode: "HTML",
-          reply_markup: start_menu,
-        },
-      )
-      .catch((reason) => {
-        console.error(reason);
-      });
+      await ctx
+        .replyWithPhoto(
+          "https://art404app.pages.dev/memebot/bot-img-memeclub.png",
+          {
+            caption: startCaptionText,
+            parse_mode: "HTML",
+            reply_markup: start_menu,
+          },
+        )
+        .catch((reason) => {
+          console.error(reason);
+        });
+    } else {
+      // 这边是在群组中
+
+      await ctx
+        .replyWithPhoto(
+          "https://art404app.pages.dev/memebot/bot-img-memeclub.png",
+          {
+            caption: startCaptionText,
+            parse_mode: "HTML",
+            reply_markup: group_start_menu,
+          },
+        )
+        .catch((reason) => {
+          console.error(reason);
+        });
+    } //in group
   });
 }

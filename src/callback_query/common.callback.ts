@@ -28,6 +28,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
       callbackData &&
       callbackData.startsWith("callback_confirm_deploy_")
     ) {
+      // 点击 【Confirm to Create Memecoin】按钮
       const memecoinId = callbackData.split("callback_confirm_deploy_")[1];
       let memecoin = await prisma.memecoin.findUnique({
         where: { id: BigInt(memecoinId) },
@@ -40,6 +41,11 @@ export function on_callback_query(bot: Bot<MyContext>) {
       console.info(memecoin?.ticker);
       console.info(memecoin?.ticker);
 
+      // TODO 这里就要部署了
+      // TODO 这里就要部署了
+      // TODO 这里就要部署了
+      // TODO 这里就要部署了
+      // TODO 这里就要部署了
       // 回复用户
       // await ctx.answerCallbackQuery("memecoin in deploying");
       // await ctx.answerCallbackQuery({ text: "⚠️警告", show_alert: true });
