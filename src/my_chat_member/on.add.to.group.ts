@@ -1,7 +1,7 @@
 import { Bot, InlineKeyboard } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
-import { Prisma } from "@prisma/client";
+import { Chat, Prisma } from "@prisma/client";
 
 export function on_add_to_group(bot: Bot<MyContext>) {
   bot.on("my_chat_member", async (ctx) => {
@@ -18,57 +18,85 @@ export function on_add_to_group(bot: Bot<MyContext>) {
       chatType == "group" ||
       chatType == "supergroup"
     ) {
-      let opIgId = ctx.myChatMember.from.id;
-      let opFirstName = ctx.myChatMember.from.first_name;
-      let opLastName = ctx.myChatMember.from.last_name;
-      let opDisplayName = `${opFirstName} ${opLastName}`;
-
       // let status: "member" | "creator" | "administrator" | "restricted" | "left" | "kicked"
       let chatMemberStatus = ctx.myChatMember.new_chat_member.status;
-      let userById = await prisma.user.findUnique({
-        where: { tgId: opIgId },
-      });
-      if (!userById) {
-        console.error(`admin user not found by id ${opIgId}`);
-        return;
-      }
-
       if (chatMemberStatus == "member" || chatMemberStatus == "administrator") {
         let chatMemberCount = await ctx.api.getChatMemberCount(
           ctx.myChatMember.chat.id,
         );
 
-        const insertData = {
-          chatId: chatId,
-          chatType: chatType,
-          chatTitle: "" + chatTitle,
-          chatUsername: chatUsername,
-          inviterTgId: opIgId,
-          mainBotId: ctx.myChatMember.new_chat_member.user.id,
-          mainBotUsername: "" + ctx.myChatMember.new_chat_member.user.username,
-          botStatus: chatMemberStatus,
-          memberCount: chatMemberCount,
-          createBy: opIgId,
-        } satisfies Prisma.ChatCreateInput;
+        let opIgId = ctx.myChatMember.from.id;
+        let opFirstName = ctx.myChatMember.from.first_name;
+        let opLastName = ctx.myChatMember.from.last_name;
+        let opDisplayName = `${opFirstName} ${opLastName}`;
 
-        const updateData = {
-          chatId: chatId,
-          chatType: chatType,
-          chatTitle: "" + chatTitle,
-          chatUsername: chatUsername,
-          inviterTgId: opIgId,
-          botStatus: chatMemberStatus,
-          memberCount: chatMemberCount,
-          modifyBy: opIgId,
-        } satisfies Prisma.ChatUpdateInput;
-        let newChat = await prisma.chat.upsert({
+        let findChat = await prisma.chat.findUnique({
           where: { chatId: chatId },
-          create: insertData,
-          update: updateData,
         });
-        console.info(`new ${chatType} chat upsert. ${newChat.id}`);
+        let realChat: Chat | undefined;
+        if (findChat) {
+          // 准备按需更新
+          if (
+            findChat.mainBotId ==
+            BigInt(ctx.myChatMember.new_chat_member.user.id)
+          ) {
+            // 判断 mainBotId 是否是本 bot，有可能本项目有多个 bot 实例
+            // 如果是就更新，否则先跳过
+            const updateData = {
+              chatTitle: "" + chatTitle,
+              chatUsername: chatUsername,
+              inviterTgId: opIgId,
+              botStatus: chatMemberStatus,
+              memberCount: chatMemberCount,
+              modifyBy: opIgId,
+            } satisfies Prisma.ChatUpdateInput;
 
-        let addToChatCaption = `
+            realChat = await prisma.chat.update({
+              where: { chatId: chatId },
+              data: updateData,
+            });
+          } else {
+            // TODO:  mainBotId 不是本 bot, 先忽略这个情况，将来再支持
+            console.error("mainBotId is another bot, pending support.");
+          }
+        } else {
+          // 创建
+          const insertData = {
+            chatId: chatId,
+            chatType: chatType,
+            chatTitle: "" + chatTitle,
+            chatUsername: chatUsername,
+            inviterTgId: opIgId,
+            mainBotId: ctx.myChatMember.new_chat_member.user.id,
+            mainBotUsername:
+              "" + ctx.myChatMember.new_chat_member.user.username,
+            botStatus: chatMemberStatus,
+            memberCount: chatMemberCount,
+            createBy: opIgId,
+          } satisfies Prisma.ChatCreateInput;
+          realChat = await prisma.chat.create({ data: insertData });
+        }
+
+        // let userById = await prisma.user.findUnique({
+        //   where: { tgId: opIgId },
+        // });
+        // if (!userById) {
+        //   console.error(`admin user not found by id ${opIgId}`);
+        //   return;
+        // }
+
+        if (realChat) {
+          if (realChat.mainMemecoinId) {
+            await ctx.api
+              .sendMessage(
+                opIgId,
+                `There already have a memecoin in group/channel.] `,
+              )
+              .catch((e) => {
+                console.error(e);
+              });
+          } else {
+            let addToChatCaption = `
 <b>🎉 Add to group successfully.</b>\n
         - Group name: ${chatTitle}
         - Member count: ${chatMemberCount}\n
@@ -76,32 +104,37 @@ export function on_add_to_group(bot: Bot<MyContext>) {
 ⭐Your Meme Points: + 200
 `;
 
-        let inlineKeyboard = new InlineKeyboard().text(
-          "Step 2: Create new Meme coin",
-          "create_meme_callback",
-        );
+            let inlineKeyboard = new InlineKeyboard().text(
+              "Step 2: Create new Memecoin",
+              `callback_create_meme_chatId_${realChat.chatId}`,
+            );
 
-        await ctx.api
-          .sendMessage(opIgId, addToChatCaption, {
-            parse_mode: "HTML",
-            reply_markup: inlineKeyboard,
-          })
-          .catch((e) => {
-            console.error(e);
-          });
+            await ctx.api
+              .sendMessage(opIgId, addToChatCaption, {
+                parse_mode: "HTML",
+                reply_markup: inlineKeyboard,
+              })
+              .catch((e) => {
+                console.error(e);
+              });
 
-        await ctx.api
-          .sendMessage(
-            chatId,
-            `added by ${opDisplayName} to this group, will fair launch memecoins. `,
-            {
-              parse_mode: "HTML",
-            },
-          )
-          .catch((e) => {
-            console.error(e);
-          });
+            await ctx.api
+              .sendMessage(
+                chatId,
+                `added by ${opDisplayName} to this group, will fair launch memecoins. `,
+                {
+                  parse_mode: "HTML",
+                },
+              )
+              .catch((e) => {
+                console.error(e);
+              });
+          }
+        }
       } else {
+        console.info(
+          ` new chatMemberStatus ${chatMemberStatus} at chat ${chatId}`,
+        );
         // 去除 member ，admin 和 creator，还有如下 3个状态
         // let status: "restricted" | "left" | "kicked"
         let findChat = await prisma.chat.findUnique({
@@ -121,20 +154,3 @@ export function on_add_to_group(bot: Bot<MyContext>) {
     } //end chat in group / channel loop
   });
 }
-
-//
-// [
-//   {
-//     user: {
-//       id: 5499157826,
-//       is_bot: false,
-//       first_name: "Andrew 💎",
-//       last_name: "Memeclub",
-//       username: "andrew_tonx",
-//       language_code: "en",
-//       is_premium: true,
-//     },
-//     status: "creator",
-//     is_anonymous: false,
-//   },
-// ];

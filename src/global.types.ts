@@ -13,6 +13,7 @@ export interface Dish {
 
 export interface SessionData {
   userDefinedIds: string[];
+  chatId: string;
 }
 
 export type MyContext = Context &

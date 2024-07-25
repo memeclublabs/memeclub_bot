@@ -2,32 +2,43 @@ import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
 
-// ⚠️注意：需要把具体的 bot.callbackQuery 放到 通用的 bot.on('callback_query') 前面，否则会被通用的处理掉
-// ⚠️注意：需要把具体的 bot.callbackQuery 放到 通用的 bot.on('callback_query') 前面，否则会被通用的处理掉
-// ⚠️注意：需要把具体的 bot.callbackQuery 放到 通用的 bot.on('callback_query') 前面，否则会被通用的处理掉
-
 export function on_callback_query(bot: Bot<MyContext>) {
-  // 处理 create_meme_callback
-  bot.callbackQuery("create_meme_callback", async (ctx) => {
-    await ctx.conversation.enter("newMemeWithValidation");
-    // await ctx.conversation.enter("movie");
-  });
+  // 这个是旧的处理方式，因为不能接受参数chatId，已经没用了，
+  // bot.callbackQuery("create_meme_callback", async (ctx) => {
+  //   await ctx.conversation.enter("newMemeWithValidation");
+  // });
 
   // 处理通用的按钮点击事件 callback_query
-  bot.on("callback_query", async (ctx) => {
+  bot.on("callback_query", async (ctx, next) => {
     const callbackData = ctx.callbackQuery.data;
 
-    if (callbackData && callbackData.startsWith("confirm_deploy_memecoin_")) {
-      console.info(callbackData);
-      // `confirm_deploy_memecoin_${newMemecoin.id}`,
-      const memecoinId = callbackData.split("confirm_deploy_memecoin_")[1];
+    if (
+      callbackData &&
+      callbackData.startsWith("callback_create_meme_chatId_")
+    ) {
+      // 点击 [Step 2: Create new Memecoin] 按钮会进入这个方法处理，按钮附带了 chatId 参数
+      // chatId 参数将会放到 session 中才可以传递给 conversation
+      // conversation 处理方法讲中 session 中获取 chatId
 
+      ctx.session.chatId = callbackData.split(
+        "callback_create_meme_chatId_",
+      )[1];
+      await ctx.conversation.enter("newMemeWithValidation");
+    } else if (
+      callbackData &&
+      callbackData.startsWith("callback_confirm_deploy_")
+    ) {
+      const memecoinId = callbackData.split("callback_confirm_deploy_")[1];
       let memecoin = await prisma.memecoin.findUnique({
         where: { id: BigInt(memecoinId) },
       });
 
+      if (!memecoin) {
+        console.error(`${memecoinId} not found`);
+      }
       console.info(memecoin?.ticker);
-      // 根据 id 从数据库中删除记录
+      console.info(memecoin?.ticker);
+      console.info(memecoin?.ticker);
 
       // 回复用户
       // await ctx.answerCallbackQuery("memecoin in deploying");
@@ -46,12 +57,14 @@ export function on_callback_query(bot: Bot<MyContext>) {
             [
               {
                 text: "Check Status",
-                callback_data: "your_callback_data",
+                callback_data: `callback_check_status_memecoin_${memecoin?.id}`,
               },
             ],
           ],
         },
       });
+    } else {
+      await next();
     }
   });
 }

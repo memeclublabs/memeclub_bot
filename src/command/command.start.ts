@@ -15,8 +15,8 @@ const backCaptionText: string =
 let newMemeCaption = `
 <b>[ How it works ?]</b>\n
 Step 1: Add this bot to your group or channel.\n
-Step 2: Create new meme coin with few or zero gas cost.\n
-Step 3: Buy the meme coin on the bonding curve. Sell at any time to lock in your profits or losses.\n
+Step 2: Create new Memecoin with few or zero gas cost.\n
+Step 3: Buy the Memecoin on the bonding curve. Sell at any time to lock in your profits or losses.\n
 Step 4: When enough people buy on the bonding curve it reaches a pool of 1,000 TON.\n
 Step 5: All liquidity is then deposited in DEX(DeDust or STON fi) and burned.\n
 `;

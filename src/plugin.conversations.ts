@@ -3,6 +3,7 @@ import { MyContext, MyConversation } from "./global.types";
 import { conversations, createConversation } from "@grammyjs/conversations";
 import prisma from "./prisma";
 import { bigintReplacer } from "./functions.common";
+import { Prisma } from "@prisma/client";
 
 export function use_conversations(bot: Bot<MyContext>) {
   // WARN: must run after sessions plugin
@@ -69,10 +70,10 @@ async function newMemeWithValidation(
 
   await ctx.reply(
     "Good. Now let’s enter a ticker for this meme coin.  [2/4]\n\n" +
-      "Examples: \n " +
-      "   - DOGE \n" +
-      "   - PEPE \n" +
-      "   - FISH \n",
+      "Examples:\n " +
+      "   - DOGE\n" +
+      "   - PEPE\n" +
+      "   - FISH\n",
   );
   const tickerMsg = await conversation.waitFor(":text");
   await ctx.reply(
@@ -95,22 +96,39 @@ async function newMemeWithValidation(
 
     let devTgId = nameMsg?.message?.from.id;
 
+    // 从会话中获取参数
+    const chatIdStr = ctx.session.chatId;
+
+    let chatId = Number(chatIdStr);
+    let newData = {
+      network: "TON-Mainnet",
+      name: name,
+      ticker: ticker,
+      description: desc,
+      devTgId: devTgId,
+      chatId: chatId,
+    } satisfies Prisma.MemecoinCreateInput;
+
     let newMemecoin = await prisma.memecoin.create({
+      data: newData,
+    });
+
+    let newChat = await prisma.chat.update({
+      where: { chatId: chatId },
       data: {
-        network: "TON-Mainnet",
-        name: name,
-        ticker: ticker,
-        description: desc,
-        devTgId: devTgId,
+        mainMemecoinId: newMemecoin.id,
       },
     });
+    console.info(
+      `${newChat.chatTitle} mainMemecoinId updated to  ${newMemecoin.id}`,
+    );
 
     const keyboard = new InlineKeyboard().text(
       "Confirm to Create",
-      `confirm_deploy_memecoin_${newMemecoin.id}`,
+      `callback_confirm_deploy_${newMemecoin.id}`,
     );
     await ctx.reply(
-      `Name: ${name} \nTicker: ${ticker} \nDescription: ${desc} \n`,
+      `Name: ${name} \nTicker: ${ticker} \nDescription: ${desc} \n chatId:${chatIdStr}`,
       { reply_markup: keyboard },
     );
   });

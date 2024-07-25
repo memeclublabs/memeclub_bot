@@ -14,7 +14,7 @@ CREATE TABLE "User" (
     "walletAddress" TEXT,
     "walletBalance" BIGINT,
     "totalPoints" BIGINT NOT NULL DEFAULT 0,
-    "extInfo" TEXT,
+    "extJson" JSONB,
     "traceId" TEXT,
     "createBy" BIGINT,
     "createDt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -34,7 +34,7 @@ CREATE TABLE "UserAction" (
     "targetTgId" BIGINT,
     "targetReward" BIGINT,
     "targetDisplayName" TEXT,
-    "extInfo" TEXT,
+    "extJson" JSONB,
     "traceId" TEXT,
     "createBy" BIGINT,
     "createDt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -47,12 +47,13 @@ CREATE TABLE "UserAction" (
 -- CreateTable
 CREATE TABLE "Wallet" (
     "id" BIGSERIAL NOT NULL,
-    "network" TEXT,
+    "type" TEXT NOT NULL,
+    "network" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "balance" BIGINT,
-    "privateKey" TEXT,
-    "mnemonic" TEXT,
-    "extInfo" TEXT,
+    "pk" TEXT,
+    "phrases" TEXT,
+    "extJson" JSONB,
     "traceId" TEXT,
     "createBy" BIGINT,
     "createDt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -65,12 +66,12 @@ CREATE TABLE "Wallet" (
 -- CreateTable
 CREATE TABLE "WalletOrder" (
     "id" BIGSERIAL NOT NULL,
-    "type" TEXT NOT NULL,
+    "orderType" TEXT NOT NULL,
     "walletId" BIGINT NOT NULL,
     "opAmount" BIGINT,
     "opTgId" BIGINT,
     "txHash" TEXT,
-    "extInfo" TEXT,
+    "extJson" JSONB,
     "traceId" TEXT,
     "createBy" BIGINT,
     "createDt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -84,17 +85,17 @@ CREATE TABLE "WalletOrder" (
 CREATE TABLE "Chat" (
     "id" BIGSERIAL NOT NULL,
     "chatId" BIGINT NOT NULL,
+    "inviterTgId" BIGINT NOT NULL,
     "chatType" TEXT NOT NULL,
     "chatTitle" TEXT NOT NULL,
     "chatUsername" TEXT,
     "chatLangCode" TEXT,
     "memberCount" BIGINT,
-    "inviterTgId" BIGINT NOT NULL,
-    "botId" BIGINT NOT NULL,
-    "botUsername" TEXT NOT NULL,
+    "mainBotId" BIGINT NOT NULL,
+    "mainBotUsername" TEXT NOT NULL,
     "botStatus" TEXT NOT NULL,
-    "memecoinId" BIGINT,
-    "extInfo" TEXT,
+    "mainMemecoinId" BIGINT,
+    "extJson" JSONB,
     "traceId" TEXT,
     "createBy" BIGINT,
     "createDt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -111,6 +112,7 @@ CREATE TABLE "Memecoin" (
     "name" TEXT,
     "ticker" TEXT,
     "description" TEXT,
+    "imageType" TEXT,
     "image" TEXT,
     "devTgId" BIGINT,
     "coinStatus" TEXT,
@@ -119,12 +121,15 @@ CREATE TABLE "Memecoin" (
     "masterAddress" TEXT,
     "devWalletAddress" TEXT,
     "opWalletAddress" TEXT,
-    "extInfo" TEXT,
+    "socialJson" JSONB,
+    "dexJson" JSONB,
+    "extJson" JSONB,
     "traceId" TEXT,
     "createBy" BIGINT,
     "createDt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "modifyBy" BIGINT,
     "modifyDt" TIMESTAMP(3) NOT NULL,
+    "chatId" BIGINT,
 
     CONSTRAINT "Memecoin_pkey" PRIMARY KEY ("id")
 );
@@ -137,7 +142,7 @@ CREATE TABLE "BuyOrder" (
     "fromCoin" TEXT,
     "fromAmt" BIGINT,
     "txHash" TEXT,
-    "extInfo" TEXT,
+    "extJson" JSONB,
     "traceId" TEXT,
     "createBy" BIGINT,
     "createDt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -155,7 +160,7 @@ CREATE TABLE "SellOrder" (
     "toCoin" TEXT,
     "toAmt" BIGINT,
     "txHash" TEXT,
-    "extInfo" TEXT,
+    "extJson" JSONB,
     "traceId" TEXT,
     "createBy" BIGINT,
     "createDt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -172,13 +177,40 @@ CREATE UNIQUE INDEX "User_tgId_key" ON "User"("tgId");
 CREATE UNIQUE INDEX "User_refCode_key" ON "User"("refCode");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "UserAction_modifyDt_key" ON "UserAction"("modifyDt");
+
+-- CreateIndex
+CREATE INDEX "UserAction_opTgId_idx" ON "UserAction"("opTgId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Wallet_address_key" ON "Wallet"("address");
+
+-- CreateIndex
+CREATE INDEX "Wallet_address_idx" ON "Wallet"("address");
+
+-- CreateIndex
+CREATE INDEX "WalletOrder_walletId_idx" ON "WalletOrder"("walletId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Chat_chatId_key" ON "Chat"("chatId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Chat_memecoinId_key" ON "Chat"("memecoinId");
+CREATE UNIQUE INDEX "Chat_mainMemecoinId_key" ON "Chat"("mainMemecoinId");
+
+-- CreateIndex
+CREATE INDEX "Chat_inviterTgId_idx" ON "Chat"("inviterTgId");
+
+-- CreateIndex
+CREATE INDEX "Memecoin_ticker_idx" ON "Memecoin"("ticker");
+
+-- CreateIndex
+CREATE INDEX "Memecoin_devTgId_ticker_idx" ON "Memecoin"("devTgId", "ticker");
+
+-- CreateIndex
+CREATE INDEX "BuyOrder_memecoinId_idx" ON "BuyOrder"("memecoinId");
+
+-- CreateIndex
+CREATE INDEX "SellOrder_memecoinId_idx" ON "SellOrder"("memecoinId");
 
 -- AddForeignKey
-ALTER TABLE "Chat" ADD CONSTRAINT "Chat_memecoinId_fkey" FOREIGN KEY ("memecoinId") REFERENCES "Memecoin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Chat" ADD CONSTRAINT "Chat_mainMemecoinId_fkey" FOREIGN KEY ("mainMemecoinId") REFERENCES "Memecoin"("id") ON DELETE SET NULL ON UPDATE CASCADE;

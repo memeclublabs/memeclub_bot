@@ -140,13 +140,14 @@ model Memecoin {
   opWalletAddress  String?
   socialJson       Json?
   dexJson          Json?
+  chatId           BigInt?
+  Chat             Chat?
   extJson          Json?
   traceId          String?
   createBy         BigInt?
   createDt         DateTime @default(now())
   modifyBy         BigInt?
   modifyDt         DateTime @updatedAt
-  Chat             Chat?
 
   @@index([ticker])
   @@index([devTgId, ticker])
