@@ -15,14 +15,7 @@ export function use_conversations(bot: Bot<MyContext>) {
   bot.use(conversations());
 
   bot.use(createConversation(movie));
-  // bot.use(createConversation(new_meme));
   bot.use(createConversation(newMemeWithValidation));
-}
-
-async function greeting(conversation: MyConversation, ctx: MyContext) {
-  await ctx.reply("Hi there! What is your name?");
-  const { message } = await conversation.wait();
-  await ctx.reply(`Welcome to the chat, ${message?.text}!`);
 }
 
 async function movie(conversation: MyConversation, ctx: MyContext) {
@@ -99,6 +92,14 @@ async function newMemeWithValidation(
     // 从会话中获取参数
     const chatIdStr = ctx.session.chatId;
 
+    if (chatIdStr) {
+      console.info(`成功从 session 中获得绑定的chatId ${chatIdStr}`);
+    } else {
+      console.error(`无法成功从 session 中获得绑定的chatId ${chatIdStr}`);
+      console.error(`无法成功从 session 中获得绑定的chatId ${chatIdStr}`);
+      console.error(`无法成功从 session 中获得绑定的chatId ${chatIdStr}`);
+    }
+
     let chatId = Number(chatIdStr);
     let newData = {
       network: "TON-Mainnet",
@@ -108,6 +109,10 @@ async function newMemeWithValidation(
       devTgId: devTgId,
       chatId: chatId,
     } satisfies Prisma.MemecoinCreateInput;
+
+    // todo: 只要点击 【Step 2: 创建 Memecoin按钮】,就能够获取绑定的 chatId
+    // todo: 这里要判断一下，对应的 chat 是否已经有 memecoin
+    // todo: 如果有，就继续推进，而不是新建一个
 
     let newMemecoin = await prisma.memecoin.create({
       data: newData,
@@ -127,9 +132,14 @@ async function newMemeWithValidation(
       "Confirm to Create Memecoin",
       `callback_confirm_deploy_${newMemecoin.id}`,
     );
+
     await ctx.reply(
-      `Name: ${name} \nTicker: ${ticker} \nDescription: ${desc} \n chatId:${chatIdStr}`,
-      { reply_markup: keyboard },
+      `📝<b>New Memecoin Information</b>
+      
+         Name: ${name}
+         Ticker: ${ticker}
+         Description: ${desc}`,
+      { parse_mode: "HTML", reply_markup: keyboard },
     );
   });
 }
