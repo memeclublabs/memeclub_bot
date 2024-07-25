@@ -4,11 +4,6 @@ import prisma from "../prisma";
 import { Prisma } from "@prisma/client";
 
 export function on_add_to_group(bot: Bot<MyContext>) {
-  // 处理按钮点击事件
-  bot.callbackQuery("create_meme_callback", async (ctx) => {
-    await ctx.conversation.enter("new_meme");
-  });
-
   bot.on("my_chat_member", async (ctx) => {
     console.info("my_chat_member，");
     //1. 读取 chat 发生地，是私聊还是群聊
@@ -49,8 +44,8 @@ export function on_add_to_group(bot: Bot<MyContext>) {
           chatTitle: "" + chatTitle,
           chatUsername: chatUsername,
           inviterTgId: opIgId,
-          botId: ctx.myChatMember.new_chat_member.user.id,
-          botUsername: "" + ctx.myChatMember.new_chat_member.user.username,
+          mainBotId: ctx.myChatMember.new_chat_member.user.id,
+          mainBotUsername: "" + ctx.myChatMember.new_chat_member.user.username,
           botStatus: chatMemberStatus,
           memberCount: chatMemberCount,
           createBy: opIgId,

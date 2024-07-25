@@ -4,7 +4,7 @@ import { Menu } from "@grammyjs/menu";
 import prisma from "../prisma";
 import { generateReferralCode } from "../referral";
 import { MEME_ } from "../static";
-import { Prisma } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 
 const startCaptionText: string =
   "<b>#1 Meme launchpad on TON </b>\n\nMake Memecoins Great Again";
@@ -23,7 +23,7 @@ Step 5: All liquidity is then deposited in DEX(DeDust or STON fi) and burned.\n
 
 export function bind_command_start(bot: Bot<MyContext>) {
   const start_menu = new Menu<MyContext>("start_menu")
-    .submenu("🚀 Create Meme ", "create_meme_menu", async (ctx) => {
+    .submenu("🚀 Create Memecoin", "create_meme_menu", async (ctx) => {
       await ctx
         .editMessageCaption({ caption: newMemeCaption, parse_mode: "HTML" })
         .then((r) => {});
@@ -87,14 +87,16 @@ export function bind_command_start(bot: Bot<MyContext>) {
         //create user
         // https://t.me/your_bot?start=MEME_ABCDEFGHIJK
         let match = ctx.match;
-        let referByTgId: bigint = -1n;
+        let haveRefer = false;
+        let referUser: User | undefined = undefined;
         if (match.startsWith(MEME_)) {
           let userByRefCode = await prisma.user.findUnique({
             where: { refCode: match },
           });
           // if not find, userByRefCode is null
           if (userByRefCode) {
-            referByTgId = userByRefCode.tgId;
+            haveRefer = true;
+            referUser = userByRefCode;
             await ctx.reply(
               `You are invited by ${userByRefCode.firstName} ${userByRefCode.lastName}`,
             );
@@ -109,7 +111,7 @@ export function bind_command_start(bot: Bot<MyContext>) {
           isPremium: ctx.from.is_premium,
           langCode: ctx.from.language_code,
           createBy: tgId,
-          ...(referByTgId != -1n ? { referBy: referByTgId } : {}),
+          ...(referUser ? { referBy: referUser.tgId } : {}),
         } satisfies Prisma.UserCreateInput;
         let newUser = await prisma.user.create({ data: userData });
         console.info(`new user created. ${newUser.id}`);

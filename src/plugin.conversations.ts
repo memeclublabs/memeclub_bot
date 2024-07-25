@@ -1,4 +1,4 @@
-import { Bot } from "grammy";
+import { Bot, InlineKeyboard } from "grammy";
 import { MyContext, MyConversation } from "./global.types";
 import { conversations, createConversation } from "@grammyjs/conversations";
 import prisma from "./prisma";
@@ -14,7 +14,8 @@ export function use_conversations(bot: Bot<MyContext>) {
   bot.use(conversations());
 
   bot.use(createConversation(movie));
-  bot.use(createConversation(new_meme));
+  // bot.use(createConversation(new_meme));
+  bot.use(createConversation(newMemeWithValidation));
 }
 
 async function greeting(conversation: MyConversation, ctx: MyContext) {
@@ -45,30 +46,72 @@ async function movie(conversation: MyConversation, ctx: MyContext) {
   await ctx.reply(movies.map((m, i) => `${i + 1}. ${m}`).join("\n"));
 }
 
-async function new_meme(conversation: MyConversation, ctx: MyContext) {
+/**
+ * - name: name too long: it must be less than 32 characters
+ * - ticker: ticker must be less than 11 characters
+ * - desc: description must be less than 256 characters
+ *
+ * @param conversation
+ * @param ctx
+ */
+async function newMemeWithValidation(
+  conversation: MyConversation,
+  ctx: MyContext,
+) {
   await ctx.reply(
-    "Now let’s deploy a new meme coin.\n\n" +
-      "Please choose a name for your meme coin? 1/4\n",
+    "Please enter a name for your meme coin?  [1/4]\n\n" +
+      "Examples:\n" +
+      "   - Dogecoin\n" +
+      "   - Pepe\n" +
+      "   - Ton Fish\n",
   );
-  const memeName = await conversation.waitFor(":text");
-  await ctx.reply("Good. Now let’s choose a ticker for this meme coin.  2/4 ");
-  const ticker = await conversation.waitFor(":text");
+  const nameMsg = await conversation.waitFor(":text");
+
   await ctx.reply(
-    "Good. please enter a short description of the meme coin. 3/4 ",
+    "Good. Now let’s enter a ticker for this meme coin.  [2/4]\n\n" +
+      "Examples: \n " +
+      "   - DOGE \n" +
+      "   - PEPE \n" +
+      "   - FISH \n",
   );
-  const desc = await conversation.waitFor(":text");
+  const tickerMsg = await conversation.waitFor(":text");
   await ctx.reply(
-    "Now upload a image for this meme coin.\n" +
-      "\n" +
-      "/empty to skip. /AIGC to generate by AI",
+    "Good. please enter a short description of the meme coin.  [3/4]\n\n" +
+      "Example: \n" +
+      "Dogecoin is the accidental crypto movement that makes people smile!\n",
   );
-  const photo = await conversation.waitFor(":photo");
+  const descMsg = await conversation.waitFor(":text");
+  await ctx.reply(
+    "Now upload an image for this meme coin.  [4/4]\n",
+    // "/empty to skip. /AIGC to generate by AI",
+  );
+  const photoMsg = await conversation.waitFor(":photo");
 
   await conversation.external(async () => {
-    console.info("run for external" + JSON.stringify(desc));
+    let name = nameMsg?.message?.text;
+    let ticker = tickerMsg?.message?.text;
+    let desc = descMsg?.message?.text;
+    let photos = photoMsg?.message?.photo;
+
+    let devTgId = nameMsg?.message?.from.id;
+
+    let newMemecoin = await prisma.memecoin.create({
+      data: {
+        network: "TON-Mainnet",
+        name: name,
+        ticker: ticker,
+        description: desc,
+        devTgId: devTgId,
+      },
+    });
+
+    const keyboard = new InlineKeyboard().text(
+      "Confirm to Create",
+      `confirm_deploy_memecoin_${newMemecoin.id}`,
+    );
+    await ctx.reply(
+      `Name: ${name} \nTicker: ${ticker} \nDescription: ${desc} \n`,
+      { reply_markup: keyboard },
+    );
   });
-  console.info(JSON.stringify(memeName));
-  console.info(JSON.stringify(ticker));
-  console.info(JSON.stringify(photo));
-  await ctx.reply(` ${memeName} ${ticker} ${desc} ${photo}`);
 }

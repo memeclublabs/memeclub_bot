@@ -12,7 +12,7 @@ export interface Dish {
 }
 
 export interface SessionData {
-  favoriteIds: string[];
+  userDefinedIds: string[];
 }
 
 export type MyContext = Context &

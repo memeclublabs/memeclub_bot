@@ -1,17 +1,7 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-
-//•	commonjs：适用于 Node.js 环境。
-//    •	esnext 指定了生成的 JavaScript 代码应使用 ECMAScript 模块（ESM）的最新标准。
-//    •	es6 或 es2015 或 esnext：适用于现代浏览器和支持 ESM（ECMAScript Modules） 的环境。
-//    •	amd：适用于浏览器环境，特别是使用 RequireJS 的项目。
-//    •	system：适用于需要使用 SystemJS 模块加载器的项目。
-//    •	umd：适用于同时需要支持浏览器和 Node.js 环境的项目。
-//    •	none：如果你不需要模块系统，可以选择 none。
-//    •	nodenext 和 nodenext12：适用于需要同时支持 ESM 和 CommonJS 模块的 Node.js 项目。
+    "target": "ES2020",
     "module": "commonjs",
-
     "rootDir": "./src",
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -19,6 +9,8 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "strict": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"]
 }
