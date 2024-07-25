@@ -66,6 +66,6 @@
   },
   "config": {
     "botAdminId": 5499157826,
-    "isDeveloper": true
+    "isAdmin": true
   }
 }

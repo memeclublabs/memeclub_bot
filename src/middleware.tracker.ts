@@ -8,7 +8,7 @@ export function use_time_tracer(bot: Bot<MyContext>) {
     const before = Date.now();
     ctx.config = {
       botAdminId: BOT_ADMIN,
-      isDeveloper: ctx.from?.id === BOT_ADMIN,
+      isAdmin: ctx.from?.id === BOT_ADMIN,
     };
 
     // invoke downstream middleware

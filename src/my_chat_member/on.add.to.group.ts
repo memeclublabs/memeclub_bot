@@ -1,7 +1,14 @@
-import { Bot } from "grammy";
+import { Bot, InlineKeyboard } from "grammy";
 import { MyContext } from "../global.types";
+import prisma from "../prisma";
+import { Prisma } from "@prisma/client";
 
 export function on_add_to_group(bot: Bot<MyContext>) {
+  // 处理按钮点击事件
+  bot.callbackQuery("create_meme_callback", async (ctx) => {
+    await ctx.conversation.enter("new_meme");
+  });
+
   bot.on("my_chat_member", async (ctx) => {
     console.info("my_chat_member，");
     //1. 读取 chat 发生地，是私聊还是群聊
@@ -23,44 +30,67 @@ export function on_add_to_group(bot: Bot<MyContext>) {
 
       // let status: "member" | "creator" | "administrator" | "restricted" | "left" | "kicked"
       let chatMemberStatus = ctx.myChatMember.new_chat_member.status;
+      let userById = await prisma.user.findUnique({
+        where: { tgId: opIgId },
+      });
+      if (!userById) {
+        console.error(`admin user not found by id ${opIgId}`);
+        return;
+      }
+
       if (chatMemberStatus == "member" || chatMemberStatus == "administrator") {
-        let memberCount = await ctx.api.getChatMemberCount(
+        let chatMemberCount = await ctx.api.getChatMemberCount(
           ctx.myChatMember.chat.id,
         );
 
-        // let adminList = await ctx.api.getChatAdministrators(
-        //   ctx.myChatMember.chat.id,
-        // );
-        // // creator of group/channel: "status": "creator",
-        // // admin of group/channel added by creator: "status": "administrator",
-        // let admins = JSON.stringify(adminList);
-        // let memberCount = await ctx.api.getChatMemberCount(
-        //   ctx.myChatMember.chat.id,
-        // );
+        const insertData = {
+          chatId: chatId,
+          chatType: chatType,
+          chatTitle: "" + chatTitle,
+          chatUsername: chatUsername,
+          inviterTgId: opIgId,
+          botId: ctx.myChatMember.new_chat_member.user.id,
+          botUsername: "" + ctx.myChatMember.new_chat_member.user.username,
+          botStatus: chatMemberStatus,
+          memberCount: chatMemberCount,
+          createBy: opIgId,
+        } satisfies Prisma.ChatCreateInput;
 
-        // test;
-        // await client.memecoin.create({
-        //   data: {
-        //     devTgId: opIgId,
-        //     coinStatus: CoinStatus.Initialized,
-        //     chatId: chatId,
-        //     chatType: chatType,
-        //     chatTitle: chatTitle,
-        //     chatUsername: chatUsername,
-        //     chatStatus: chatMemberStatus,
-        //     createBy: opIgId,
-        //     createDt: Date.now(),
-        //   },
-        // });
+        const updateData = {
+          chatId: chatId,
+          chatType: chatType,
+          chatTitle: "" + chatTitle,
+          chatUsername: chatUsername,
+          inviterTgId: opIgId,
+          botStatus: chatMemberStatus,
+          memberCount: chatMemberCount,
+          modifyBy: opIgId,
+        } satisfies Prisma.ChatUpdateInput;
+        let newChat = await prisma.chat.upsert({
+          where: { chatId: chatId },
+          create: insertData,
+          update: updateData,
+        });
+        console.info(`new ${chatType} chat upsert. ${newChat.id}`);
+
+        let addToChatCaption = `
+<b>🎉 Add to group successfully.</b>\n
+        - Group name: ${chatTitle}
+        - Member count: ${chatMemberCount}\n
+
+⭐Your Meme Points: + 200
+`;
+
+        let inlineKeyboard = new InlineKeyboard().text(
+          "Step 2: Create new Meme coin",
+          "create_meme_callback",
+        );
 
         await ctx.api
-          .sendMessage(
-            opIgId,
-            `Added by ${opDisplayName} to ${chatType} ${chatTitle} \n\n`,
-            {
-              parse_mode: "HTML",
-            },
-          )
+          .sendMessage(opIgId, addToChatCaption, {
+            parse_mode: "HTML",
+            reply_markup: inlineKeyboard,
+          })
           .catch((e) => {
             console.error(e);
           });
@@ -76,6 +106,22 @@ export function on_add_to_group(bot: Bot<MyContext>) {
           .catch((e) => {
             console.error(e);
           });
+      } else {
+        // 去除 member ，admin 和 creator，还有如下 3个状态
+        // let status: "restricted" | "left" | "kicked"
+        let findChat = await prisma.chat.findUnique({
+          where: { chatId: chatId },
+        });
+        if (findChat) {
+          await prisma.chat.update({
+            where: { chatId: chatId },
+            data: { botStatus: chatMemberStatus },
+          });
+          console.info(
+            `Chat ${findChat.chatId} botStatus updated from ${findChat.botStatus} to ${chatMemberStatus}`,
+          );
+        }
+        // await prisma.user.findUnique({ where: { tgId: tgId }});
       } //end join group / channel
     } //end chat in group / channel loop
   });

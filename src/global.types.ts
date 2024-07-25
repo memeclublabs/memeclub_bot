@@ -4,7 +4,7 @@ import { I18nFlavor } from "@grammyjs/i18n";
 
 export interface BotConfig {
   botAdminId: number;
-  isDeveloper: boolean;
+  isAdmin: boolean;
 }
 export interface Dish {
   id: string;

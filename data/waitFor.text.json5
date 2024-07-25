@@ -1,0 +1,77 @@
+{
+  "update": {
+    "update_id": 434237157,
+    "message": {
+      "message_id": 1044,
+      "from": {
+        "id": 5499157826,
+        "is_bot": false,
+        "first_name": "Andrew 💎",
+        "last_name": "Memeclub",
+        "username": "andrew_tonx",
+        "language_code": "en",
+        "is_premium": true
+      },
+      "chat": {
+        "id": 5499157826,
+        "first_name": "Andrew 💎",
+        "last_name": "Memeclub",
+        "username": "andrew_tonx",
+        "type": "private"
+      },
+      "date": 1721824489,
+      "text": "3"
+    }
+  },
+  "api": {
+    "token": "7139592991:AAF-L3tfqCxGzQLeJibr5k4hZWVGcEijcq0",
+    "options": {
+      "baseFetchConfig": {
+        "agent": {
+          "_events": {},
+          "_eventsCount": 2,
+          "options": {
+            "noDelay": true,
+            "path": null
+          },
+          "requests": {},
+          "sockets": {},
+          "freeSockets": {},
+          "keepAliveMsecs": 1000,
+          "keepAlive": false,
+          "maxSockets": null,
+          "maxFreeSockets": 256,
+          "scheduling": "lifo",
+          "maxTotalSockets": null,
+          "totalSocketCount": 0,
+          "shouldLookup": false,
+          "proxy": {
+            "host": "127.0.0.1",
+            "port": 7890,
+            "type": 5
+          },
+          "timeout": null,
+          "socketOptions": null
+        },
+        "compress": true
+      }
+    },
+    "raw": {},
+    "config": {}
+  },
+  "me": {
+    "id": 7139592991,
+    "is_bot": true,
+    "first_name": "Meme Dev Bot",
+    "username": "diamond404bot",
+    "can_join_groups": true,
+    "can_read_all_group_messages": false,
+    "supports_inline_queries": false,
+    "can_connect_to_business": true
+  },
+  "config": {
+    "botAdminId": 5499157826,
+    "isDeveloper": true
+  },
+  "session": {}
+}

@@ -41,7 +41,6 @@ export function bind_command_start(bot: Bot<MyContext>) {
     .submenu("🎁 Airdrop", "create_meme_menu");
 
   let addGroupUrl = `https://t.me/${process.env.TELEGRAM_BOT_NAME}?startgroup=true`;
-  console.info(addGroupUrl);
   const create_meme_menu = new Menu<MyContext>("create_meme_menu")
     .url("Step 1: Add bot to your group", addGroupUrl)
     .row()
@@ -72,7 +71,10 @@ export function bind_command_start(bot: Bot<MyContext>) {
 
   bot.command("start", async (ctx) => {
     //#1. 判断消息来源的operator，按需创建用户
-    //#2. 判断是私聊还是群聊，发送不同的菜单
+    //#2. 判断是私聊还是群聊，发送不同的菜单 TODO
+    //#2. 判断是私聊还是群聊，发送不同的菜单 TODO
+    //#2. 判断是私聊还是群聊，发送不同的菜单 TODO
+    //#2. 判断是私聊还是群聊，发送不同的菜单 TODO
 
     //1.  判断消息来源的operator，按需创建用户
     let tgId = ctx.from?.id;
@@ -80,6 +82,7 @@ export function bind_command_start(bot: Bot<MyContext>) {
       let userById = await prisma.user.findUnique({ where: { tgId: tgId } });
       if (userById) {
         // user found
+        await ctx.reply("Welcome back!");
       } else {
         //create user
         // https://t.me/your_bot?start=MEME_ABCDEFGHIJK
@@ -92,6 +95,9 @@ export function bind_command_start(bot: Bot<MyContext>) {
           // if not find, userByRefCode is null
           if (userByRefCode) {
             referByTgId = userByRefCode.tgId;
+            await ctx.reply(
+              `You are invited by ${userByRefCode.firstName} ${userByRefCode.lastName}`,
+            );
           }
         }
         const userData = {
@@ -100,6 +106,9 @@ export function bind_command_start(bot: Bot<MyContext>) {
           firstName: ctx.from.first_name,
           lastName: ctx.from.last_name,
           refCode: generateReferralCode(tgId),
+          isPremium: ctx.from.is_premium,
+          langCode: ctx.from.language_code,
+          createBy: tgId,
           ...(referByTgId != -1n ? { referBy: referByTgId } : {}),
         } satisfies Prisma.UserCreateInput;
         let newUser = await prisma.user.create({ data: userData });

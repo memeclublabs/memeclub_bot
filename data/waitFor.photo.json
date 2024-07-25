@@ -1,0 +1,458 @@
+{
+  "update": {
+    "update_id": 434237158,
+    "message": {
+      "message_id": 1046,
+      "from": {
+        "id": 5499157826,
+        "is_bot": false,
+        "first_name": "Andrew 💎",
+        "last_name": "Memeclub",
+        "username": "andrew_tonx",
+        "language_code": "en",
+        "is_premium": true
+      },
+      "chat": {
+        "id": 5499157826,
+        "first_name": "Andrew 💎",
+        "last_name": "Memeclub",
+        "username": "andrew_tonx",
+        "type": "private"
+      },
+      "date": 1721824497,
+      "photo": [
+        {
+          "file_id": "AgACAgUAAxkBAAIEFmag9PHF9gRTehmUGl6xTpJUgyfIAAKfvzEbE3wJVabS_jd_TjAiAQADAgADcwADNQQ",
+          "file_unique_id": "AQADn78xGxN8CVV4",
+          "file_size": 1633,
+          "width": 90,
+          "height": 90
+        },
+        {
+          "file_id": "AgACAgUAAxkBAAIEFmag9PHF9gRTehmUGl6xTpJUgyfIAAKfvzEbE3wJVabS_jd_TjAiAQADAgADbQADNQQ",
+          "file_unique_id": "AQADn78xGxN8CVVy",
+          "file_size": 19441,
+          "width": 320,
+          "height": 320
+        },
+        {
+          "file_id": "AgACAgUAAxkBAAIEFmag9PHF9gRTehmUGl6xTpJUgyfIAAKfvzEbE3wJVabS_jd_TjAiAQADAgADeAADNQQ",
+          "file_unique_id": "AQADn78xGxN8CVV9",
+          "file_size": 37762,
+          "width": 640,
+          "height": 640
+        }
+      ]
+    }
+  },
+  "api": {
+    "token": "7139592991:AAF-L3tfqCxGzQLeJibr5k4hZWVGcEijcq0",
+    "options": {
+      "baseFetchConfig": {
+        "agent": {
+          "_events": {},
+          "_eventsCount": 2,
+          "options": {
+            "noDelay": true,
+            "path": null
+          },
+          "requests": {},
+          "sockets": {},
+          "freeSockets": {},
+          "keepAliveMsecs": 1000,
+          "keepAlive": false,
+          "maxSockets": null,
+          "maxFreeSockets": 256,
+          "scheduling": "lifo",
+          "maxTotalSockets": null,
+          "totalSocketCount": 0,
+          "shouldLookup": false,
+          "proxy": {
+            "host": "127.0.0.1",
+            "port": 7890,
+            "type": 5
+          },
+          "timeout": null,
+          "socketOptions": null
+        },
+        "compress": true
+      }
+    },
+    "raw": {},
+    "config": {}
+  },
+  "me": {
+    "id": 7139592991,
+    "is_bot": true,
+    "first_name": "Meme Dev Bot",
+    "username": "diamond404bot",
+    "can_join_groups": true,
+    "can_read_all_group_messages": false,
+    "supports_inline_queries": false,
+    "can_connect_to_business": true
+  },
+  "config": {
+    "botAdminId": 5499157826,
+    "isDeveloper": true
+  },
+  "session": {
+    "conversation": {
+      "new_meme": [
+        {
+          "log": {
+            "u": [
+              {
+                "u": {
+                  "update_id": 434237154,
+                  "callback_query": {
+                    "id": "5171958948101852570",
+                    "from": {
+                      "id": 5499157826,
+                      "is_bot": false,
+                      "first_name": "Andrew 💎",
+                      "last_name": "Memeclub",
+                      "username": "andrew_tonx",
+                      "language_code": "en",
+                      "is_premium": true
+                    },
+                    "message": {
+                      "message_id": 1009,
+                      "from": {
+                        "id": 7139592991,
+                        "is_bot": true,
+                        "first_name": "Meme Dev Bot",
+                        "username": "diamond404bot"
+                      },
+                      "chat": {
+                        "id": 5499157826,
+                        "first_name": "Andrew 💎",
+                        "last_name": "Memeclub",
+                        "username": "andrew_tonx",
+                        "type": "private"
+                      },
+                      "date": 1721824038,
+                      "text": "🎉 Add to group successfully.\n\n        - Group name: Open Test Group\n        - Member count: 4\n\n\n⭐Your Meme Points: + 200",
+                      "entities": [
+                        {
+                          "offset": 0,
+                          "length": 29,
+                          "type": "bold"
+                        }
+                      ],
+                      "reply_markup": {
+                        "inline_keyboard": [
+                          [
+                            {
+                              "text": "Step 2: Create new Meme coin",
+                              "callback_data": "create_meme_callback"
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "chat_instance": "-2317731054475184996",
+                    "data": "create_meme_callback"
+                  }
+                },
+                "x": {
+                  "config": {
+                    "botAdminId": 5499157826,
+                    "isDeveloper": true
+                  },
+                  "session": {},
+                  "match": "create_meme_callback"
+                },
+                "a": {
+                  "sendMessage": [
+                    {
+                      "i": 0,
+                      "r": {
+                        "ok": true,
+                        "result": {
+                          "message_id": 1039,
+                          "from": {
+                            "id": 7139592991,
+                            "is_bot": true,
+                            "first_name": "Meme Dev Bot",
+                            "username": "diamond404bot"
+                          },
+                          "chat": {
+                            "id": 5499157826,
+                            "first_name": "Andrew 💎",
+                            "last_name": "Memeclub",
+                            "username": "andrew_tonx",
+                            "type": "private"
+                          },
+                          "date": 1721824480,
+                          "text": "Now let’s deploy a new meme coin.\n\nPlease choose a name for your meme coin? 1/4"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "u": {
+                  "update_id": 434237155,
+                  "message": {
+                    "message_id": 1040,
+                    "from": {
+                      "id": 5499157826,
+                      "is_bot": false,
+                      "first_name": "Andrew 💎",
+                      "last_name": "Memeclub",
+                      "username": "andrew_tonx",
+                      "language_code": "en",
+                      "is_premium": true
+                    },
+                    "chat": {
+                      "id": 5499157826,
+                      "first_name": "Andrew 💎",
+                      "last_name": "Memeclub",
+                      "username": "andrew_tonx",
+                      "type": "private"
+                    },
+                    "date": 1721824485,
+                    "text": "1"
+                  }
+                },
+                "x": {
+                  "config": {
+                    "botAdminId": 5499157826,
+                    "isDeveloper": true
+                  },
+                  "session": {}
+                },
+                "a": {
+                  "sendMessage": [
+                    {
+                      "i": 0,
+                      "r": {
+                        "ok": true,
+                        "result": {
+                          "message_id": 1041,
+                          "from": {
+                            "id": 7139592991,
+                            "is_bot": true,
+                            "first_name": "Meme Dev Bot",
+                            "username": "diamond404bot"
+                          },
+                          "chat": {
+                            "id": 5499157826,
+                            "first_name": "Andrew 💎",
+                            "last_name": "Memeclub",
+                            "username": "andrew_tonx",
+                            "type": "private"
+                          },
+                          "date": 1721824486,
+                          "text": "Good. Now let’s choose a ticker for this meme coin.  2/4"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "u": {
+                  "update_id": 434237156,
+                  "message": {
+                    "message_id": 1042,
+                    "from": {
+                      "id": 5499157826,
+                      "is_bot": false,
+                      "first_name": "Andrew 💎",
+                      "last_name": "Memeclub",
+                      "username": "andrew_tonx",
+                      "language_code": "en",
+                      "is_premium": true
+                    },
+                    "chat": {
+                      "id": 5499157826,
+                      "first_name": "Andrew 💎",
+                      "last_name": "Memeclub",
+                      "username": "andrew_tonx",
+                      "type": "private"
+                    },
+                    "date": 1721824487,
+                    "text": "2"
+                  }
+                },
+                "x": {
+                  "config": {
+                    "botAdminId": 5499157826,
+                    "isDeveloper": true
+                  },
+                  "session": {}
+                },
+                "a": {
+                  "sendMessage": [
+                    {
+                      "i": 0,
+                      "r": {
+                        "ok": true,
+                        "result": {
+                          "message_id": 1043,
+                          "from": {
+                            "id": 7139592991,
+                            "is_bot": true,
+                            "first_name": "Meme Dev Bot",
+                            "username": "diamond404bot"
+                          },
+                          "chat": {
+                            "id": 5499157826,
+                            "first_name": "Andrew 💎",
+                            "last_name": "Memeclub",
+                            "username": "andrew_tonx",
+                            "type": "private"
+                          },
+                          "date": 1721824488,
+                          "text": "Good. please enter a short description of the meme coin. 3/4"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "u": {
+                  "update_id": 434237157,
+                  "message": {
+                    "message_id": 1044,
+                    "from": {
+                      "id": 5499157826,
+                      "is_bot": false,
+                      "first_name": "Andrew 💎",
+                      "last_name": "Memeclub",
+                      "username": "andrew_tonx",
+                      "language_code": "en",
+                      "is_premium": true
+                    },
+                    "chat": {
+                      "id": 5499157826,
+                      "first_name": "Andrew 💎",
+                      "last_name": "Memeclub",
+                      "username": "andrew_tonx",
+                      "type": "private"
+                    },
+                    "date": 1721824489,
+                    "text": "3"
+                  }
+                },
+                "x": {
+                  "config": {
+                    "botAdminId": 5499157826,
+                    "isDeveloper": true
+                  },
+                  "session": {}
+                },
+                "a": {
+                  "sendMessage": [
+                    {
+                      "i": 0,
+                      "r": {
+                        "ok": true,
+                        "result": {
+                          "message_id": 1045,
+                          "from": {
+                            "id": 7139592991,
+                            "is_bot": true,
+                            "first_name": "Meme Dev Bot",
+                            "username": "diamond404bot"
+                          },
+                          "chat": {
+                            "id": 5499157826,
+                            "first_name": "Andrew 💎",
+                            "last_name": "Memeclub",
+                            "username": "andrew_tonx",
+                            "type": "private"
+                          },
+                          "date": 1721824490,
+                          "text": "Now upload a image for this meme coin.\n\n/empty to skip. /AIGC to generate by AI",
+                          "entities": [
+                            {
+                              "offset": 40,
+                              "length": 6,
+                              "type": "bot_command"
+                            },
+                            {
+                              "offset": 56,
+                              "length": 5,
+                              "type": "bot_command"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "u": {
+                  "update_id": 434237158,
+                  "message": {
+                    "message_id": 1046,
+                    "from": {
+                      "id": 5499157826,
+                      "is_bot": false,
+                      "first_name": "Andrew 💎",
+                      "last_name": "Memeclub",
+                      "username": "andrew_tonx",
+                      "language_code": "en",
+                      "is_premium": true
+                    },
+                    "chat": {
+                      "id": 5499157826,
+                      "first_name": "Andrew 💎",
+                      "last_name": "Memeclub",
+                      "username": "andrew_tonx",
+                      "type": "private"
+                    },
+                    "date": 1721824497,
+                    "photo": [
+                      {
+                        "file_id": "AgACAgUAAxkBAAIEFmag9PHF9gRTehmUGl6xTpJUgyfIAAKfvzEbE3wJVabS_jd_TjAiAQADAgADcwADNQQ",
+                        "file_unique_id": "AQADn78xGxN8CVV4",
+                        "file_size": 1633,
+                        "width": 90,
+                        "height": 90
+                      },
+                      {
+                        "file_id": "AgACAgUAAxkBAAIEFmag9PHF9gRTehmUGl6xTpJUgyfIAAKfvzEbE3wJVabS_jd_TjAiAQADAgADbQADNQQ",
+                        "file_unique_id": "AQADn78xGxN8CVVy",
+                        "file_size": 19441,
+                        "width": 320,
+                        "height": 320
+                      },
+                      {
+                        "file_id": "AgACAgUAAxkBAAIEFmag9PHF9gRTehmUGl6xTpJUgyfIAAKfvzEbE3wJVabS_jd_TjAiAQADAgADeAADNQQ",
+                        "file_unique_id": "AQADn78xGxN8CVV9",
+                        "file_size": 37762,
+                        "width": 640,
+                        "height": 640
+                      }
+                    ]
+                  }
+                },
+                "x": {
+                  "config": {
+                    "botAdminId": 5499157826,
+                    "isDeveloper": true
+                  },
+                  "session": {}
+                },
+                "e": [
+                  {
+                    "i": 0,
+                    "r": {}
+                  }
+                ]
+              }
+            ]
+          },
+          "last": 1721824479267
+        }
+      ]
+    }
+  },
+  "conversation": {}
+}

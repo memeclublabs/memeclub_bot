@@ -35,7 +35,7 @@ model User {
 
 model UserAction {
   id                BigInt   @id @default(autoincrement())
-  opTgId            BigInt   @unique
+  opTgId            BigInt
   opDisplayName     String?
   actionType        String
   selfReward        BigInt?
@@ -82,7 +82,7 @@ model WalletOrder {
 
 model Chat {
   id           BigInt    @id @default(autoincrement())
-  chatId       BigInt
+  chatId       BigInt    @unique
   // group | supergroup | channel
   chatType     String
   // group or channel name
@@ -90,11 +90,21 @@ model Chat {
   // public link name suffix, e.g. https://t.me/chatUsername
   chatUsername String?
   chatLangCode String?
+  memberCount  BigInt?
   inviterTgId  BigInt
+  // the bot which invited into group
+  botId        BigInt
+  botUsername  String
   // status: "member" | "creator" | "administrator" | "restricted" | "left" | "kicked"
   botStatus    String
   memecoin     Memecoin? @relation(fields: [memecoinId], references: [id])
   memecoinId   BigInt?   @unique
+  extInfo      String?
+  traceId      String?
+  createBy     BigInt?
+  createDt     DateTime  @default(now())
+  modifyBy     BigInt?
+  modifyDt     DateTime  @updatedAt
 }
 
 model Memecoin {
@@ -111,13 +121,13 @@ model Memecoin {
   masterAddress    String?
   devWalletAddress String?
   opWalletAddress  String?
+  chat             Chat?
   extInfo          String?
   traceId          String?
   createBy         BigInt?
   createDt         DateTime @default(now())
   modifyBy         BigInt?
   modifyDt         DateTime @updatedAt
-  chat             Chat?
 }
 
 model BuyOrder {
