@@ -29,10 +29,15 @@ export function bind_command_start(bot: Bot<MyContext>) {
         .then((r) => {});
     })
     .row()
-    .url(
-      "🎁 Airdrop & Referral",
-      `https://t.me/${process.env.TELEGRAM_BOT_NAME}?start=MEME_RUXCWXDUS5`,
-    );
+    .dynamic((ctx, range) => {
+      const referCode = ctx.session.referCode;
+      console.info("get referCode from session : ", referCode);
+      range.url(
+        "🎁 Airdrop & Referral",
+        `https://t.me/${process.env.TELEGRAM_BOT_NAME}?start=${referCode}`,
+      );
+    });
+
   const how_it_works_menu = new Menu<MyContext>("how_it_works_menu").back(
     "◀️ Go Back",
     async (ctx) => {
@@ -153,6 +158,23 @@ export function bind_command_start(bot: Bot<MyContext>) {
         });
     } else {
       // 这边是在群组中
+
+      let findChat = await prisma.chat.findUnique({
+        where: { chatId: ctx.chat.id },
+      });
+
+      if (findChat) {
+        let findUser = await prisma.user.findUnique({
+          where: { tgId: findChat.inviterTgId },
+        });
+
+        if (findUser) {
+          console.info(
+            `Session store code ${findUser.refCode} of ${findUser.firstName} ${findUser.lastName}`,
+          );
+          ctx.session.referCode = findUser.refCode;
+        }
+      }
 
       await ctx
         .replyWithPhoto(

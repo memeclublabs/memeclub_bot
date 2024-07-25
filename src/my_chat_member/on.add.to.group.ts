@@ -121,10 +121,10 @@ export function on_add_to_group(bot: Bot<MyContext>) {
             await ctx.api
               .sendMessage(
                 chatId,
-                `<b>🥇Top 1 Memecoin launchpad on TON </b>\n
-                This bot was invited by 👑${opDisplayName}.
-                All new users in this group will use his referral code.
-                Let's create a new Memecoin and have fun together!
+                `<b>🥇#1 Memecoin launchpad on TON </b>\n
+    This bot was invited by 👑${opDisplayName}.
+    New users in this group will use his/her referral code.\n
+    Let's create a new Memecoin and have fun together!
                 `,
 
                 {

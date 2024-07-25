@@ -70,7 +70,7 @@ async function newMemeWithValidation(
 
   await ctx.reply(
     "Good. Now let’s enter a ticker for this meme coin.  [2/4]\n\n" +
-      "Examples:\n " +
+      "Examples:\n" +
       "   - DOGE\n" +
       "   - PEPE\n" +
       "   - FISH\n",
