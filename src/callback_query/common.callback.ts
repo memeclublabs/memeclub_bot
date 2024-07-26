@@ -14,13 +14,13 @@ export function on_callback_query(bot: Bot<MyContext>) {
 
     if (
       callbackData &&
-      callbackData.startsWith("callback_create_meme_chatId_")
+      callbackData.startsWith("callback_create_meme_groupId_")
     ) {
-      // 点击 [Step 2: Create new Memecoin] 按钮会进入这个方法处理，按钮附带了 chatId 参数
+      // 点击 [Step 2: Create new Memecoin] 按钮会进入这个方法处理，按钮附带了 groupId 参数
       // chatId 参数将会放到 session 中才可以传递给 conversation
-      // conversation 处理方法讲中 session 中获取 chatId
+      // conversation 处理方法将从 session 中获取 groupId
       let groupIdFromSession = callbackData.split(
-        "callback_create_meme_chatId_",
+        "callback_create_meme_groupId_",
       )[1];
       if (!groupIdFromSession) {
         console.error(
