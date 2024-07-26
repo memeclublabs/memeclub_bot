@@ -34,8 +34,8 @@ export function bind_command_start(bot: Bot<MyContext>) {
 
       if (!referCode) {
         if (ctx.chat?.id) {
-          let findChat = await prisma.chat.findUnique({
-            where: { chatId: ctx.chat.id },
+          let findChat = await prisma.group.findUnique({
+            where: { groupId: ctx.chat.id },
           });
 
           if (findChat && findChat.inviterTgId) {
@@ -175,14 +175,13 @@ export function bind_command_start(bot: Bot<MyContext>) {
         });
     } else {
       // 这边是在群组中
-
-      let findChat = await prisma.chat.findUnique({
-        where: { chatId: ctx.chat.id },
+      let findGroup = await prisma.group.findUnique({
+        where: { groupId: ctx.chat.id },
       });
 
-      if (findChat) {
+      if (findGroup) {
         let findUser = await prisma.user.findUnique({
-          where: { tgId: findChat.inviterTgId },
+          where: { tgId: findGroup.inviterTgId },
         });
 
         if (findUser) {

@@ -13,7 +13,7 @@ export interface Dish {
 
 export interface SessionData {
   userDefinedIds: string[];
-  chatId: string;
+  groupId: string;
   referCode: string;
 }
 

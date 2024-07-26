@@ -20,7 +20,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
       // chatId 参数将会放到 session 中才可以传递给 conversation
       // conversation 处理方法讲中 session 中获取 chatId
 
-      ctx.session.chatId = callbackData.split(
+      ctx.session.groupId = callbackData.split(
         "callback_create_meme_chatId_",
       )[1];
       await ctx.conversation.enter("newMemeWithValidation");

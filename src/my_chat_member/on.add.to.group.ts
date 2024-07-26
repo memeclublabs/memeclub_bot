@@ -1,7 +1,7 @@
 import { Bot, InlineKeyboard } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
-import { Chat, Prisma } from "@prisma/client";
+import { Group, Prisma } from "@prisma/client";
 
 export function on_add_to_group(bot: Bot<MyContext>) {
   bot.on("my_chat_member", async (ctx) => {
@@ -30,10 +30,10 @@ export function on_add_to_group(bot: Bot<MyContext>) {
         let opLastName = ctx.myChatMember.from.last_name;
         let opDisplayName = `${opFirstName} ${opLastName}`;
 
-        let findChat = await prisma.chat.findUnique({
-          where: { chatId: chatId },
+        let findChat = await prisma.group.findUnique({
+          where: { groupId: chatId },
         });
-        let realChat: Chat | undefined;
+        let realChat: Group | undefined;
         if (findChat) {
           // 准备按需更新
           if (
@@ -43,16 +43,16 @@ export function on_add_to_group(bot: Bot<MyContext>) {
             // 判断 mainBotId 是否是本 bot，有可能本项目有多个 bot 实例
             // 如果是就更新，否则先跳过
             const updateData = {
-              chatTitle: "" + chatTitle,
-              chatUsername: chatUsername,
+              groupTitle: "" + chatTitle,
+              groupUsername: chatUsername,
               inviterTgId: opIgId,
               botStatus: chatMemberStatus,
               memberCount: chatMemberCount,
               modifyBy: opIgId,
-            } satisfies Prisma.ChatUpdateInput;
+            } satisfies Prisma.GroupUpdateInput;
 
-            realChat = await prisma.chat.update({
-              where: { chatId: chatId },
+            realChat = await prisma.group.update({
+              where: { groupId: chatId },
               data: updateData,
             });
           } else {
@@ -62,10 +62,10 @@ export function on_add_to_group(bot: Bot<MyContext>) {
         } else {
           // 创建
           const insertData = {
-            chatId: chatId,
-            chatType: chatType,
-            chatTitle: "" + chatTitle,
-            chatUsername: chatUsername,
+            groupId: chatId,
+            groupType: chatType,
+            groupTitle: "" + chatTitle,
+            groupUsername: chatUsername,
             inviterTgId: opIgId,
             mainBotId: ctx.myChatMember.new_chat_member.user.id,
             mainBotUsername:
@@ -73,8 +73,8 @@ export function on_add_to_group(bot: Bot<MyContext>) {
             botStatus: chatMemberStatus,
             memberCount: chatMemberCount,
             createBy: opIgId,
-          } satisfies Prisma.ChatCreateInput;
-          realChat = await prisma.chat.create({ data: insertData });
+          } satisfies Prisma.GroupCreateInput;
+          realChat = await prisma.group.create({ data: insertData });
         }
 
         // let userById = await prisma.user.findUnique({
@@ -98,15 +98,15 @@ export function on_add_to_group(bot: Bot<MyContext>) {
           } else {
             let addToChatCaption = `
 <b>🎉 Add to group successfully.</b>\n
-        - Group name: ${chatTitle}
-        - Member count: ${chatMemberCount}\n
+        - <b>Group Name</b>: ${chatTitle}
+        - <b>Member Count</b>: ${chatMemberCount}\n
 
 ⭐Your Meme Points: + 200
 `;
 
             let inlineKeyboard = new InlineKeyboard().text(
               "Step 2: Create new Memecoin",
-              `callback_create_meme_chatId_${realChat.chatId}`,
+              `callback_create_meme_chatId_${realChat.groupId}`,
             );
 
             await ctx.api
@@ -121,10 +121,11 @@ export function on_add_to_group(bot: Bot<MyContext>) {
             await ctx.api
               .sendMessage(
                 chatId,
-                `<b>🥇#1 Memecoin launchpad on TON </b>\n
-    This bot was invited by 👑${opDisplayName}.
-    New users in this group will use his/her referral code.\n
-    Let's create a new Memecoin and have fun together!
+                `<b>🥇#1 Memecoin launchpad on TON </b>
+
+This bot was invited by 👑${opDisplayName}.
+Both of you will get a referral award if you join.\n
+Let's pump a new Memecoin and have fun together!
                 `,
 
                 {
@@ -142,16 +143,16 @@ export function on_add_to_group(bot: Bot<MyContext>) {
         );
         // 去除 member ，admin 和 creator，还有如下 3个状态
         // let status: "restricted" | "left" | "kicked"
-        let findChat = await prisma.chat.findUnique({
-          where: { chatId: chatId },
+        let findChat = await prisma.group.findUnique({
+          where: { groupId: chatId },
         });
         if (findChat) {
-          await prisma.chat.update({
-            where: { chatId: chatId },
+          await prisma.group.update({
+            where: { groupId: chatId },
             data: { botStatus: chatMemberStatus },
           });
           console.info(
-            `Chat ${findChat.chatId} botStatus updated from ${findChat.botStatus} to ${chatMemberStatus}`,
+            `Chat ${findChat.groupId} botStatus updated from ${findChat.botStatus} to ${chatMemberStatus}`,
           );
         }
         // await prisma.user.findUnique({ where: { tgId: tgId }});

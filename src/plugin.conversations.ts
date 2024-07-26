@@ -90,24 +90,15 @@ async function newMemeWithValidation(
     let devTgId = nameMsg?.message?.from.id;
 
     // 从会话中获取参数
-    const chatIdStr = ctx.session.chatId;
-
-    if (chatIdStr) {
-      console.info(`成功从 session 中获得绑定的chatId ${chatIdStr}`);
-    } else {
-      console.error(`无法成功从 session 中获得绑定的chatId ${chatIdStr}`);
-      console.error(`无法成功从 session 中获得绑定的chatId ${chatIdStr}`);
-      console.error(`无法成功从 session 中获得绑定的chatId ${chatIdStr}`);
-    }
-
-    let chatId = Number(chatIdStr);
+    const groupIdStr = ctx.session.groupId;
+    let groupId = Number(groupIdStr);
     let newData = {
       network: "TON-Mainnet",
       name: name,
       ticker: ticker,
       description: desc,
       devTgId: devTgId,
-      chatId: chatId,
+      groupId: groupId,
     } satisfies Prisma.MemecoinCreateInput;
 
     // todo: 只要点击 【Step 2: 创建 Memecoin按钮】,就能够获取绑定的 chatId
@@ -118,14 +109,14 @@ async function newMemeWithValidation(
       data: newData,
     });
 
-    let newChat = await prisma.chat.update({
-      where: { chatId: chatId },
+    let newGroup = await prisma.group.update({
+      where: { groupId: groupId },
       data: {
         mainMemecoinId: newMemecoin.id,
       },
     });
     console.info(
-      `${newChat.chatTitle} mainMemecoinId updated to  ${newMemecoin.id}`,
+      `${newGroup.groupTitle} mainMemecoinId updated to  ${newMemecoin.id}`,
     );
 
     const keyboard = new InlineKeyboard().text(

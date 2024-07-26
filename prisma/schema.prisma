@@ -92,17 +92,17 @@ model WalletOrder {
   @@index([walletId])
 }
 
-model Chat {
+model Group {
   id              BigInt    @id @default(autoincrement())
-  chatId          BigInt    @unique
+  groupId         BigInt    @unique
   inviterTgId     BigInt
-  // group | supergroup | channel
-  chatType        String
-  // group or channel name
-  chatTitle       String
-  // public link name suffix, e.g. https://t.me/chatUsername
-  chatUsername    String?
-  chatLangCode    String?
+  // group | supergroup
+  groupType       String
+  // group display name called title
+  groupTitle      String
+  // public link name suffix, e.g. https://t.me/groupUsername
+  groupUsername   String?
+  langCode        String?
   memberCount     BigInt?
   // the first bot which invited into group, and can add more bots in future
   mainBotId       BigInt
@@ -140,8 +140,8 @@ model Memecoin {
   opWalletAddress  String?
   socialJson       Json?
   dexJson          Json?
-  chatId           BigInt?
-  Chat             Chat?
+  groupId          BigInt?
+  Group            Group?
   extJson          Json?
   traceId          String?
   createBy         BigInt?

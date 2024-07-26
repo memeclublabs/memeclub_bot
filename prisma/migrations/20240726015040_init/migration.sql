@@ -82,14 +82,14 @@ CREATE TABLE "WalletOrder" (
 );
 
 -- CreateTable
-CREATE TABLE "Chat" (
+CREATE TABLE "Group" (
     "id" BIGSERIAL NOT NULL,
-    "chatId" BIGINT NOT NULL,
+    "groupId" BIGINT NOT NULL,
     "inviterTgId" BIGINT NOT NULL,
-    "chatType" TEXT NOT NULL,
-    "chatTitle" TEXT NOT NULL,
-    "chatUsername" TEXT,
-    "chatLangCode" TEXT,
+    "groupType" TEXT NOT NULL,
+    "groupTitle" TEXT NOT NULL,
+    "groupUsername" TEXT,
+    "langCode" TEXT,
     "memberCount" BIGINT,
     "mainBotId" BIGINT NOT NULL,
     "mainBotUsername" TEXT NOT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE "Chat" (
     "modifyBy" BIGINT,
     "modifyDt" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "Chat_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Group_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -123,13 +123,13 @@ CREATE TABLE "Memecoin" (
     "opWalletAddress" TEXT,
     "socialJson" JSONB,
     "dexJson" JSONB,
+    "groupId" BIGINT,
     "extJson" JSONB,
     "traceId" TEXT,
     "createBy" BIGINT,
     "createDt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "modifyBy" BIGINT,
     "modifyDt" TIMESTAMP(3) NOT NULL,
-    "chatId" BIGINT,
 
     CONSTRAINT "Memecoin_pkey" PRIMARY KEY ("id")
 );
@@ -192,13 +192,13 @@ CREATE INDEX "Wallet_address_idx" ON "Wallet"("address");
 CREATE INDEX "WalletOrder_walletId_idx" ON "WalletOrder"("walletId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Chat_chatId_key" ON "Chat"("chatId");
+CREATE UNIQUE INDEX "Group_groupId_key" ON "Group"("groupId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Chat_mainMemecoinId_key" ON "Chat"("mainMemecoinId");
+CREATE UNIQUE INDEX "Group_mainMemecoinId_key" ON "Group"("mainMemecoinId");
 
 -- CreateIndex
-CREATE INDEX "Chat_inviterTgId_idx" ON "Chat"("inviterTgId");
+CREATE INDEX "Group_inviterTgId_idx" ON "Group"("inviterTgId");
 
 -- CreateIndex
 CREATE INDEX "Memecoin_ticker_idx" ON "Memecoin"("ticker");
@@ -213,4 +213,4 @@ CREATE INDEX "BuyOrder_memecoinId_idx" ON "BuyOrder"("memecoinId");
 CREATE INDEX "SellOrder_memecoinId_idx" ON "SellOrder"("memecoinId");
 
 -- AddForeignKey
-ALTER TABLE "Chat" ADD CONSTRAINT "Chat_mainMemecoinId_fkey" FOREIGN KEY ("mainMemecoinId") REFERENCES "Memecoin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Group" ADD CONSTRAINT "Group_mainMemecoinId_fkey" FOREIGN KEY ("mainMemecoinId") REFERENCES "Memecoin"("id") ON DELETE SET NULL ON UPDATE CASCADE;
