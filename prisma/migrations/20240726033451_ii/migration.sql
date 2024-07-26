@@ -2,7 +2,7 @@
 CREATE TYPE "ChatStatus" AS ENUM ('creator', 'member', 'administrator', 'restricted', 'left', 'kicked');
 
 -- CreateEnum
-CREATE TYPE "CoinStatus" AS ENUM ('Init', 'Deploying', 'Deployed', 'Fail', 'Removed', 'DexListed');
+CREATE TYPE "CoinStatus" AS ENUM ('Init', 'Deploying', 'Deployed', 'FailedToDeploy', 'DexListing', 'FailedToListing', 'DexListed');
 
 -- CreateTable
 CREATE TABLE "User" (

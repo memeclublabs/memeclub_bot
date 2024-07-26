@@ -2,8 +2,9 @@ export enum CoinStatus {
   Init = "Init",
   Deploying = "Deploying",
   Deployed = "Deployed",
-  Fail = "Fail",
-  Removed = "Removed",
+  FailedToDeploy = "FailedToDeploy",
+  DexListing = "DexListing",
+  FailedToListing = "FailedToListing",
   DexListed = "DexListed",
 }
 

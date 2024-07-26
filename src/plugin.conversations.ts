@@ -4,7 +4,6 @@ import { conversations, createConversation } from "@grammyjs/conversations";
 import prisma from "./prisma";
 import { bigintReplacer } from "./functions.common";
 import { Prisma } from "@prisma/client";
-import { CoinStatus } from "./enums";
 
 export function use_conversations(bot: Bot<MyContext>) {
   // WARN: must run after sessions plugin
@@ -54,7 +53,7 @@ async function newMemeWithValidation(
   ctx: MyContext,
 ) {
   await ctx.reply(
-    "Please enter a name for your meme coin?  [1/4]\n\n" +
+    "Please enter a name for this Memecoin?  [1/4]\n\n" +
       "Examples:\n" +
       "   - Dogecoin\n" +
       "   - Pepe\n" +
@@ -63,7 +62,7 @@ async function newMemeWithValidation(
   const nameMsg = await conversation.waitFor(":text");
 
   await ctx.reply(
-    "Good. Now let’s enter a ticker for this meme coin.  [2/4]\n\n" +
+    "Good. Now let’s enter a ticker for this Memecoin.  [2/4]\n\n" +
       "Examples:\n" +
       "   - DOGE\n" +
       "   - PEPE\n" +
@@ -71,13 +70,13 @@ async function newMemeWithValidation(
   );
   const tickerMsg = await conversation.waitFor(":text");
   await ctx.reply(
-    "Good. please enter a short description of the meme coin.  [3/4]\n\n" +
+    "Good. please enter a short description for this Memecoin.  [3/4]\n\n" +
       "Example: \n" +
       "Dogecoin is the accidental crypto movement that makes people smile!\n",
   );
   const descMsg = await conversation.waitFor(":text");
   await ctx.reply(
-    "Now upload an image for this meme coin.  [4/4]\n",
+    "Now upload an image for this Memecoin.  [4/4]\n\n" + "🌄🌅🏞🌃🌆",
     // "/empty to skip. /AIGC to generate by AI",
   );
   const photoMsg = await conversation.waitFor(":photo");
@@ -100,7 +99,7 @@ async function newMemeWithValidation(
       description: desc,
       devTgId: devTgId,
       groupId: groupId,
-      coinStatus: CoinStatus.Init,
+      coinStatus: "Init",
     } satisfies Prisma.MemecoinCreateInput;
 
     // todo: 只要点击 【Step 2: 创建 Memecoin按钮】, 就能从 callback 中解析 groupId

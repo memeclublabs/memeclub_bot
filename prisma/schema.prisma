@@ -135,8 +135,9 @@ enum CoinStatus {
   Init
   Deploying
   Deployed
-  Fail
-  Removed
+  FailedToDeploy
+  DexListing
+  FailedToListing
   DexListed
 }
 

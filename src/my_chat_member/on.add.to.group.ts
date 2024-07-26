@@ -2,10 +2,10 @@ import { Bot, InlineKeyboard } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
 import { Group, Prisma } from "@prisma/client";
+import { CoinStatus } from "../enums";
 
 export function on_add_to_group(bot: Bot<MyContext>) {
   bot.on("my_chat_member", async (ctx) => {
-    console.info("my_chat_member，");
     //1. 读取 chat 发生地，是私聊还是群聊
     //1.1 忽略私聊 chat_type == "private"
     //1.2 只有添加到群组才有效，忽略 channel
@@ -84,11 +84,33 @@ export function on_add_to_group(bot: Bot<MyContext>) {
 
         if (realChat) {
           if (realChat.mainMemecoinId) {
+            let findMemecoin = await prisma.memecoin.findUnique({
+              where: { id: realChat.mainMemecoinId },
+            });
+
+            if (findMemecoin) {
+              if (findMemecoin.coinStatus == CoinStatus.Init) {
+                // 已经有 Init 状态的，继续推进
+                const keyboard = new InlineKeyboard().text(
+                  "Confirm to Create Memecoin",
+                  `callback_confirm_deploy_${findMemecoin.id}`,
+                );
+
+                await ctx.reply(
+                  `📝<b>Memecoin for ${realChat.groupTitle}</b>
+
+The group is already bound to the Memecoin as follows, so please go ahead and create it.
+      
+         Name: ${findMemecoin.name}
+         Ticker: ${findMemecoin.ticker}
+         Description: ${findMemecoin.description}`,
+                  { parse_mode: "HTML", reply_markup: keyboard },
+                );
+              }
+            }
+
             await ctx.api
-              .sendMessage(
-                opIgId,
-                `There already have a memecoin in group/channel.] `,
-              )
+              .sendMessage(opIgId, `There already have a memecoin in group.] `)
               .catch((e) => {
                 console.error(e);
               });
@@ -100,12 +122,7 @@ export function on_add_to_group(bot: Bot<MyContext>) {
 
 ⭐Your Meme Points: + 200
 `;
-
-            let inlineKeyboard = new InlineKeyboard().text(
-              "Step 2: Create new Memecoin",
-              `callback_create_meme_chatId_${realChat.groupId}`,
-            );
-
+            let inlineKeyboard = buildStep2Keyboard(realChat.groupId);
             await ctx.api
               .sendMessage(opIgId, addToChatCaption, {
                 parse_mode: "HTML",
@@ -156,4 +173,11 @@ Let's pump a new Memecoin and have fun together!
       } //end join group / channel
     } //end chat in group / channel loop
   });
+}
+
+function buildStep2Keyboard(groupId: bigint) {
+  return new InlineKeyboard().text(
+    "Step 2: Create new Memecoin",
+    `callback_create_meme_chatId_${groupId}`,
+  );
 }
