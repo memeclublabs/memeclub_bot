@@ -8,16 +8,12 @@ export function on_add_to_group(bot: Bot<MyContext>) {
     console.info("my_chat_member，");
     //1. 读取 chat 发生地，是私聊还是群聊
     //1.1 忽略私聊 chat_type == "private"
-    //1.2 不管是群组还是频道，都算有效的添加
+    //1.2 只有添加到群组才有效，忽略 channel
     let chatId = ctx.myChatMember.chat?.id;
     let chatType = ctx.myChatMember.chat?.type;
     let chatTitle = ctx.myChatMember.chat?.title;
     let chatUsername = ctx.myChatMember.chat?.username;
-    if (
-      chatType == "channel" ||
-      chatType == "group" ||
-      chatType == "supergroup"
-    ) {
+    if (chatType == "group" || chatType == "supergroup") {
       // let status: "member" | "creator" | "administrator" | "restricted" | "left" | "kicked"
       let chatMemberStatus = ctx.myChatMember.new_chat_member.status;
       if (chatMemberStatus == "member" || chatMemberStatus == "administrator") {
