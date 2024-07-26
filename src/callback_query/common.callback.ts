@@ -19,10 +19,21 @@ export function on_callback_query(bot: Bot<MyContext>) {
       // 点击 [Step 2: Create new Memecoin] 按钮会进入这个方法处理，按钮附带了 chatId 参数
       // chatId 参数将会放到 session 中才可以传递给 conversation
       // conversation 处理方法讲中 session 中获取 chatId
-
-      ctx.session.groupId = callbackData.split(
+      let groupIdFromSession = callbackData.split(
         "callback_create_meme_chatId_",
       )[1];
+      if (!groupIdFromSession) {
+        console.error(
+          "Cannot find group info when click Step2 button",
+          callbackData,
+        );
+        await ctx.reply(
+          "Cannot find group info, pls contact memeclub helpdesk!",
+        );
+        return;
+      }
+
+      ctx.session.groupId = groupIdFromSession;
       await ctx.conversation.enter("newMemeWithValidation");
     } else if (
       callbackData &&

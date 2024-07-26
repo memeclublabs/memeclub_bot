@@ -1,6 +1,17 @@
 export enum CoinStatus {
-  Initialized = "Initialized",
+  Init = "Init",
+  Deploying = "Deploying",
   Deployed = "Deployed",
+  Fail = "Fail",
+  Removed = "Removed",
+  DexListed = "DexListed",
+}
+
+function getCoinStatus(status: string): CoinStatus | undefined {
+  if (Object.values(CoinStatus).includes(status as CoinStatus)) {
+    return status as CoinStatus;
+  }
+  return undefined; // 或者你可以抛出一个错误
 }
 
 // : "member" | "creator" | "administrator" | "restricted" | "left" | "kicked"
@@ -11,6 +22,13 @@ export enum ChatStatus {
   restricted = "restricted",
   left = "left",
   kicked = "kicked",
+}
+
+function getChatStatus(status: string): ChatStatus | undefined {
+  if (Object.values(ChatStatus).includes(status as ChatStatus)) {
+    return status as ChatStatus;
+  }
+  return undefined;
 }
 
 function isChatStatus(value: string): value is ChatStatus {

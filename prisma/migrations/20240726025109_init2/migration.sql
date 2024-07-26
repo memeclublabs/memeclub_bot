@@ -1,3 +1,9 @@
+-- CreateEnum
+CREATE TYPE "ChatStatus" AS ENUM ('creator', 'member', 'administrator', 'restricted', 'left', 'kicked');
+
+-- CreateEnum
+CREATE TYPE "CoinStatus" AS ENUM ('Init', 'Deploying', 'Deployed', 'Fail', 'Removed', 'DexListed');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" BIGSERIAL NOT NULL,
@@ -93,7 +99,7 @@ CREATE TABLE "Group" (
     "memberCount" BIGINT,
     "mainBotId" BIGINT NOT NULL,
     "mainBotUsername" TEXT NOT NULL,
-    "botStatus" TEXT NOT NULL,
+    "botStatus" "ChatStatus" NOT NULL,
     "mainMemecoinId" BIGINT,
     "extJson" JSONB,
     "traceId" TEXT,
@@ -115,7 +121,7 @@ CREATE TABLE "Memecoin" (
     "imageType" TEXT,
     "image" TEXT,
     "devTgId" BIGINT,
-    "coinStatus" TEXT,
+    "coinStatus" "CoinStatus" NOT NULL,
     "contractVersion" TEXT,
     "deployTxHash" TEXT,
     "masterAddress" TEXT,

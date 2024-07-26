@@ -4,6 +4,7 @@ import { conversations, createConversation } from "@grammyjs/conversations";
 import prisma from "./prisma";
 import { bigintReplacer } from "./functions.common";
 import { Prisma } from "@prisma/client";
+import { CoinStatus } from "./enums";
 
 export function use_conversations(bot: Bot<MyContext>) {
   // WARN: must run after sessions plugin
@@ -99,9 +100,10 @@ async function newMemeWithValidation(
       description: desc,
       devTgId: devTgId,
       groupId: groupId,
+      coinStatus: CoinStatus.Init,
     } satisfies Prisma.MemecoinCreateInput;
 
-    // todo: 只要点击 【Step 2: 创建 Memecoin按钮】,就能够获取绑定的 chatId
+    // todo: 只要点击 【Step 2: 创建 Memecoin按钮】, 就能从 callback 中解析 groupId
     // todo: 这里要判断一下，对应的 chat 是否已经有 memecoin
     // todo: 如果有，就继续推进，而不是新建一个
 

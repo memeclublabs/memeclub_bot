@@ -32,12 +32,13 @@ export function on_add_to_group(bot: Bot<MyContext>) {
         let realChat: Group | undefined;
         if (findChat) {
           // 准备按需更新
+          // 判断群组绑定的 mainBotId 是否是本 bot，有可能本项目有多个 bot 实例
+          // 如果是本 bot 就更新，否则先跳过
           if (
             findChat.mainBotId ==
             BigInt(ctx.myChatMember.new_chat_member.user.id)
           ) {
-            // 判断 mainBotId 是否是本 bot，有可能本项目有多个 bot 实例
-            // 如果是就更新，否则先跳过
+            // 更新会更新邀请人，这将影响群组内的新用户邀请码
             const updateData = {
               groupTitle: "" + chatTitle,
               groupUsername: chatUsername,

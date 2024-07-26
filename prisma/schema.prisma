@@ -92,9 +92,18 @@ model WalletOrder {
   @@index([walletId])
 }
 
+enum ChatStatus {
+  creator
+  member
+  administrator
+  restricted
+  left
+  kicked
+}
+
 model Group {
-  id              BigInt    @id @default(autoincrement())
-  groupId         BigInt    @unique
+  id              BigInt     @id @default(autoincrement())
+  groupId         BigInt     @unique
   inviterTgId     BigInt
   // group | supergroup
   groupType       String
@@ -108,22 +117,31 @@ model Group {
   mainBotId       BigInt
   mainBotUsername String
   // status: "member" | "creator" | "administrator" | "restricted" | "left" | "kicked"
-  botStatus       String
+  botStatus       ChatStatus
   // main is one-one relation, and we can add a many to many called memecoins
-  mainMemecoin    Memecoin? @relation(fields: [mainMemecoinId], references: [id])
-  mainMemecoinId  BigInt?   @unique
+  mainMemecoin    Memecoin?  @relation(fields: [mainMemecoinId], references: [id])
+  mainMemecoinId  BigInt?    @unique
   extJson         Json?
   traceId         String?
   createBy        BigInt?
-  createDt        DateTime  @default(now())
+  createDt        DateTime   @default(now())
   modifyBy        BigInt?
-  modifyDt        DateTime  @updatedAt
+  modifyDt        DateTime   @updatedAt
 
   @@index([inviterTgId])
 }
 
+enum CoinStatus {
+  Init
+  Deploying
+  Deployed
+  Fail
+  Removed
+  DexListed
+}
+
 model Memecoin {
-  id               BigInt   @id @default(autoincrement())
+  id               BigInt     @id @default(autoincrement())
   network          String?
   name             String?
   ticker           String?
@@ -131,8 +149,7 @@ model Memecoin {
   imageType        String?
   image            String?
   devTgId          BigInt?
-  // Init, Deploying, Deployed, DEX
-  coinStatus       String?
+  coinStatus       CoinStatus
   contractVersion  String?
   deployTxHash     String?
   masterAddress    String?
@@ -145,9 +162,9 @@ model Memecoin {
   extJson          Json?
   traceId          String?
   createBy         BigInt?
-  createDt         DateTime @default(now())
+  createDt         DateTime   @default(now())
   modifyBy         BigInt?
-  modifyDt         DateTime @updatedAt
+  modifyDt         DateTime   @updatedAt
 
   @@index([ticker])
   @@index([devTgId, ticker])
