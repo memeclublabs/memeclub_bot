@@ -2,7 +2,6 @@ import { Bot, InlineKeyboard } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
 import { Group, Prisma } from "@prisma/client";
-import { CoinStatus } from "../enums";
 
 export function on_add_to_group(bot: Bot<MyContext>) {
   bot.on("my_chat_member", async (ctx) => {
@@ -74,14 +73,6 @@ export function on_add_to_group(bot: Bot<MyContext>) {
           realChat = await prisma.group.create({ data: insertData });
         }
 
-        // let userById = await prisma.user.findUnique({
-        //   where: { tgId: opIgId },
-        // });
-        // if (!userById) {
-        //   console.error(`admin user not found by id ${opIgId}`);
-        //   return;
-        // }
-
         if (realChat) {
           if (realChat.mainMemecoinId) {
             let findMemecoin = await prisma.memecoin.findUnique({
@@ -89,31 +80,61 @@ export function on_add_to_group(bot: Bot<MyContext>) {
             });
 
             if (findMemecoin) {
-              if (findMemecoin.coinStatus == CoinStatus.Init) {
+              console.info(findMemecoin.coinStatus);
+
+              if (findMemecoin.coinStatus == "Init") {
                 // 已经有 Init 状态的，继续推进
                 const keyboard = new InlineKeyboard().text(
-                  "Confirm to Create Memecoin",
+                  "🚀 Confirm to Create Memecoin",
                   `callback_confirm_deploy_${findMemecoin.id}`,
                 );
 
-                await ctx.reply(
-                  `📝<b>Memecoin for ${realChat.groupTitle}</b>
+                let textFor = `🔔<b>Memecoin for ${realChat.groupTitle}</b>
 
-The group is already bound to the Memecoin as follows, so please go ahead and create it.
-      
-         Name: ${findMemecoin.name}
-         Ticker: ${findMemecoin.ticker}
-         Description: ${findMemecoin.description}`,
-                  { parse_mode: "HTML", reply_markup: keyboard },
+The group is already bound to this Memecoin, please go ahead and create it.
+    
+       Name: ${findMemecoin.name}
+       Ticker: ${findMemecoin.ticker}
+       Description: ${findMemecoin.description}`;
+                await ctx.api.sendMessage(opIgId, textFor, {
+                  parse_mode: "HTML",
+                  reply_markup: keyboard,
+                });
+              } else if (findMemecoin.coinStatus == "Deploying") {
+                await ctx.api.sendMessage(
+                  opIgId,
+                  `This Memecoin ${findMemecoin.name} is in deploying, please wait...`,
+                );
+              } else if (findMemecoin.coinStatus === "Deployed") {
+                // TODO： 这里换成真实的买卖按钮
+                await ctx.api.sendMessage(
+                  opIgId,
+                  `This Memecoin ${findMemecoin.name} is pumping, please join to have fun!`,
+                  {
+                    reply_markup: {
+                      inline_keyboard: [
+                        [
+                          {
+                            text: "Buy ",
+                            url: "https://tonviewer.com/EQBOop4AF9RNh2DG1N1yZfzFM28vZNUlRjAtjphOEVMd0mJ5",
+                          },
+                          {
+                            text: "Sell",
+                            url: "https://tonviewer.com/EQBOop4AF9RNh2DG1N1yZfzFM28vZNUlRjAtjphOEVMd0mJ5",
+                          },
+                        ],
+                        [
+                          {
+                            text: "Referral",
+                            url: "https://tonviewer.com/EQBOop4AF9RNh2DG1N1yZfzFM28vZNUlRjAtjphOEVMd0mJ5",
+                          },
+                        ],
+                      ],
+                    },
+                  },
                 );
               }
             }
-
-            await ctx.api
-              .sendMessage(opIgId, `There already have a memecoin in group.] `)
-              .catch((e) => {
-                console.error(e);
-              });
           } else {
             let addToChatCaption = `
 <b>🎉 Add to group successfully.</b>\n
@@ -152,6 +173,7 @@ Let's pump a new Memecoin and have fun together!
           }
         }
       } else {
+        // 下面是处理 bot 被剔除群组的情况
         console.info(
           ` new chatMemberStatus ${chatMemberStatus} at chat ${chatId}`,
         );
@@ -163,7 +185,10 @@ Let's pump a new Memecoin and have fun together!
         if (findChat) {
           await prisma.group.update({
             where: { groupId: chatId },
-            data: { botStatus: chatMemberStatus },
+            data: {
+              botStatus: chatMemberStatus,
+              modifyBy: ctx.myChatMember?.from.id,
+            },
           });
           console.info(
             `Chat ${findChat.groupId} botStatus updated from ${findChat.botStatus} to ${chatMemberStatus}`,
