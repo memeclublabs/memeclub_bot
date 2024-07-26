@@ -4,6 +4,7 @@ import { conversations, createConversation } from "@grammyjs/conversations";
 import prisma from "./prisma";
 import { bigintReplacer } from "./functions.common";
 import { Prisma } from "@prisma/client";
+import { processByCoinStatus } from "./service/memecoin.process.by.status";
 
 export function use_conversations(bot: Bot<MyContext>) {
   // WARN: must run after sessions plugin
@@ -151,10 +152,14 @@ async function newMemeWithValidation(
     } else {
       // 2.2 已经绑定，既 findGroup.mainMemecoinId 不为空
       // 根据 Memecoin 状态，发送不同消息
-      // todo
-      // todo
-      // todo
-      // todo
+      // 下面这个方法，会根据 Memecoin 的状态来发送不同的消息
+      console.info("plugin.conversations.ts => 重复点击 Step2 按钮");
+      await processByCoinStatus(
+        ctx,
+        Number(findGroup.inviterTgId),
+        findGroup.mainMemecoinId,
+        findGroup.groupTitle,
+      );
     }
   } else {
     // 没有发现群组，异常

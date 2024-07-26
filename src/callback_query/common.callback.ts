@@ -48,9 +48,10 @@ export function on_callback_query(bot: Bot<MyContext>) {
       if (!memecoin) {
         console.error(`${memecoinId} not found`);
       }
-      console.info(memecoin?.ticker);
-      console.info(memecoin?.ticker);
-      console.info(memecoin?.ticker);
+      console.info("TODO 这里就要部署了", memecoin?.ticker);
+      console.info("TODO 这里就要部署了", memecoin?.ticker);
+      console.info("TODO 这里就要部署了", memecoin?.ticker);
+      console.info("TODO 这里就要部署了", memecoin?.ticker);
 
       // TODO 这里就要部署了
       // TODO 这里就要部署了

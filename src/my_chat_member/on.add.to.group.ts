@@ -2,6 +2,7 @@ import { Bot, InlineKeyboard } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
 import { Group, Prisma } from "@prisma/client";
+import { processByCoinStatus } from "../service/memecoin.process.by.status";
 
 export function on_add_to_group(bot: Bot<MyContext>) {
   bot.on("my_chat_member", async (ctx) => {
@@ -25,16 +26,16 @@ export function on_add_to_group(bot: Bot<MyContext>) {
         let opLastName = ctx.myChatMember.from.last_name;
         let opDisplayName = `${opFirstName} ${opLastName}`;
 
-        let findChat = await prisma.group.findUnique({
+        let findGroup = await prisma.group.findUnique({
           where: { groupId: chatId },
         });
-        let realChat: Group | undefined;
-        if (findChat) {
+        let realGroup: Group | undefined;
+        if (findGroup) {
           // 准备按需更新
           // 判断群组绑定的 mainBotId 是否是本 bot，有可能本项目有多个 bot 实例
           // 如果是本 bot 就更新，否则先跳过
           if (
-            findChat.mainBotId ==
+            findGroup.mainBotId ==
             BigInt(ctx.myChatMember.new_chat_member.user.id)
           ) {
             // 更新会更新邀请人，这将影响群组内的新用户邀请码
@@ -47,7 +48,7 @@ export function on_add_to_group(bot: Bot<MyContext>) {
               modifyBy: opIgId,
             } satisfies Prisma.GroupUpdateInput;
 
-            realChat = await prisma.group.update({
+            realGroup = await prisma.group.update({
               where: { groupId: chatId },
               data: updateData,
             });
@@ -70,71 +71,21 @@ export function on_add_to_group(bot: Bot<MyContext>) {
             memberCount: chatMemberCount,
             createBy: opIgId,
           } satisfies Prisma.GroupCreateInput;
-          realChat = await prisma.group.create({ data: insertData });
+          realGroup = await prisma.group.create({ data: insertData });
         }
 
-        if (realChat) {
-          if (realChat.mainMemecoinId) {
-            let findMemecoin = await prisma.memecoin.findUnique({
-              where: { id: realChat.mainMemecoinId },
-            });
-
-            if (findMemecoin) {
-              console.info(findMemecoin.coinStatus);
-
-              if (findMemecoin.coinStatus == "Init") {
-                // 已经有 Init 状态的，继续推进
-                const keyboard = new InlineKeyboard().text(
-                  "🚀 Confirm to Create Memecoin",
-                  `callback_confirm_deploy_${findMemecoin.id}`,
-                );
-
-                let textFor = `🔔<b>Memecoin for ${realChat.groupTitle}</b>
-
-The group is already bound to this Memecoin, please go ahead and create it.
-    
-       Name: ${findMemecoin.name}
-       Ticker: ${findMemecoin.ticker}
-       Description: ${findMemecoin.description}`;
-                await ctx.api.sendMessage(opIgId, textFor, {
-                  parse_mode: "HTML",
-                  reply_markup: keyboard,
-                });
-              } else if (findMemecoin.coinStatus == "Deploying") {
-                await ctx.api.sendMessage(
-                  opIgId,
-                  `This Memecoin ${findMemecoin.name} is in deploying, please wait...`,
-                );
-              } else if (findMemecoin.coinStatus === "Deployed") {
-                // TODO： 这里换成真实的买卖按钮
-                await ctx.api.sendMessage(
-                  opIgId,
-                  `This Memecoin ${findMemecoin.name} is pumping, please join to have fun!`,
-                  {
-                    reply_markup: {
-                      inline_keyboard: [
-                        [
-                          {
-                            text: "Buy ",
-                            url: "https://tonviewer.com/EQBOop4AF9RNh2DG1N1yZfzFM28vZNUlRjAtjphOEVMd0mJ5",
-                          },
-                          {
-                            text: "Sell",
-                            url: "https://tonviewer.com/EQBOop4AF9RNh2DG1N1yZfzFM28vZNUlRjAtjphOEVMd0mJ5",
-                          },
-                        ],
-                        [
-                          {
-                            text: "Referral",
-                            url: "https://tonviewer.com/EQBOop4AF9RNh2DG1N1yZfzFM28vZNUlRjAtjphOEVMd0mJ5",
-                          },
-                        ],
-                      ],
-                    },
-                  },
-                );
-              }
-            }
+        if (realGroup) {
+          if (realGroup.mainMemecoinId) {
+            // 下面这个方法，会根据 Memecoin 的状态来发送不同的消息
+            console.info(
+              "on.add.to.group.ts => bot 重复加入一个群(kicked 后再加入)",
+            );
+            await processByCoinStatus(
+              ctx,
+              opIgId,
+              realGroup.mainMemecoinId,
+              realGroup.groupTitle,
+            );
           } else {
             let addToChatCaption = `
 <b>🎉 Add to group successfully.</b>\n
@@ -143,7 +94,7 @@ The group is already bound to this Memecoin, please go ahead and create it.
 
 ⭐Your Meme Points: + 200
 `;
-            let inlineKeyboard = buildStep2Keyboard(realChat.groupId);
+            let inlineKeyboard = buildStep2Keyboard(realGroup.groupId);
             await ctx.api
               .sendMessage(opIgId, addToChatCaption, {
                 parse_mode: "HTML",
