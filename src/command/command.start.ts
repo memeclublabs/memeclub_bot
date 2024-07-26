@@ -14,7 +14,7 @@ const backCaptionText: string =
 
 let newMemeCaption = `
 <b>[ How it works ?]</b>\n
-Step 1: Add this bot to your group or channel.\n
+Step 1: Add this bot to a group where you have an admin role.\n
 Step 2: Create new Memecoin with few or zero gas cost.\n
 Step 3: Buy the Memecoin on the bonding curve. Sell at any time to lock in your profits or losses.\n
 Step 4: When enough people buy on the bonding curve it reaches a pool of 1,000 TON.\n
@@ -29,9 +29,26 @@ export function bind_command_start(bot: Bot<MyContext>) {
         .then((r) => {});
     })
     .row()
-    .dynamic((ctx, range) => {
-      const referCode = ctx.session.referCode;
-      console.info("get referCode from session : ", referCode);
+    .dynamic(async (ctx, range) => {
+      let referCode = ctx.session.referCode;
+
+      if (!referCode) {
+        if (ctx.chat?.id) {
+          let findChat = await prisma.chat.findUnique({
+            where: { chatId: ctx.chat.id },
+          });
+
+          if (findChat && findChat.inviterTgId) {
+            let findUser = await prisma.user.findUnique({
+              where: { tgId: findChat.inviterTgId },
+            });
+            if (findUser && findUser.refCode) {
+              referCode = findUser?.refCode;
+            }
+          }
+        }
+      }
+      console.info(`real referCode ${referCode} for group ${ctx.chat?.id}`);
       range.url(
         "🎁 Airdrop & Referral",
         `https://t.me/${process.env.TELEGRAM_BOT_NAME}?start=${referCode}`,
