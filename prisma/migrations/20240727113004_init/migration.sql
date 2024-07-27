@@ -1,4 +1,10 @@
 -- CreateEnum
+CREATE TYPE "Blockchain" AS ENUM ('TON', 'SOL', 'ETH');
+
+-- CreateEnum
+CREATE TYPE "Network" AS ENUM ('Mainnet', 'Testnet', 'Custom');
+
+-- CreateEnum
 CREATE TYPE "ChatStatus" AS ENUM ('creator', 'member', 'administrator', 'restricted', 'left', 'kicked');
 
 -- CreateEnum
@@ -16,7 +22,8 @@ CREATE TABLE "User" (
     "refCode" TEXT NOT NULL,
     "referBy" BIGINT,
     "langCode" TEXT,
-    "walletNetwork" TEXT,
+    "walletChain" "Blockchain",
+    "walletNetwork" "Network",
     "walletAddress" TEXT,
     "walletBalance" BIGINT,
     "totalPoints" BIGINT NOT NULL DEFAULT 0,
@@ -54,7 +61,8 @@ CREATE TABLE "UserAction" (
 CREATE TABLE "Wallet" (
     "id" BIGSERIAL NOT NULL,
     "type" TEXT NOT NULL,
-    "network" TEXT NOT NULL,
+    "chain" "Blockchain" NOT NULL,
+    "network" "Network" NOT NULL,
     "address" TEXT NOT NULL,
     "balance" BIGINT,
     "pk" TEXT,
@@ -114,10 +122,11 @@ CREATE TABLE "Group" (
 -- CreateTable
 CREATE TABLE "Memecoin" (
     "id" BIGSERIAL NOT NULL,
-    "network" TEXT,
-    "name" TEXT,
-    "ticker" TEXT,
-    "description" TEXT,
+    "chain" "Blockchain" NOT NULL,
+    "network" "Network" NOT NULL,
+    "name" TEXT NOT NULL,
+    "ticker" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
     "imageType" TEXT,
     "image" TEXT,
     "devTgId" BIGINT,

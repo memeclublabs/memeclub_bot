@@ -11,27 +11,28 @@ datasource db {
 }
 
 model User {
-  id            BigInt   @id @default(autoincrement())
-  tgId          BigInt   @unique
+  id            BigInt      @id @default(autoincrement())
+  tgId          BigInt      @unique
   tgUsername    String?
   firstName     String?
   lastName      String?
   profileImg    String?
-  isPremium     Boolean  @default(false)
-  refCode       String   @unique
+  isPremium     Boolean     @default(false)
+  refCode       String      @unique
   referBy       BigInt?
   langCode      String?
   // default custody wallet saved in User
-  walletNetwork String?
+  walletChain   Blockchain?
+  walletNetwork Network?
   walletAddress String?
   walletBalance BigInt?
-  totalPoints   BigInt   @default(0)
+  totalPoints   BigInt      @default(0)
   extJson       Json?
   traceId       String?
   createBy      BigInt?
-  createDt      DateTime @default(now())
+  createDt      DateTime    @default(now())
   modifyBy      BigInt?
-  modifyDt      DateTime @updatedAt
+  modifyDt      DateTime    @updatedAt
 }
 
 model UserAction {
@@ -54,21 +55,22 @@ model UserAction {
 }
 
 model Wallet {
-  id       BigInt   @id @default(autoincrement())
+  id       BigInt     @id @default(autoincrement())
   // Custody, Self-custodial
   type     String
   // TON-Mainnet, ETH-Testnet
-  network  String
-  address  String   @unique
+  chain    Blockchain
+  network  Network
+  address  String     @unique
   balance  BigInt?
   pk       String?
   phrases  String?
   extJson  Json?
   traceId  String?
   createBy BigInt?
-  createDt DateTime @default(now())
+  createDt DateTime   @default(now())
   modifyBy BigInt?
-  modifyDt DateTime @updatedAt
+  modifyDt DateTime   @updatedAt
 
   @@index([address])
 }
@@ -90,15 +92,6 @@ model WalletOrder {
   modifyDt  DateTime @updatedAt
 
   @@index([walletId])
-}
-
-enum ChatStatus {
-  creator
-  member
-  administrator
-  restricted
-  left
-  kicked
 }
 
 model Group {
@@ -131,22 +124,13 @@ model Group {
   @@index([inviterTgId])
 }
 
-enum CoinStatus {
-  Init
-  Deploying
-  Deployed
-  FailedToDeploy
-  DexListing
-  FailedToListing
-  DexListed
-}
-
 model Memecoin {
   id               BigInt     @id @default(autoincrement())
-  network          String?
-  name             String?
-  ticker           String?
-  description      String?
+  chain            Blockchain
+  network          Network
+  name             String
+  ticker           String
+  description      String
   imageType        String?
   image            String?
   devTgId          BigInt?
@@ -204,3 +188,38 @@ model SellOrder {
 
   @@index([memecoinId])
 }
+
+//  ================== enums ==================
+
+enum Blockchain {
+  TON
+  SOL
+  ETH
+}
+
+enum Network {
+  Mainnet
+  Testnet
+  Custom
+}
+
+enum ChatStatus {
+  creator
+  member
+  administrator
+  restricted
+  left
+  kicked
+}
+
+enum CoinStatus {
+  Init
+  Deploying
+  Deployed
+  FailedToDeploy
+  DexListing
+  FailedToListing
+  DexListed
+}
+
+//  ================== enums end ==================

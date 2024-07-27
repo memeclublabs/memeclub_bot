@@ -111,10 +111,12 @@ async function newMemeWithValidation(
         let devTgId = nameMsg?.message?.from.id;
 
         let newData = {
-          network: "TON-Mainnet",
-          name: name,
-          ticker: ticker,
-          description: desc,
+          name: name!,
+          ticker: ticker!,
+          description: desc!,
+          chain: "TON",
+          network:
+            process.env.CHAIN_NETWORK == "Testnet" ? "Testnet" : "Mainnet",
           devTgId: devTgId,
           groupId: groupId,
           coinStatus: "Init",

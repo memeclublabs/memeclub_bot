@@ -33,7 +33,7 @@
     "@grammyjs/types": "^3.11.0",
     "@prisma/client": "5.17.0",
     "@ton/core": "^0.56.3",
-    "@ton/crypto": "^3.2.0",
+    "@ton/crypto": "^3.3.0",
     "@ton/ton": "^14.0.0",
     "dotenv": "^16.4.5",
     "grammy": "^1.27.0",
