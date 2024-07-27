@@ -8,4 +8,4 @@ enum XXS {
   DexListed = "DexListed",
 }
 
-console.info(XXS.FailedToDeploy);
+console.info(Math.floor(Math.random() * 100001));

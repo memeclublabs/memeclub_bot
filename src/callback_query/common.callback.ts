@@ -1,6 +1,7 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
+import { tonDeployMaster } from "../service/ton.deploy.master";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   // 这个是旧的处理方式，因为不能接受参数chatId，已经没用了，
@@ -45,42 +46,52 @@ export function on_callback_query(bot: Bot<MyContext>) {
         where: { id: BigInt(memecoinId) },
       });
 
-      if (!memecoin) {
+      if (memecoin) {
+        console.info("TODO 这里就要部署了", memecoin?.ticker);
+        console.info("TODO 这里就要部署了", memecoin?.ticker);
+        console.info("TODO 这里就要部署了", memecoin?.ticker);
+        console.info("TODO 这里就要部署了", memecoin?.ticker);
+
+        let { address, seqNo } = await tonDeployMaster(
+          memecoin.name,
+          memecoin.ticker,
+          memecoin.description + Math.floor(Math.random() * 100000),
+        );
+
+        console.info(address);
+        console.info(seqNo);
+
+        // TODO 这里就要部署了
+        // TODO 这里就要部署了
+        // TODO 这里就要部署了
+        // TODO 这里就要部署了
+        // TODO 这里就要部署了
+        // 回复用户
+        // await ctx.answerCallbackQuery("memecoin in deploying");
+        // await ctx.answerCallbackQuery({ text: "⚠️警告", show_alert: true });
+
+        await ctx.reply("Memecoin in deploying....", {
+          parse_mode: "HTML",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "View Transaction ",
+                  url: "https://tonviewer.com/EQBOop4AF9RNh2DG1N1yZfzFM28vZNUlRjAtjphOEVMd0mJ5",
+                },
+              ],
+              [
+                {
+                  text: "Check Status",
+                  callback_data: `callback_check_status_memecoin_${memecoin?.id}`,
+                },
+              ],
+            ],
+          },
+        });
+      } else {
         console.error(`${memecoinId} not found`);
       }
-      console.info("TODO 这里就要部署了", memecoin?.ticker);
-      console.info("TODO 这里就要部署了", memecoin?.ticker);
-      console.info("TODO 这里就要部署了", memecoin?.ticker);
-      console.info("TODO 这里就要部署了", memecoin?.ticker);
-
-      // TODO 这里就要部署了
-      // TODO 这里就要部署了
-      // TODO 这里就要部署了
-      // TODO 这里就要部署了
-      // TODO 这里就要部署了
-      // 回复用户
-      // await ctx.answerCallbackQuery("memecoin in deploying");
-      // await ctx.answerCallbackQuery({ text: "⚠️警告", show_alert: true });
-
-      await ctx.reply("Memecoin in deploying....", {
-        parse_mode: "HTML",
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "View Transaction ",
-                url: "https://tonviewer.com/EQBOop4AF9RNh2DG1N1yZfzFM28vZNUlRjAtjphOEVMd0mJ5",
-              },
-            ],
-            [
-              {
-                text: "Check Status",
-                callback_data: `callback_check_status_memecoin_${memecoin?.id}`,
-              },
-            ],
-          ],
-        },
-      });
     } else {
       await next();
     }

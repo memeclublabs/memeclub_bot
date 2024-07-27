@@ -22,3 +22,8 @@ ncu -u
 ```
 
 
+
+
+PS: PNPM 升级
+
+pnpm add -g pnpm@latest

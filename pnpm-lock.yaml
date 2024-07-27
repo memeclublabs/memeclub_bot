@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@aws-crypto/sha256-js':
+        specifier: ^5.2.0
+        version: 5.2.0
       '@grammyjs/conversations':
         specifier: ^1.2.0
         version: 1.2.0(grammy@1.27.0)
@@ -23,15 +26,18 @@ importers:
       '@prisma/client':
         specifier: 5.17.0
         version: 5.17.0(prisma@5.17.0)
+      '@ton-community/func-js':
+        specifier: ^0.7.0
+        version: 0.7.0
       '@ton/core':
         specifier: ^0.56.3
-        version: 0.56.3(@ton/crypto@3.2.0)
+        version: 0.56.3(@ton/crypto@3.3.0)
       '@ton/crypto':
-        specifier: ^3.2.0
-        version: 3.2.0
+        specifier: ^3.3.0
+        version: 3.3.0
       '@ton/ton':
         specifier: ^14.0.0
-        version: 14.0.0(@ton/core@0.56.3(@ton/crypto@3.2.0))(@ton/crypto@3.2.0)
+        version: 14.0.0(@ton/core@0.56.3(@ton/crypto@3.3.0))(@ton/crypto@3.3.0)
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -81,6 +87,17 @@ packages:
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
+
+  '@aws-crypto/sha256-js@5.2.0':
+    resolution: {integrity: sha512-FFQQyu7edu4ufvIZ+OadFpHHOt+eSTBaYaki44c+akjg7qZg9oOQeLlk77F6tSYqjDAFClrHJk9tMf0HdVyOvA==}
+    engines: {node: '>=16.0.0'}
+
+  '@aws-crypto/util@5.2.0':
+    resolution: {integrity: sha512-4RkU9EsI6ZpBve5fseQlGNUWKMa1RLPQ1dnjnQoe07ldfIzcsGb5hC5W0Dm7u423KWzawlrpbjXBrXCEv9zazQ==}
+
+  '@aws-sdk/types@3.609.0':
+    resolution: {integrity: sha512-+Tqnh9w0h2LcrUsdXyT1F8mNhXz+tVYBtP19LpeEGntmvHwa2XzvLUCWpoIAIVsHp5+HdB2X9Sn0KAtmbFXc2Q==}
+    engines: {node: '>=16.0.0'}
 
   '@babel/code-frame@7.10.4':
     resolution: {integrity: sha512-vG6SvB6oYEhvgisZNFRmRCUkLz11c7rp+tbNTynGqc6mS1d5ATd/sGyV6W0KZZnXRKMTzZDRgQT3Ou9jhpAfUg==}
@@ -1434,16 +1451,39 @@ packages:
   '@sinonjs/fake-timers@10.3.0':
     resolution: {integrity: sha512-V4BG07kuYSUkTCSBHG8G8TNhM+F19jXFWnQtzj+we8DrkpSBCee9Z3Ms8yiGer/dlmhe35/Xdgyo3/0rQKg7YA==}
 
+  '@smithy/is-array-buffer@2.2.0':
+    resolution: {integrity: sha512-GGP3O9QFD24uGeAXYUjwSTXARoqpZykHadOmA8G5vfJPK0/DC67qa//0qvqrJzL1xc8WQWX7/yc7fwudjPHPhA==}
+    engines: {node: '>=14.0.0'}
+
+  '@smithy/types@3.3.0':
+    resolution: {integrity: sha512-IxvBBCTFDHbVoK7zIxqA1ZOdc4QfM5HM7rGleCuHi7L1wnKv5Pn69xXJQ9hgxH60ZVygH9/JG0jRgtUncE3QUA==}
+    engines: {node: '>=16.0.0'}
+
+  '@smithy/util-buffer-from@2.2.0':
+    resolution: {integrity: sha512-IJdWBbTcMQ6DA0gdNhh/BwrLkDR+ADW5Kr1aZmd4k3DIF6ezMV4R2NIAmT08wQJ3yUK82thHWmC/TnK/wpMMIA==}
+    engines: {node: '>=14.0.0'}
+
+  '@smithy/util-utf8@2.3.0':
+    resolution: {integrity: sha512-R8Rdn8Hy72KKcebgLiv8jQcQkXoLMOGGv5uI1/k0l+snqkOzQ1R0ChUBCxWMlBsFMekWjq0wRudIweFs7sKT5A==}
+    engines: {node: '>=14.0.0'}
+
+  '@ton-community/func-js-bin@0.4.4-newops.1':
+    resolution: {integrity: sha512-TV4t6XhmItq4t+wv4pV30yEwb+YvdmsKo4Ig4B0zp4PLdI0r9iZHz4y5bBHcXmDQDRqulXzK6kTgfHvs2CIsaQ==}
+
+  '@ton-community/func-js@0.7.0':
+    resolution: {integrity: sha512-VYJsv6Pqz6+qh3HlZWReBG5W9RXutAdIFYDqmblPSCXfjBhx/QjON/3WoppzUVrqQQdD0BVIh4PR+xRHRCBNhw==}
+    hasBin: true
+
   '@ton/core@0.56.3':
     resolution: {integrity: sha512-HVkalfqw8zqLLPehtq0CNhu5KjVzc7IrbDwDHPjGoOSXmnqSobiWj8a5F+YuWnZnEbQKtrnMGNOOjVw4LG37rg==}
     peerDependencies:
       '@ton/crypto': '>=3.2.0'
 
-  '@ton/crypto-primitives@2.0.0':
-    resolution: {integrity: sha512-wttiNClmGbI6Dfy/8oyNnsIV0b/qYkCJz4Gn4eP62lJZzMtVQ94Ko7nikDX1EfYHkLI1xpOitWpW+8ZuG6XtDg==}
+  '@ton/crypto-primitives@2.1.0':
+    resolution: {integrity: sha512-PQesoyPgqyI6vzYtCXw4/ZzevePc4VGcJtFwf08v10OevVJHVfW238KBdpj1kEDQkxWLeuNHEpTECNFKnP6tow==}
 
-  '@ton/crypto@3.2.0':
-    resolution: {integrity: sha512-50RkwReEuV2FkxSZ8ht/x9+n0ZGtwRKGsJ0ay4I/HFhkYVG/awIIBQeH0W4j8d5lADdO5h01UtX8PJ8AjiejjA==}
+  '@ton/crypto@3.3.0':
+    resolution: {integrity: sha512-/A6CYGgA/H36OZ9BbTaGerKtzWp50rg67ZCH2oIjV1NcrBaCK9Z343M+CxedvM7Haf3f/Ee9EhxyeTp0GKMUpA==}
 
   '@ton/ton@14.0.0':
     resolution: {integrity: sha512-xb2CY6U0AlHUKc7DV7xK/K4Gqn6YoR253yUrM2E7L5WegVFsDF0CQRUIfpYACCuj1oUywQc5J2oMolYNu/uGkA==}
@@ -4646,6 +4686,23 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
+  '@aws-crypto/sha256-js@5.2.0':
+    dependencies:
+      '@aws-crypto/util': 5.2.0
+      '@aws-sdk/types': 3.609.0
+      tslib: 2.6.3
+
+  '@aws-crypto/util@5.2.0':
+    dependencies:
+      '@aws-sdk/types': 3.609.0
+      '@smithy/util-utf8': 2.3.0
+      tslib: 2.6.3
+
+  '@aws-sdk/types@3.609.0':
+    dependencies:
+      '@smithy/types': 3.3.0
+      tslib: 2.6.3
+
   '@babel/code-frame@7.10.4':
     dependencies:
       '@babel/highlight': 7.24.6
@@ -6699,25 +6756,50 @@ snapshots:
       '@sinonjs/commons': 3.0.1
     optional: true
 
-  '@ton/core@0.56.3(@ton/crypto@3.2.0)':
+  '@smithy/is-array-buffer@2.2.0':
     dependencies:
-      '@ton/crypto': 3.2.0
+      tslib: 2.6.3
+
+  '@smithy/types@3.3.0':
+    dependencies:
+      tslib: 2.6.3
+
+  '@smithy/util-buffer-from@2.2.0':
+    dependencies:
+      '@smithy/is-array-buffer': 2.2.0
+      tslib: 2.6.3
+
+  '@smithy/util-utf8@2.3.0':
+    dependencies:
+      '@smithy/util-buffer-from': 2.2.0
+      tslib: 2.6.3
+
+  '@ton-community/func-js-bin@0.4.4-newops.1': {}
+
+  '@ton-community/func-js@0.7.0':
+    dependencies:
+      '@ton-community/func-js-bin': 0.4.4-newops.1
+      arg: 5.0.2
+
+  '@ton/core@0.56.3(@ton/crypto@3.3.0)':
+    dependencies:
+      '@ton/crypto': 3.3.0
       symbol.inspect: 1.0.1
 
-  '@ton/crypto-primitives@2.0.0':
+  '@ton/crypto-primitives@2.1.0':
     dependencies:
       jssha: 3.2.0
 
-  '@ton/crypto@3.2.0':
+  '@ton/crypto@3.3.0':
     dependencies:
-      '@ton/crypto-primitives': 2.0.0
+      '@ton/crypto-primitives': 2.1.0
       jssha: 3.2.0
       tweetnacl: 1.0.3
 
-  '@ton/ton@14.0.0(@ton/core@0.56.3(@ton/crypto@3.2.0))(@ton/crypto@3.2.0)':
+  '@ton/ton@14.0.0(@ton/core@0.56.3(@ton/crypto@3.3.0))(@ton/crypto@3.3.0)':
     dependencies:
-      '@ton/core': 0.56.3(@ton/crypto@3.2.0)
-      '@ton/crypto': 3.2.0
+      '@ton/core': 0.56.3(@ton/crypto@3.3.0)
+      '@ton/crypto': 3.3.0
       axios: 1.7.2
       dataloader: 2.2.2
       symbol.inspect: 1.0.1
@@ -6934,8 +7016,7 @@ snapshots:
 
   arg@4.1.3: {}
 
-  arg@5.0.2:
-    optional: true
+  arg@5.0.2: {}
 
   argparse@1.0.10:
     dependencies:
