@@ -22,6 +22,7 @@ model User {
   referBy       BigInt?
   langCode      String?
   // default custody wallet saved in User
+  walletMode    WalletMode?
   walletChain   Blockchain?
   walletNetwork Network?
   walletAddress String?
@@ -191,6 +192,11 @@ model SellOrder {
 }
 
 //  ================== enums ==================
+
+enum WalletMode {
+  PlatformCustody
+  UserOwnWallet
+}
 
 enum Blockchain {
   TON
