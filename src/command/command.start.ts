@@ -72,8 +72,8 @@ export function bind_command_start(bot: Bot<MyContext>) {
         .then((r) => {});
     })
     .row()
-    .url("🌟 New Listing", "https://develop.memeclub-app.pages.dev/create")
-    .url("🦄 Popular Memes", "https://develop.memeclub-app.pages.dev/create")
+    .submenu("🌟 New Listing", "create_meme_menu")
+    .submenu("🦄 Popular Memes", "create_meme_menu")
     .row()
     .submenu("💎 My Wallet", "create_meme_menu")
     .submenu("🤡 My Memes", "create_meme_menu")

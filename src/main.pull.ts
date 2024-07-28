@@ -28,8 +28,8 @@ if (process.env.NODE_ENV === "dev") {
     },
   };
 }
-const token = process.env.BOT_TOKEN;
-if (!token) throw new Error("BOT_TOKEN is unset");
+const token = process.env.TELEGRAM_BOT_TOKEN;
+if (!token) throw new Error("TELEGRAM_BOT_TOKEN is unset");
 export const bot = new Bot<MyContext>(token, config);
 //
 //                        Bot Init Section End

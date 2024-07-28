@@ -8,12 +8,17 @@ export function tonNetwork() {
   return tonTestOnly() ? "Testnet" : "Mainnet";
 }
 
-export function tonAddressStr(address: Address) {
+export function toTonAddressStr(address: Address): string {
   return address.toString({
     urlSafe: true,
     bounceable: false,
     testOnly: tonTestOnly(),
   });
+}
+
+export function formatTonAddressStr(address: string): string {
+  let addressObj = Address.parse(address);
+  return toTonAddressStr(addressObj);
 }
 
 export function tonviewerUrl(address: String | null) {

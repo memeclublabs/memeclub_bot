@@ -7,8 +7,8 @@ declare namespace NodeJS {
     CHAIN_NETWORK: "Testnet" | "Mainnet";
     PHRASES_1: string;
     PHRASES_2: string;
+    TELEGRAM_BOT_TOKEN: string;
     TELEGRAM_BOT_NAME: string;
-    TELEGRAM_BOT_API_TOKEN: string;
-    TELEGRAM_BOT_SECRET_TOKEN: string;
+    TELEGRAM_BOT_LINK: string;
   }
 }

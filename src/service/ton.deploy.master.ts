@@ -4,7 +4,7 @@ import { Cell } from "@ton/core";
 import { getMemeDexBase64 } from "./ton/compileContract";
 import { getMemeMasterAddressAndInit } from "./ton/initContract";
 import { initDeployMemeMaster } from "./ton/dex/MemeDex";
-import { tonAddressStr } from "../util";
+import { toTonAddressStr } from "../util";
 
 export async function tonDeployMaster(
   name: string,
@@ -58,7 +58,7 @@ export async function tonDeployMaster(
 
   return {
     opWallet: opWallet,
-    masterAddress: tonAddressStr(deployMasterContractAddress),
+    masterAddress: toTonAddressStr(deployMasterContractAddress),
     seqNo: master_seqno,
   };
 }

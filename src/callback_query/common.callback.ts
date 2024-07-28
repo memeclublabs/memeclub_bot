@@ -2,7 +2,7 @@ import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
 import { tonDeployMaster } from "../service/ton.deploy.master";
-import { tonAddressStr, tonviewerUrl } from "../util";
+import { tonviewerUrl, toTonAddressStr } from "../util";
 import { sleep, waitNextSeqNo } from "../service/ton/util.helpers";
 import { memecoinDeployedNotify } from "./memecoin.deployed.notify";
 
@@ -88,7 +88,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
             where: { id: memecoin.id },
             data: {
               masterAddress: masterAddress,
-              opWalletAddress: tonAddressStr(opWallet.address),
+              opWalletAddress: toTonAddressStr(opWallet.address),
               opDeploySeqNo: seqNo,
               coinStatus: "Deploying",
             },
@@ -147,7 +147,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
 
           // 因为这个 memecoin 不是最新的数据库记录，所以要把 masterAddress 给它补上
           memecoin.masterAddress = masterAddress;
-          memecoin.opWalletAddress = tonAddressStr(opWallet.address);
+          memecoin.opWalletAddress = toTonAddressStr(opWallet.address);
           await memecoinDeployedNotify(ctx, memecoin);
         } else if (memecoin.coinStatus == "Deploying") {
           await ctx.reply(
