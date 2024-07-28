@@ -12,9 +12,9 @@ export interface Dish {
 }
 
 export interface SessionData {
-  userDefinedIds: string[];
-  groupId: string;
-  referCode: string;
+  userDefinedIds?: string[];
+  groupId?: string;
+  referCode?: string;
 }
 
 export type MyContext = Context &

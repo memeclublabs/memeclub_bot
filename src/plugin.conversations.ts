@@ -61,7 +61,10 @@ async function newMemeWithValidation(
   // 2.1 没有绑定， 新建 Memecoin
   // 2.2 已经绑定， 根据 Memecoin 状态，发送不同消息
 
-  const groupIdStr = ctx.session.groupId;
+  let groupIdStr = ctx.session.groupId;
+  if (!groupIdStr) {
+    groupIdStr = "-1";
+  }
   const groupId = BigInt(groupIdStr);
 
   let findGroup = await prisma.group.findUnique({

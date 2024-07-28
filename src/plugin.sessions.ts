@@ -1,14 +1,14 @@
-import { Bot, MemorySessionStorage, session } from "grammy";
-import { MyContext } from "./global.types";
+import { Bot, session } from "grammy";
+import { MyContext, SessionData } from "./global.types";
 
 export function use_sessions(bot: Bot<MyContext>) {
   // Install the session plugin.
+  function initial(): SessionData {
+    return {};
+  }
   bot.use(
     session({
-      initial() {
-        return { userDefinedIds: [] };
-      },
-      storage: new MemorySessionStorage(), // also the default value
+      initial,
     }),
   );
 }
