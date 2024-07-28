@@ -34,13 +34,18 @@ export async function waitNextSeqNo(
   let counter = 0;
   var start = performance.now();
   while (nextSeqno < lastSeqNo + 1) {
-    await sleep(100);
+    await sleep(1000);
     nextSeqno = await wallet_contract.getSeqno();
     counter = counter + 1;
   }
-  var end = performance.now();
-  var result = (end - start) / 1000;
+  const end = performance.now();
+  const result = (end - start) / 1000;
   console.log("Waited", `${result}s`, ",queried ", counter, "times");
+  return {
+    isNextSeq: true,
+    nextSeqno: nextSeqno,
+    msg: "get next seqno successfully",
+  };
 }
 
 const sha256 = (str: string) => {

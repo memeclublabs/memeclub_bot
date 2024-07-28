@@ -8,7 +8,6 @@ export async function processByCoinStatus(
   memecoinId: bigint,
   groupTitle: string,
 ) {
-  console.info("==== processByCoinStatus === ");
   if (memecoinId) {
     let findMemecoin = await prisma.memecoin.findUnique({
       where: { id: memecoinId },

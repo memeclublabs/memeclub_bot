@@ -4,7 +4,7 @@ import { Cell } from "@ton/core";
 import { getMemeDexBase64 } from "./ton/compileContract";
 import { getMemeMasterAddressAndInit } from "./ton/initContract";
 import { initDeployMemeMaster } from "./ton/dex/MemeDex";
-import { sleep, waitNextSeqNo } from "./ton/util.helpers";
+import { tonAddressStr } from "../util";
 
 export async function tonDeployMaster(
   name: string,
@@ -12,7 +12,7 @@ export async function tonDeployMaster(
   description: string,
 ) {
   //1.加载平台钱包
-  let { wallet_contract: user1_wallet, secretKey: user1_secretKey } =
+  let { wallet_contract: opWallet, secretKey: user1_secretKey } =
     await getWalletContract(1); //platform address
 
   //2.加载meme-master和meme-wallet的合约code
@@ -20,12 +20,12 @@ export async function tonDeployMaster(
 
   let memeMasterDeployParam: MemeMasterDeployParam = {
     jetton_name: name,
-    jetton_symbol: ticker,
     jetton_description: description,
+    jetton_symbol: ticker,
     image_url:
       "https://raw.githubusercontent.com/NotFoundLabs/TRC-404/main/meme_logo.png",
     max_supply: "1000000000", //1 billion,10 亿 token
-    admin_address: user1_wallet.address,
+    admin_address: opWallet.address,
     jetton_wallet_code: Cell.fromBase64(compile_codes.meme_wallet),
     tx_fee_numerator: 1000, //1000/10000,即10%卖出手续费
     curve_type: 1, //1: 线性函数  y= a*x/10^9 + b  5:友好型S函数
@@ -46,15 +46,19 @@ export async function tonDeployMaster(
   // ****************2.deploy contract
   let query_id = 0n;
   let master_seqno = await initDeployMemeMaster(
-    user1_wallet,
+    opWallet,
     user1_secretKey,
     deployMasterContractAddress,
     master_init,
     query_id,
     "0.02",
   );
-  await waitNextSeqNo(user1_wallet, master_seqno);
-  await sleep(15000);
+  // await waitNextSeqNo(opWallet, master_seqno);
+  // await sleep(15000);
 
-  return { address: deployMasterContractAddress, seqNo: master_seqno };
+  return {
+    opWallet: opWallet,
+    masterAddress: tonAddressStr(deployMasterContractAddress),
+    seqNo: master_seqno,
+  };
 }

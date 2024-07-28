@@ -140,6 +140,7 @@ model Memecoin {
   masterAddress    String?
   devWalletAddress String?
   opWalletAddress  String?
+  opDeploySeqNo    BigInt?
   socialJson       Json?
   dexJson          Json?
   groupId          BigInt?
@@ -214,6 +215,7 @@ enum ChatStatus {
 
 enum CoinStatus {
   Init
+  Processing
   Deploying
   Deployed
   FailedToDeploy
