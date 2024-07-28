@@ -2,8 +2,9 @@ import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
 import { tonDeployMaster } from "../service/ton.deploy.master";
-import { tonAddressStr, tonTestOnly } from "../util";
+import { tonAddressStr, tonviewerUrl } from "../util";
 import { sleep, waitNextSeqNo } from "../service/ton/util.helpers";
+import { memecoinDeployedNotify } from "./memecoin.deployed.notify";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   // 这个是旧的处理方式，因为不能接受参数chatId，已经没用了，
@@ -46,6 +47,9 @@ export function on_callback_query(bot: Bot<MyContext>) {
         " 处理点击 🚀【Confirm to Create Memecoin】按钮",
         callbackData,
       );
+      await ctx.reply(
+        "The memecoin is in deploying to TON network, please wait...",
+      );
       // 点击 【Confirm to Create Memecoin】按钮
       const memecoinId = callbackData.split("callback_confirm_deploy_")[1];
       let memecoin = await prisma.memecoin.findUnique({
@@ -70,7 +74,6 @@ export function on_callback_query(bot: Bot<MyContext>) {
           );
 
           // 再次判断是否为 Processing ，防止并发修改
-          // 再次判断是否为 Processing ，防止并发修改
           let newMemecoin = await prisma.memecoin.findUnique({
             where: { id: BigInt(memecoinId) },
           });
@@ -91,11 +94,9 @@ export function on_callback_query(bot: Bot<MyContext>) {
             },
           });
 
-          console.info(masterAddress);
-          console.info(seqNo);
-          let url = tonTestOnly()
-            ? "https://testnet.tonviewer.com/"
-            : "https://tonviewer.com/";
+          console.info(
+            `new master ${masterAddress} with seqNo ${seqNo} deployed for ${memecoin.id}`,
+          );
 
           await ctx.reply(
             "🏗<b>Memecoin " +
@@ -117,7 +118,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
                   [
                     {
                       text: "🌐 View Transaction at Tonviewer",
-                      url: url + masterAddress,
+                      url: tonviewerUrl(masterAddress),
                     },
                   ],
                   [
@@ -144,39 +145,10 @@ export function on_callback_query(bot: Bot<MyContext>) {
             });
           }
 
-          await ctx.reply(
-            "<b>🎉Memecoin " +
-              memecoin.ticker +
-              " #" +
-              memecoin.id +
-              " deploy successfully!</b>\n\n" +
-              "" +
-              "Name:" +
-              memecoin.name +
-              "\nTicker:" +
-              memecoin.ticker +
-              "\nDescription:" +
-              memecoin.description,
-            {
-              parse_mode: "HTML",
-              reply_markup: {
-                inline_keyboard: [
-                  [
-                    {
-                      text: "🌐 View Transaction at Tonviewer",
-                      url: url + masterAddress,
-                    },
-                  ],
-                  [
-                    {
-                      text: "Check Status",
-                      callback_data: `callback_check_status_memecoin_${memecoin?.id}`,
-                    },
-                  ],
-                ],
-              },
-            },
-          );
+          // 因为这个 memecoin 不是最新的数据库记录，所以要把 masterAddress 给它补上
+          memecoin.masterAddress = masterAddress;
+          memecoin.opWalletAddress = tonAddressStr(opWallet.address);
+          await memecoinDeployedNotify(ctx, memecoin);
         } else if (memecoin.coinStatus == "Deploying") {
           await ctx.reply(
             "This memecoin ${memecoin.name} is in deploying please wait...",
@@ -205,8 +177,27 @@ export function on_callback_query(bot: Bot<MyContext>) {
           );
         }
       } else {
-        console.error(`${memecoinId} not found`);
+        console.error(`memecoinId ${memecoinId} is not found`);
       }
+    } else if (
+      callbackData &&
+      callbackData.startsWith("callback_in_group_click_memecoinId_")
+    ) {
+      let memecoinId = callbackData.split(
+        "callback_in_group_click_memecoinId_",
+      )[1];
+    } else if (
+      callbackData &&
+      callbackData.startsWith("callback_buy_memecoin_")
+    ) {
+    } else if (
+      callbackData &&
+      callbackData.startsWith("callback_sell_memecoin_")
+    ) {
+    } else if (
+      callbackData &&
+      callbackData.startsWith("callback_template____")
+    ) {
     } else {
       await next();
     }

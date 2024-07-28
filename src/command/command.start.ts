@@ -3,8 +3,9 @@ import { MyContext } from "../global.types";
 import { Menu } from "@grammyjs/menu";
 import prisma from "../prisma";
 import { Prisma, User } from "@prisma/client";
-import { MEME_ } from "../static";
+import { FROM_GROUP_VIEW_MEME, Invite_ } from "../static";
 import { generateReferralCode } from "../referral";
+import { sendPrivateMemecoinInfoMenu } from "../service/msg/tg.msg.sender";
 
 const startCaptionText: string =
   "<b>#1 Memecoin launchpad on TON </b>\n\nMake Memecoins Great Again";
@@ -122,27 +123,108 @@ export function bind_command_start(bot: Bot<MyContext>) {
       //1.  判断消息来源的operator，按需创建用户
       let tgId = ctx.from?.id;
       if (tgId && ctx.from) {
+        await ctx
+          .replyWithPhoto(
+            "https://art404app.pages.dev/memebot/bot-img-memeclub.png",
+            {
+              caption: startCaptionText,
+              parse_mode: "HTML",
+              reply_markup: start_menu,
+            },
+          )
+          .catch((reason) => {
+            console.error(reason);
+          });
         let userById = await prisma.user.findUnique({ where: { tgId: tgId } });
         if (userById) {
           // user found
           await ctx.reply("Welcome back!");
+          let match = ctx.match;
+          if (match.startsWith(FROM_GROUP_VIEW_MEME)) {
+            // 通过群里点击 meme Buy/Sell 按钮加入，老用户要发送 Meme 菜单
+            const memecoinId = match.split(FROM_GROUP_VIEW_MEME)[1];
+            let findMeme = await prisma.memecoin.findUnique({
+              where: { id: Number(memecoinId) },
+            });
+            if (findMeme) {
+              let findGroup = await prisma.group.findUnique({
+                where: { groupId: Number(findMeme.groupId) },
+              });
+              if (findGroup) {
+                // 这里要发送一个关于 Memecoin 的菜单
+                let text =
+                  "<b>🎉Memecoin " +
+                  findMeme.ticker +
+                  " #" +
+                  findMeme.id +
+                  " from group</b>\n\n" +
+                  "" +
+                  "Name:" +
+                  findMeme.name +
+                  "\nTicker:" +
+                  findMeme.ticker +
+                  "\nGroup:" +
+                  findGroup.groupTitle +
+                  "\nDescription:" +
+                  findMeme.description;
+                await sendPrivateMemecoinInfoMenu(ctx, findMeme, text);
+              }
+            }
+          }
         } else {
           //create user
-          // https://t.me/your_bot?start=MEME_ABCDEFGHIJK
+          // https://t.me/your_bot?start=Invite_ABCDEFGHIJK
           let match = ctx.match;
-          let haveRefer = false;
           let referUser: User | undefined = undefined;
-          if (match.startsWith(MEME_)) {
+          if (match.startsWith(Invite_)) {
             let userByRefCode = await prisma.user.findUnique({
               where: { refCode: match },
             });
             // if not find, userByRefCode is null
             if (userByRefCode) {
-              haveRefer = true;
               referUser = userByRefCode;
               await ctx.reply(
                 `You are invited by ${userByRefCode.firstName} ${userByRefCode.lastName}`,
               );
+            }
+          } else if (match.startsWith(FROM_GROUP_VIEW_MEME)) {
+            // 通过群里点击 meme Buy/Sell 按钮加入，这个推荐关系要算到邀请人身上
+            const memecoinId = match.split(FROM_GROUP_VIEW_MEME)[1];
+            let findMeme = await prisma.memecoin.findUnique({
+              where: { id: Number(memecoinId) },
+            });
+            if (findMeme) {
+              let findGroup = await prisma.group.findUnique({
+                where: { groupId: Number(findMeme.groupId) },
+              });
+              if (findGroup) {
+                let findUser = await prisma.user.findUnique({
+                  where: { tgId: findGroup.inviterTgId },
+                });
+                if (findUser) {
+                  referUser = findUser;
+                  console.info(
+                    `${ctx.from.first_name} 通过群里点击 meme Buy/Sell 按钮加入，这个推荐关系要算到邀请人 ${referUser.firstName}身上`,
+                  );
+                }
+                // 这里要发送一个关于 Memecoin 的菜单
+                let text =
+                  "<b>🎉Memecoin " +
+                  findMeme.ticker +
+                  " #" +
+                  findMeme.id +
+                  " from group</b>\n\n" +
+                  "" +
+                  "Name:" +
+                  findMeme.name +
+                  "\nTicker:" +
+                  findMeme.ticker +
+                  "\nGroup:" +
+                  findGroup.groupTitle +
+                  "\nDescription:" +
+                  findMeme.description;
+                await sendPrivateMemecoinInfoMenu(ctx, findMeme, text);
+              }
             }
           }
           const userData = {
@@ -160,19 +242,6 @@ export function bind_command_start(bot: Bot<MyContext>) {
           console.info(`new user created. ${newUser.id}`);
         }
       }
-
-      await ctx
-        .replyWithPhoto(
-          "https://art404app.pages.dev/memebot/bot-img-memeclub.png",
-          {
-            caption: startCaptionText,
-            parse_mode: "HTML",
-            reply_markup: start_menu,
-          },
-        )
-        .catch((reason) => {
-          console.error(reason);
-        });
     } else {
       // 这边是在群组中
       let findGroup = await prisma.group.findUnique({
@@ -207,3 +276,5 @@ export function bind_command_start(bot: Bot<MyContext>) {
     } //in group
   });
 }
+
+function fromGroupClickMeme(ctx: MyContext) {}

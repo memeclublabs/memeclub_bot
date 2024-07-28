@@ -15,3 +15,19 @@ export function tonAddressStr(address: Address) {
     testOnly: tonTestOnly(),
   });
 }
+
+export function tonviewerUrl(address: String | null) {
+  let url = tonTestOnly()
+    ? "https://testnet.tonviewer.com/"
+    : "https://tonviewer.com/";
+
+  if (address) {
+    return url + address;
+  } else {
+    return url;
+  }
+}
+
+export function botStatusValid(botStatus: string) {
+  return botStatus === "member" || botStatus === "administrator";
+}

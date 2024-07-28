@@ -1,6 +1,6 @@
 // Function to convert big integer to alphabetic string
 
-import { MEME_ } from "./static";
+import { Invite_ } from "./static";
 
 export function generateReferralCode(tgId: number): string {
   // Convert the string to a BigInt
@@ -15,7 +15,7 @@ export function generateReferralCode(tgId: number): string {
   }
   // Convert each hex digit to its corresponding letter
   const alphabeticString =
-    MEME_ + hexString.split("").map(hexDigitToLetter).join("");
+    Invite_ + hexString.split("").map(hexDigitToLetter).join("");
   return isNegative ? "_" + alphabeticString : alphabeticString;
 }
 
