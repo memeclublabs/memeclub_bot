@@ -15,11 +15,12 @@ export function on_callback_query(bot: Bot<MyContext>) {
   // 处理通用的按钮点击事件 callback_query
   bot.on("callback_query", async (ctx, next) => {
     const callbackData = ctx.callbackQuery.data;
+    if (!callbackData) {
+      console.error("ERROR: callback_query data is null!");
+      return;
+    }
 
-    if (
-      callbackData &&
-      callbackData.startsWith("callback_create_meme_groupId_")
-    ) {
+    if (callbackData.startsWith("callback_create_meme_groupId_")) {
       // 点击 [Step 2: Create new Memecoin] 按钮会进入这个方法处理，按钮附带了 groupId 参数
       // chatId 参数将会放到 session 中才可以传递给 conversation
       // conversation 处理方法将从 session 中获取 groupId
@@ -39,10 +40,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
 
       ctx.session.groupId = groupIdFromSession;
       await ctx.conversation.enter("newMemeWithValidation");
-    } else if (
-      callbackData &&
-      callbackData.startsWith("callback_confirm_deploy_")
-    ) {
+    } else if (callbackData.startsWith("callback_confirm_deploy_")) {
       console.info(
         " 处理点击 🚀【Confirm to Create Memecoin】按钮",
         callbackData,
@@ -179,25 +177,13 @@ export function on_callback_query(bot: Bot<MyContext>) {
       } else {
         console.error(`memecoinId ${memecoinId} is not found`);
       }
-    } else if (
-      callbackData &&
-      callbackData.startsWith("callback_in_group_click_memecoinId_")
-    ) {
+    } else if (callbackData.startsWith("callback_in_group_click_memecoinId_")) {
       let memecoinId = callbackData.split(
         "callback_in_group_click_memecoinId_",
       )[1];
-    } else if (
-      callbackData &&
-      callbackData.startsWith("callback_buy_memecoin_")
-    ) {
-    } else if (
-      callbackData &&
-      callbackData.startsWith("callback_sell_memecoin_")
-    ) {
-    } else if (
-      callbackData &&
-      callbackData.startsWith("callback_template____")
-    ) {
+    } else if (callbackData.startsWith("callback_buy_memecoin_")) {
+    } else if (callbackData.startsWith("callback_sell_memecoin_")) {
+    } else if (callbackData.startsWith("callback_template____")) {
     } else {
       await next();
     }

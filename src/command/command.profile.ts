@@ -2,8 +2,8 @@ import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import { UserRejectsError } from "@tonconnect/sdk";
 import { getWallets } from "../ton-connect/wallets";
-import { getConnector } from "../ton-connect/conenctor";
 import { formatTonAddressStr } from "../util";
+import { getConnector } from "../ton-connect/connector";
 
 export function bind_command_profile(bot: Bot<MyContext>) {
   bot.command("profile", async (ctx) => {
