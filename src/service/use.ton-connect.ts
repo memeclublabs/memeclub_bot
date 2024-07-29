@@ -2,10 +2,6 @@ import { MyContext } from "../global.types";
 import { getWallets } from "../ton-connect/wallets";
 import { formatTonAddressStr } from "../util";
 import { getConnector } from "../ton-connect/connector";
-import {
-  addTGReturnStrategy,
-  convertDeeplinkToUniversalLink,
-} from "../ton-connect/utils";
 
 export async function tonConnectMenu(ctx: MyContext, chatId: number) {
   let connector = getConnector(chatId);
@@ -21,14 +17,9 @@ export async function tonConnectMenu(ctx: MyContext, chatId: number) {
   //上面判断过未连接钱包，下面就准备连接菜单
   // 1. 如果连接状态变化，wallet 不为空，说明连接成功
   connector.onStatusChange(async (wallet) => {
-    console.info(
-      ">> connector.onStatusChange, wallet = ",
-      JSON.stringify(wallet?.device?.appName),
-    );
     if (wallet) {
-      const walletName = wallet.device.appName;
       await ctx.reply(
-        `${walletName} wallet ${formatTonAddressStr(wallet.account.address)} connected!`,
+        `${wallet.device.appName} wallet ${formatTonAddressStr(wallet.account.address)} connected!`,
       );
     }
   });
@@ -49,15 +40,16 @@ export async function tonConnectMenu(ctx: MyContext, chatId: number) {
     (wallet) => wallet.appName === "telegram-wallet",
   )!;
 
-  const universalLink = connector.connect(wallets);
-  const tgWalletLink = tgWallet
-    ? addTGReturnStrategy(
-        convertDeeplinkToUniversalLink(universalLink, tgWallet?.universalLink),
-        process.env.TELEGRAM_BOT_LINK!,
-      )
-    : undefined;
-  console.info("========== TG Wallet ============");
-  console.info(tgWalletLink);
+  let tgWalletLink = "";
+  // const universalLink = connector.connect(wallets);
+  // const tgWalletLink = tgWallet
+  //   ? addTGReturnStrategy(
+  //       convertDeeplinkToUniversalLink(universalLink, tgWallet?.universalLink),
+  //       process.env.TELEGRAM_BOT_LINK!,
+  //     )
+  //   : undefined;
+  // console.info("========== TG Wallet ============");
+  // console.info(tgWalletLink);
 
   let inlineKeyboard = [
     [
