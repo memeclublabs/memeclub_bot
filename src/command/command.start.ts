@@ -124,14 +124,11 @@ export function bind_command_start(bot: Bot<MyContext>) {
       let tgId = ctx.from?.id;
       if (tgId && ctx.from) {
         await ctx
-          .replyWithPhoto(
-            "https://art404app.pages.dev/memebot/bot-img-memeclub.png",
-            {
-              caption: startCaptionText,
-              parse_mode: "HTML",
-              reply_markup: start_menu,
-            },
-          )
+          .replyWithPhoto("https://www.memeclub.ai/bot/bot-img-memeclub.png", {
+            caption: startCaptionText,
+            parse_mode: "HTML",
+            reply_markup: start_menu,
+          })
           .catch((reason) => {
             console.error(reason);
           });
@@ -262,14 +259,11 @@ export function bind_command_start(bot: Bot<MyContext>) {
       }
 
       await ctx
-        .replyWithPhoto(
-          "https://art404app.pages.dev/memebot/bot-img-memeclub.png",
-          {
-            caption: startCaptionText,
-            parse_mode: "HTML",
-            reply_markup: group_start_menu,
-          },
-        )
+        .replyWithPhoto("https://www.memeclub.ai/bot/bot-img-memeclub.png", {
+          caption: startCaptionText,
+          parse_mode: "HTML",
+          reply_markup: group_start_menu,
+        })
         .catch((reason) => {
           console.error(reason);
         });
