@@ -49,7 +49,7 @@ terminal.
 
 Prisma Migrate doesn't support D1 yet, so you can't follow the "default" migration workflows using `prisma migrate dev`
 or `prisma db push`. For this example, the file [`./prisma/schema.sql`](./prisma/schema.sql) contains a SQL statement to
-create a `User` table that mirros the shape of the `User` model in [`./prisma/schema.prisma`](./prisma/schema.prisma).
+create a `User` table that mirros the shape of the `User` model in [`./prisma/schema.prisma`](../prisma/schema.prisma).
 
 To apply this SQL statement to your D1 instance, run the following command.
 
