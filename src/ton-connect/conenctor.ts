@@ -24,6 +24,7 @@ export function getConnector(
     storedItem = {
       connector: new TonConnect({
         manifestUrl: process.env.MANIFEST_URL,
+        // TODO: use redis
         storage: new TonConnectStorage(chatId),
       }),
       onConnectorExpired: [],

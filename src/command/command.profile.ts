@@ -1,16 +1,15 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
-import { getConnector } from "../ton-connect/conenctor";
-import { formatTonAddressStr } from "../util";
 import { UserRejectsError } from "@tonconnect/sdk";
 import { getWallets } from "../ton-connect/wallets";
+import { getConnector } from "../ton-connect/conenctor";
+import { formatTonAddressStr } from "../util";
 
 export function bind_command_profile(bot: Bot<MyContext>) {
   bot.command("profile", async (ctx) => {
     const chatId = ctx.msg.chat.id;
 
     const connector = getConnector(chatId);
-
     await connector.restoreConnection();
     if (!connector.connected) {
       await ctx.reply("Connect wallet to send transaction");
