@@ -1,32 +1,12 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
-import { tonConnectMenu } from "../service/use.ton-connect";
 import { getConnector } from "../ton-connect/connector";
 import { getWalletInfo } from "../ton-connect/wallets";
 import { CHAIN, toUserFriendlyAddress } from "@tonconnect/sdk";
 
-export function bind_command_referral(bot: Bot<MyContext>) {
-  bot.command("connect", async (ctx) => {
-    const chatId = ctx.msg.chat.id;
-    await tonConnectMenu(ctx, chatId);
-  });
-
-  bot.command("disconnect", async (ctx) => {
-    console.info("disconnect()");
-    const chatId = ctx.msg.chat.id;
-    const connector = getConnector(chatId);
-    await connector.restoreConnection();
-    if (!connector.connected) {
-      await ctx.reply("You didn't connect a wallet");
-      return;
-    }
-    console.info("before call connector.disconnect()");
-    await connector.disconnect();
-    console.info("after call connector.disconnect()");
-    await ctx.reply("Wallet has been disconnected");
-  });
-
+export function bind_command_my_wallet(bot: Bot<MyContext>) {
   bot.command("my_wallet", async (ctx) => {
+    console.info("command - /my_wallet [", ctx.from?.username, Date.now());
     const chatId = ctx.msg.chat.id;
 
     const connector = getConnector(chatId);
@@ -47,5 +27,6 @@ export function bind_command_referral(bot: Bot<MyContext>) {
         connector.wallet!.account.chain === CHAIN.TESTNET,
       )}`,
     );
+    console.info("command - /my_wallet ]", ctx.from?.username, Date.now());
   });
 }

@@ -5,12 +5,13 @@ import * as dotenv from "dotenv";
 import prisma from "./prisma";
 import { bind_command } from "./command/command";
 import { on_message } from "./message/message";
-import { on_member } from "./member/on.member";
-import { on_add_to_group } from "./my_chat_member/on.add.to.group";
 import { use_time_tracer } from "./middleware.tracker";
 import { use_sessions_plugin } from "./plugin.sessions";
 import { on_callback_query } from "./callback_query/common.callback";
 import { use_conversations_plugin } from "./plugin.conversations";
+import { use_menu_plugin_start } from "./plugin.menu.start";
+import { on_my_chat_member } from "./member/my_chat_member";
+import { on_chat_member } from "./member/chat_member";
 
 // ===========================================================================
 //                        Bot Init Section Start
@@ -38,20 +39,24 @@ export const bot = new Bot<MyContext>(token, config);
 // ===========================================================================
 //                        Main Start
 //
+// ⚠️⚠️⚠️ Make sure that you install all menus before other middleware, especially before middleware that uses callback query data
+// ⚠️⚠️⚠️ 请确保在其他中间件之前安装所有菜单，尤其是在使用回调查询数据的中间件之前
+use_menu_plugin_start(bot);
 
 use_time_tracer(bot);
 
 // session must run before use_conversations
 use_sessions_plugin(bot);
 use_conversations_plugin(bot);
-// use_menu_plugin(bot);
 
 on_callback_query(bot);
 
+on_chat_member(bot);
+on_my_chat_member(bot);
+
 bind_command(bot);
+
 on_message(bot);
-on_member(bot);
-on_add_to_group(bot);
 
 bot.catch((err) => {
   console.error("===============================");

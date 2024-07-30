@@ -2,7 +2,6 @@ import { MyContext } from "../../global.types";
 import { Group, Memecoin } from "@prisma/client";
 import prisma from "../../prisma";
 import { InlineKeyboard } from "grammy";
-import { menu_memecoin_info } from "../../plugin.menu";
 
 export async function listNewMemes(ctx: MyContext): Promise<void> {
   let findMemecoins = await prisma.memecoin.findMany({
@@ -71,7 +70,6 @@ export async function sendPrivateChatMemecoinInfo(
   ctx.session.memecoinId = Number(memecoin.id);
   await ctx.reply(text, {
     parse_mode: "HTML",
-    reply_markup: menu_memecoin_info,
   });
 
   // end menu

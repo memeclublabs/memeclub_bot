@@ -4,7 +4,7 @@ import prisma from "../prisma";
 import { Group, Prisma } from "@prisma/client";
 import { processByCoinStatus } from "../service/memecoin.process.by.status";
 
-export function on_add_to_group(bot: Bot<MyContext>) {
+export function on_my_chat_member(bot: Bot<MyContext>) {
   bot.on("my_chat_member", async (ctx) => {
     //1. 读取 chat 发生地，是私聊还是群聊
     //1.1 忽略私聊 chat_type == "private"

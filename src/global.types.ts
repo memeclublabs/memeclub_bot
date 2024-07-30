@@ -6,10 +6,6 @@ export interface BotConfig {
   botAdminId: number;
   isAdmin: boolean;
 }
-export interface Dish {
-  id: string;
-  name: string;
-}
 
 export interface SessionData {
   userDefinedIds?: string[];

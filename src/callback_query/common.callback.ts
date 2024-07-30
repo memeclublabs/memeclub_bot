@@ -8,13 +8,14 @@ import { memecoinDeployedNotify } from "./memecoin.deployed.notify";
 import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.sender";
 
 export function on_callback_query(bot: Bot<MyContext>) {
-  // 这个是旧的处理方式，因为不能接受参数chatId，已经没用了，
-  // bot.callbackQuery("create_meme_callback", async (ctx) => {
-  //   await ctx.conversation.enter("newMemeWithValidation");
-  // });
-
   // 处理通用的按钮点击事件 callback_query
   bot.on("callback_query", async (ctx, next) => {
+    console.info(
+      "callback_query - start [",
+      ctx.from?.username,
+      ctx,
+      Date.now(),
+    );
     const callbackData = ctx.callbackQuery.data;
     if (!callbackData) {
       console.error("ERROR: callback_query data is null!");
@@ -44,7 +45,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
     } else if (callbackData.startsWith("callback_confirm_deploy_")) {
       console.info(" Click 🚀【Confirm to Create Memecoin】", callbackData);
       await ctx.reply(
-        "The memecoin is deploying to the blockchain network; please wait…",
+        "The memecoin is deploying to the blockchain network, please wait…",
       );
       // 【Confirm to Create Memecoin】
       const memecoinId = callbackData.split("callback_confirm_deploy_")[1];
@@ -206,5 +207,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
     } else {
       await next();
     }
+
+    console.info(`callback_query - start ]`, ctx.from?.username, Date.now());
   });
 }
