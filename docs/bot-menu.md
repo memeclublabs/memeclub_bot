@@ -3,6 +3,12 @@ twitter -  𝕏 Twitter
 group - 👥 Chat Group
 news - 🎉 Announcement
 
+start - start
+connect -  connect
+my_wallet - my_wallet
+disconnect - disconnect
+
+
 
 
 start - 💎 Home Menu

@@ -155,6 +155,8 @@ model Memecoin {
 
   @@index([ticker])
   @@index([devTgId, ticker])
+  @@index([createDt])
+  @@index([modifyDt])
 }
 
 model BuyOrder {

@@ -5,7 +5,10 @@ import prisma from "../prisma";
 import { Prisma, User } from "@prisma/client";
 import { FROM_GROUP_VIEW_MEME, Invite_ } from "../static";
 import { generateReferralCode } from "../referral";
-import { sendPrivateMemecoinInfoMenu } from "../service/msg/tg.msg.sender";
+import {
+  listNewMemes,
+  sendPrivateMemecoinInfoMenu,
+} from "../service/msg/tg.msg.sender";
 
 const startCaptionText: string =
   "<b>#1 Memecoin launchpad on TON </b>\n\nMake Memecoins Great Again";
@@ -72,13 +75,12 @@ export function bind_command_start(bot: Bot<MyContext>) {
         .then((r) => {});
     })
     .row()
-    .submenu("🌟 New Listing", "create_meme_menu")
-    .submenu("🦄 Popular Memes", "create_meme_menu")
-    .row()
-    .submenu("💎 My Wallet", "create_meme_menu")
+    .text("🌟 New Listing", async (ctx) => {
+      await listNewMemes(ctx);
+    })
     .submenu("🤡 My Memes", "create_meme_menu")
     .row()
-    .submenu("🇬🇧 Language", "create_meme_menu")
+    .submenu("💎 My Wallet", "create_meme_menu")
     .submenu("⚙️ Setting", "create_meme_menu")
     .row()
     .submenu("🎁 Airdrop", "create_meme_menu");
@@ -134,8 +136,6 @@ export function bind_command_start(bot: Bot<MyContext>) {
           });
         let userById = await prisma.user.findUnique({ where: { tgId: tgId } });
         if (userById) {
-          // user found
-          await ctx.reply("Welcome back!");
           let match = ctx.match;
           if (match.startsWith(FROM_GROUP_VIEW_MEME)) {
             // 通过群里点击 meme Buy/Sell 按钮加入，老用户要发送 Meme 菜单

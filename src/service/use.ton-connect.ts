@@ -54,7 +54,7 @@ export async function tonConnectMenu(ctx: MyContext, chatId: number) {
   let inlineKeyboard = [
     [
       {
-        text: "Connect Tonkeeper",
+        text: "Connect Tonkeeper Wallet",
         url: tonkeeperLink,
       },
     ],

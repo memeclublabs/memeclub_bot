@@ -5,6 +5,7 @@ import { tonDeployMaster } from "../service/ton.deploy.master";
 import { tonviewerUrl, toTonAddressStr } from "../util";
 import { sleep, waitNextSeqNo } from "../service/ton/util.helpers";
 import { memecoinDeployedNotify } from "./memecoin.deployed.notify";
+import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.sender";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   // 这个是旧的处理方式，因为不能接受参数chatId，已经没用了，
@@ -41,14 +42,11 @@ export function on_callback_query(bot: Bot<MyContext>) {
       ctx.session.groupId = groupIdFromSession;
       await ctx.conversation.enter("newMemeWithValidation");
     } else if (callbackData.startsWith("callback_confirm_deploy_")) {
-      console.info(
-        " 处理点击 🚀【Confirm to Create Memecoin】按钮",
-        callbackData,
-      );
+      console.info(" Click 🚀【Confirm to Create Memecoin】", callbackData);
       await ctx.reply(
-        "The memecoin is in deploying to TON network, please wait...",
+        "The memecoin is deploying to the blockchain network; please wait…",
       );
-      // 点击 【Confirm to Create Memecoin】按钮
+      // 【Confirm to Create Memecoin】
       const memecoinId = callbackData.split("callback_confirm_deploy_")[1];
       let memecoin = await prisma.memecoin.findUnique({
         where: { id: BigInt(memecoinId) },
@@ -71,7 +69,6 @@ export function on_callback_query(bot: Bot<MyContext>) {
             memecoin.description + ` [id:${memecoin.id}]`,
           );
 
-          // 再次判断是否为 Processing ，防止并发修改
           let newMemecoin = await prisma.memecoin.findUnique({
             where: { id: BigInt(memecoinId) },
           });
@@ -183,6 +180,28 @@ export function on_callback_query(bot: Bot<MyContext>) {
       )[1];
     } else if (callbackData.startsWith("callback_buy_memecoin_")) {
     } else if (callbackData.startsWith("callback_sell_memecoin_")) {
+    } else if (callbackData.startsWith("callback_show_menu_memecoin_")) {
+      let memecoinId = callbackData.split("callback_show_menu_memecoin_")[1];
+
+      let findMemecoin = await prisma.memecoin.findUnique({
+        where: { id: Number(memecoinId) },
+      });
+      if (!findMemecoin) {
+        let errorInfo = `Memecoin ${memecoinId} not found.`;
+        console.error(errorInfo);
+        await ctx.reply(errorInfo);
+        return;
+      }
+      let findGroup = await prisma.group.findUnique({
+        where: { groupId: Number(findMemecoin.groupId) },
+      });
+      if (!findGroup) {
+        let errorInfo = `Group ${findMemecoin.groupId} not found.`;
+        console.error(errorInfo);
+        await ctx.reply(errorInfo);
+        return;
+      }
+      await sendPrivateChatMemecoinInfo(ctx, findGroup, findMemecoin);
     } else if (callbackData.startsWith("callback_template____")) {
     } else {
       await next();
