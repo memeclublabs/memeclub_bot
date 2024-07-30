@@ -7,7 +7,7 @@ import { FROM_GROUP_VIEW_MEME, Invite_ } from "../static";
 import { generateReferralCode } from "../referral";
 import {
   listNewMemes,
-  sendPrivateMemecoinInfoMenu,
+  sendPrivateChatMemecoinInfo,
 } from "../service/msg/tg.msg.sender";
 import { tonConnectMenu } from "../service/use.ton-connect";
 
@@ -156,23 +156,7 @@ export function bind_command_start(bot: Bot<MyContext>) {
                 where: { groupId: Number(findMeme.groupId) },
               });
               if (findGroup) {
-                // 这里要发送一个关于 Memecoin 的菜单
-                let text =
-                  "<b>🎉Memecoin " +
-                  findMeme.ticker +
-                  " #" +
-                  findMeme.id +
-                  " from group</b>\n\n" +
-                  "" +
-                  "Name:" +
-                  findMeme.name +
-                  "\nTicker:" +
-                  findMeme.ticker +
-                  "\nGroup:" +
-                  findGroup.groupTitle +
-                  "\nDescription:" +
-                  findMeme.description;
-                await sendPrivateMemecoinInfoMenu(ctx, findMeme, text);
+                await sendPrivateChatMemecoinInfo(ctx, findGroup, findMeme);
               }
             }
           }
@@ -212,23 +196,8 @@ export function bind_command_start(bot: Bot<MyContext>) {
                     `${ctx.from.first_name} 通过群里点击 meme Buy/Sell 按钮加入，这个推荐关系要算到邀请人 ${referUser.firstName}身上`,
                   );
                 }
-                // 这里要发送一个关于 Memecoin 的菜单
-                let text =
-                  "<b>🎉Memecoin " +
-                  findMeme.ticker +
-                  " #" +
-                  findMeme.id +
-                  " from group</b>\n\n" +
-                  "" +
-                  "Name:" +
-                  findMeme.name +
-                  "\nTicker:" +
-                  findMeme.ticker +
-                  "\nGroup:" +
-                  findGroup.groupTitle +
-                  "\nDescription:" +
-                  findMeme.description;
-                await sendPrivateMemecoinInfoMenu(ctx, findMeme, text);
+
+                await sendPrivateChatMemecoinInfo(ctx, findGroup, findMeme);
               }
             }
           }

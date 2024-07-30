@@ -3,36 +3,21 @@ import { MyContext } from "../global.types";
 import { botStatusValid, tonviewerUrl } from "../util";
 import prisma from "../prisma";
 import { FROM_GROUP_VIEW_MEME } from "../static";
-import { sendPrivateMemecoinInfoMenu } from "../service/msg/tg.msg.sender";
+import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.sender";
 
 export async function memecoinDeployedNotify(
   ctx: MyContext,
   memecoin: Memecoin,
 ) {
-  // 1. 通知部署人  2. 通知群组
-
-  // 1. 通知到人购买菜单
-  let text =
-    "<b>🎉Memecoin " +
-    memecoin.ticker +
-    " #" +
-    memecoin.id +
-    " deploy successfully!</b>\n\n" +
-    "" +
-    "Name:" +
-    memecoin.name +
-    "\nTicker:" +
-    memecoin.ticker +
-    "\nDescription:" +
-    memecoin.description;
-  await sendPrivateMemecoinInfoMenu(ctx, memecoin, text);
-
-  // 1. 通知到群组菜单
   let findGroup = await prisma.group.findUnique({
     where: { groupId: memecoin.groupId! },
   });
 
   if (findGroup && botStatusValid(findGroup.botStatus)) {
+    // 1. 通知部署人
+    await sendPrivateChatMemecoinInfo(ctx, findGroup, memecoin);
+
+    //2. 通知群组
     let replyMarkupGroup = {
       inline_keyboard: [
         [
