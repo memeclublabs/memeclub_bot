@@ -48,12 +48,13 @@ node
 https://nodejs.org/en/download/package-managernode
 
 apt install ts-node
+apt install node-typescript
 ```
 
 npm
 ```bash
-npm install -g npm
-
+npm install -g pnpm
+npm install pm2 -g
 
 
 ```

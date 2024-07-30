@@ -14,8 +14,10 @@
     "prisma_studio": "npx prisma studio",
     "nodemon": "nodemon",
     "ts-node": "ts-node ./src/main.pull.ts",
-    "compile_ts_2_js": "npx rimraf dist && tsc",
+    "compile_ts_2_js": "npx rimraf dist && npx tsc",
     "run_with_node": "node ./dist/main.pull.js",
+    "start:daemon": "pm2 start --name tgbot ./dist/main.pull.js",
+    "stop:daemon": "pm2 stop tgbot && pm2 delete tgbot",
     "app_main_local": "ts-node src/main.local.ts"
   },
   "prisma": {
