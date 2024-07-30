@@ -2,6 +2,8 @@ import { MyContext } from "../../global.types";
 import { Group, Memecoin } from "@prisma/client";
 import dbPrisma from "../../db.prisma";
 import { InlineKeyboard } from "grammy";
+import { InlineKeyboardButton } from "@grammyjs/types";
+import { tonviewerUrl } from "../../com.utils";
 
 export async function listNewMemes(ctx: MyContext): Promise<void> {
   let findMemecoins = await dbPrisma.memecoin.findMany({
@@ -18,7 +20,7 @@ export async function listNewMemes(ctx: MyContext): Promise<void> {
       i++;
       inlineKeyboard.text(
         `#${memecoin.id} - ${memecoin.name}`,
-        `callback_show_menu_memecoin_${memecoin.id}`,
+        `callback_show_memecoin_info_${memecoin.id}`,
       );
       if (i % 2 === 0) {
         inlineKeyboard.row();
@@ -66,55 +68,42 @@ export async function sendPrivateChatMemecoinInfo(
     memecoin.description;
   let masterAddress = memecoin.masterAddress;
 
-  // start
-  ctx.session.memecoinId = Number(memecoin.id);
+  let groupInfoLine: InlineKeyboardButton[] = [];
+  if (group.groupUsername) {
+    groupInfoLine.push({
+      text: `Join ${memecoin.name} Group  👥(${group.memberCount})`,
+      url: `https://t.me/${group.groupUsername}`,
+    });
+  } else {
+    groupInfoLine.push({
+      text: `${group.groupTitle} 👥(${group.memberCount}) is private.`,
+      callback_data: `callback_join_private_group_${group.groupId}`,
+    });
+  }
+  let inlineKeyboard: InlineKeyboardButton[][] = [
+    [
+      {
+        text: "🟢 Buy",
+        callback_data: `callback_buy_memecoin_${memecoin?.id}`,
+      },
+      {
+        text: "🔴 Sell",
+        callback_data: `callback_sell_memecoin_${memecoin?.id}`,
+      },
+    ],
+  ];
+  inlineKeyboard.push(groupInfoLine);
+  inlineKeyboard.push([
+    {
+      text: "🌐 View Transaction at Tonviewer",
+      url: tonviewerUrl(masterAddress),
+    },
+  ]);
+
   await ctx.reply(text, {
     parse_mode: "HTML",
+    reply_markup: {
+      inline_keyboard: inlineKeyboard,
+    },
   });
-
-  // end menu
-  //
-  // let lastLine: InlineKeyboardButton[] = [];
-  // if (group.groupUsername) {
-  //   lastLine.push({
-  //     text: `Join ${memecoin.name} Group  👥(${group.memberCount})`,
-  //     url: `https://t.me/${group.groupUsername}`,
-  //   });
-  // } else {
-  //   lastLine.push({
-  //     text: `${group.groupTitle} 👥(${group.memberCount}) is private.`,
-  //     callback_data: `callback_join_private_group_${group.groupId}`,
-  //   });
-  // }
-  // let inlineKeyboard: InlineKeyboardButton[][] = [
-  //   [
-  //     {
-  //       text: "🟢 Buy",
-  //       callback_data: `callback_buy_memecoin_${memecoin?.id}`,
-  //     },
-  //     {
-  //       text: "🔴 Sell",
-  //       callback_data: `callback_sell_memecoin_${memecoin?.id}`,
-  //     },
-  //     {
-  //       text: "🔴 Sell",
-  //       callback_data: `callback_sell_memecoin_${memecoin?.id}`,
-  //     },
-  //   ],
-  //   [
-  //     {
-  //       text: "🌐 View Transaction at Tonviewer",
-  //       url: tonviewerUrl(masterAddress),
-  //     },
-  //   ],
-  // ];
-  // inlineKeyboard.push(lastLine);
-  // let replyMarkupPersonal = {
-  //   inline_keyboard: inlineKeyboard,
-  // };
-  //
-  // await ctx.reply(text, {
-  //   parse_mode: "HTML",
-  //   reply_markup: replyMarkupPersonal,
-  // });
 }

@@ -181,8 +181,8 @@ export function on_callback_query(bot: Bot<MyContext>) {
       )[1];
     } else if (callbackData.startsWith("callback_buy_memecoin_")) {
     } else if (callbackData.startsWith("callback_sell_memecoin_")) {
-    } else if (callbackData.startsWith("callback_show_menu_memecoin_")) {
-      let memecoinId = callbackData.split("callback_show_menu_memecoin_")[1];
+    } else if (callbackData.startsWith("callback_show_memecoin_info_")) {
+      let memecoinId = callbackData.split("callback_show_memecoin_info_")[1];
 
       let findMemecoin = await dbPrisma.memecoin.findUnique({
         where: { id: Number(memecoinId) },
