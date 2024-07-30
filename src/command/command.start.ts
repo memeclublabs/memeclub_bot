@@ -9,6 +9,7 @@ import {
   listNewMemes,
   sendPrivateMemecoinInfoMenu,
 } from "../service/msg/tg.msg.sender";
+import { tonConnectMenu } from "../service/use.ton-connect";
 
 const startCaptionText: string =
   "<b>#1 Memecoin launchpad on TON </b>\n\nMake Memecoins Great Again";
@@ -80,7 +81,14 @@ export function bind_command_start(bot: Bot<MyContext>) {
     })
     .submenu("🤡 My Memes", "create_meme_menu")
     .row()
-    .submenu("💎 My Wallet", "create_meme_menu")
+    .text("💎 My Wallet", async (ctx) => {
+      const chatId = ctx.msg?.chat.id;
+      if (chatId) {
+        await tonConnectMenu(ctx, chatId);
+      } else {
+        console.error("call 💎 My Wallet - chatId is null");
+      }
+    })
     .submenu("⚙️ Setting", "create_meme_menu")
     .row()
     .submenu("🎁 Airdrop", "create_meme_menu");
