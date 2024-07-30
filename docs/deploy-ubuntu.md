@@ -46,11 +46,15 @@ node
 ```bash
 # 安装 20+ 版本的 nodejs
 https://nodejs.org/en/download/package-managernode
+
+apt install ts-node
 ```
 
 npm
 ```bash
 npm install -g npm
+
+
 
 ```
 

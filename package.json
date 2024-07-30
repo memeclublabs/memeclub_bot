@@ -12,13 +12,11 @@
     "prisma_db_push": "npx prisma db push  && npx prisma generate",
     "prisma_db_seed": "npx prisma db seed",
     "prisma_studio": "npx prisma studio",
-    "compile_tsc": "tsc src/main.pull.ts",
     "nodemon": "nodemon",
-    "ts-node": "ts-node src/main.pull.ts",
-    "open_bot": "open https://t.me/diamond404bot",
-    "build": "pnpm run build",
-    "test": "vitest",
-    "app_test": "ts-node src/main.local.ts"
+    "ts-node": "ts-node ./src/main.pull.ts",
+    "compile_ts_2_js": "npx rimraf dist && tsc",
+    "run_with_node": "node ./dist/main.pull.js",
+    "app_main_local": "ts-node src/main.local.ts"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -52,6 +50,7 @@
     "@types/uuid": "^10.0.0",
     "prettier": "3.3.3",
     "prisma": "5.17.0",
+    "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "tslib": "^2.6.3",
     "typescript": "^5.5.4",

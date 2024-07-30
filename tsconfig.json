@@ -5,7 +5,7 @@
     "rootDir": "./src",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "outDir": "./build",
+    "outDir": "./dist",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "strict": true,
