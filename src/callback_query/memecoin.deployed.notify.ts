@@ -1,6 +1,6 @@
 import { Memecoin } from "@prisma/client";
 import { MyContext } from "../global.types";
-import dbPrisma from "../db.prisma";
+import prisma from "../prisma";
 import { FROM_GROUP_VIEW_MEME } from "../com.static";
 import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.sender";
 import { botStatusValid, tonviewerUrl } from "../com.utils";
@@ -9,7 +9,7 @@ export async function memecoinDeployedNotify(
   ctx: MyContext,
   memecoin: Memecoin,
 ) {
-  let findGroup = await dbPrisma.group.findUnique({
+  let findGroup = await prisma.group.findUnique({
     where: { groupId: memecoin.groupId! },
   });
 

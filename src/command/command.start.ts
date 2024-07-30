@@ -1,6 +1,6 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
-import dbPrisma from "../db.prisma";
+import prisma from "../prisma";
 import { Prisma, User } from "@prisma/client";
 import { FROM_GROUP_VIEW_MEME, Invite_ } from "../com.static";
 import { generateReferralCode } from "../com.referral";
@@ -30,7 +30,7 @@ export function bind_command_start(bot: Bot<MyContext>) {
           .catch((reason) => {
             console.error(reason);
           });
-        let userById = await dbPrisma.user.findUnique({
+        let userById = await prisma.user.findUnique({
           where: { tgId: tgId },
         });
         if (userById) {
@@ -38,11 +38,11 @@ export function bind_command_start(bot: Bot<MyContext>) {
           if (match.startsWith(FROM_GROUP_VIEW_MEME)) {
             // 通过群里点击 meme Buy/Sell 按钮加入，老用户要发送 Meme 菜单
             const memecoinId = match.split(FROM_GROUP_VIEW_MEME)[1];
-            let findMeme = await dbPrisma.memecoin.findUnique({
+            let findMeme = await prisma.memecoin.findUnique({
               where: { id: Number(memecoinId) },
             });
             if (findMeme) {
-              let findGroup = await dbPrisma.group.findUnique({
+              let findGroup = await prisma.group.findUnique({
                 where: { groupId: Number(findMeme.groupId) },
               });
               if (findGroup) {
@@ -56,7 +56,7 @@ export function bind_command_start(bot: Bot<MyContext>) {
           let match = ctx.match;
           let referUser: User | undefined = undefined;
           if (match.startsWith(Invite_)) {
-            let userByRefCode = await dbPrisma.user.findUnique({
+            let userByRefCode = await prisma.user.findUnique({
               where: { refCode: match },
             });
             // if not find, userByRefCode is null
@@ -69,15 +69,15 @@ export function bind_command_start(bot: Bot<MyContext>) {
           } else if (match.startsWith(FROM_GROUP_VIEW_MEME)) {
             // 通过群里点击 meme Buy/Sell 按钮加入，这个推荐关系要算到邀请人身上
             const memecoinId = match.split(FROM_GROUP_VIEW_MEME)[1];
-            let findMeme = await dbPrisma.memecoin.findUnique({
+            let findMeme = await prisma.memecoin.findUnique({
               where: { id: Number(memecoinId) },
             });
             if (findMeme) {
-              let findGroup = await dbPrisma.group.findUnique({
+              let findGroup = await prisma.group.findUnique({
                 where: { groupId: Number(findMeme.groupId) },
               });
               if (findGroup) {
-                let findUser = await dbPrisma.user.findUnique({
+                let findUser = await prisma.user.findUnique({
                   where: { tgId: findGroup.inviterTgId },
                 });
                 if (findUser) {
@@ -102,18 +102,18 @@ export function bind_command_start(bot: Bot<MyContext>) {
             createBy: tgId,
             ...(referUser ? { referBy: referUser.tgId } : {}),
           } satisfies Prisma.UserCreateInput;
-          let newUser = await dbPrisma.user.create({ data: userData });
+          let newUser = await prisma.user.create({ data: userData });
           console.info(`new user created. ${newUser.id}`);
         }
       }
     } else {
       // 这边是在群组中
-      let findGroup = await dbPrisma.group.findUnique({
+      let findGroup = await prisma.group.findUnique({
         where: { groupId: ctx.chat.id },
       });
 
       if (findGroup) {
-        let findUser = await dbPrisma.user.findUnique({
+        let findUser = await prisma.user.findUnique({
           where: { tgId: findGroup.inviterTgId },
         });
 

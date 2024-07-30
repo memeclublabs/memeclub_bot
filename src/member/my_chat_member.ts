@@ -1,6 +1,6 @@
 import { Bot, InlineKeyboard } from "grammy";
 import { MyContext } from "../global.types";
-import dbPrisma from "../db.prisma";
+import prisma from "../prisma";
 import { Group, Prisma } from "@prisma/client";
 import { processByCoinStatus } from "../service/memecoin.process.by.status";
 
@@ -26,7 +26,7 @@ export function on_my_chat_member(bot: Bot<MyContext>) {
         let opLastName = ctx.myChatMember.from.last_name;
         let opDisplayName = `${opFirstName} ${opLastName}`;
 
-        let findGroup = await dbPrisma.group.findUnique({
+        let findGroup = await prisma.group.findUnique({
           where: { groupId: chatId },
         });
         let realGroup: Group | undefined;
@@ -48,7 +48,7 @@ export function on_my_chat_member(bot: Bot<MyContext>) {
               modifyBy: opIgId,
             } satisfies Prisma.GroupUpdateInput;
 
-            realGroup = await dbPrisma.group.update({
+            realGroup = await prisma.group.update({
               where: { groupId: chatId },
               data: updateData,
             });
@@ -71,7 +71,7 @@ export function on_my_chat_member(bot: Bot<MyContext>) {
             memberCount: chatMemberCount,
             createBy: opIgId,
           } satisfies Prisma.GroupCreateInput;
-          realGroup = await dbPrisma.group.create({ data: insertData });
+          realGroup = await prisma.group.create({ data: insertData });
         }
 
         if (realGroup) {
@@ -130,11 +130,11 @@ Let's pump a new Memecoin and have fun together!
         );
         // 去除 member ，admin 和 creator，还有如下 3个状态
         // let status: "restricted" | "left" | "kicked"
-        let findChat = await dbPrisma.group.findUnique({
+        let findChat = await prisma.group.findUnique({
           where: { groupId: chatId },
         });
         if (findChat) {
-          await dbPrisma.group.update({
+          await prisma.group.update({
             where: { groupId: chatId },
             data: {
               botStatus: chatMemberStatus,

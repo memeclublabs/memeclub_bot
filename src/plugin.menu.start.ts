@@ -1,7 +1,7 @@
 import { Bot } from "grammy";
 import { MyContext } from "./global.types";
 import { Menu } from "@grammyjs/menu";
-import dbPrisma from "./db.prisma";
+import prisma from "./prisma";
 import { listNewMemes } from "./service/msg/tg.msg.sender";
 import { tonConnectInfoKeyboard } from "./service/use.ton-connect";
 
@@ -21,12 +21,12 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
 
       if (!referCode) {
         if (ctx.chat?.id) {
-          let findChat = await dbPrisma.group.findUnique({
+          let findChat = await prisma.group.findUnique({
             where: { groupId: ctx.chat.id },
           });
 
           if (findChat && findChat.inviterTgId) {
-            let findUser = await dbPrisma.user.findUnique({
+            let findUser = await prisma.user.findUnique({
               where: { tgId: findChat.inviterTgId },
             });
             if (findUser && findUser.refCode) {

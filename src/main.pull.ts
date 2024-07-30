@@ -2,7 +2,7 @@ import { SocksProxyAgent } from "socks-proxy-agent";
 import { MyContext } from "./global.types";
 import { Bot } from "grammy";
 import * as dotenv from "dotenv";
-import dbPrisma from "./db.prisma";
+import prisma from "./prisma";
 import { bind_command } from "./command/command";
 import { on_message } from "./message/message";
 import { use_time_tracer } from "./middleware.tracker";
@@ -73,11 +73,11 @@ bot.catch((err) => {
 //
 
 process.once("SIGINT", async () => {
-  await dbPrisma.$disconnect();
+  await prisma.$disconnect();
   return bot.stop();
 });
 process.once("SIGTERM", async () => {
-  await dbPrisma.$disconnect();
+  await prisma.$disconnect();
   return bot.stop();
 });
 bot
