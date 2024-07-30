@@ -2,13 +2,7 @@
   "update": {
     "update_id": 624568002,
     "my_chat_member": {
-      "chat": {
-        "id": 5499157826,
-        "first_name": "Andrew",
-        "last_name": "Tonx 💎",
-        "username": "andrew_tonx",
-        "type": "private"
-      },
+    // bot 有私聊，from 是发起用户
       "from": {
         "id": 5499157826,
         "is_bot": false,
@@ -17,6 +11,13 @@
         "username": "andrew_tonx",
         "language_code": "en",
         "is_premium": true
+      },
+      "chat": {
+        "id": 5499157826,
+        "first_name": "Andrew",
+        "last_name": "Tonx 💎",
+        "username": "andrew_tonx",
+        "type": "private"
       },
       "date": 1705731592,
       "old_chat_member": {

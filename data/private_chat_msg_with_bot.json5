@@ -3,6 +3,7 @@
     "update_id": 434236390,
     "message": {
       "message_id": 600,
+      // bot 在“私聊”收到“text”消息，from 是发消息的用户
       "from": {
         "id": 5499157826,
         "is_bot": false,
@@ -18,7 +19,7 @@
         "type": "private"
       },
       "date": 1715092197,
-      "text": "group_info"
+      "text": "私聊消息"
     }
   },
   "api": {

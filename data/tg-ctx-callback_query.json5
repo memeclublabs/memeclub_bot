@@ -5,6 +5,7 @@
     "update_id": 476465956,
     "callback_query": {
       "id": "5171958947471121543",
+      // bot 收到回调消息，from 是操作人
       "from": {
         "id": 5499157826,
         "is_bot": false,

@@ -3,6 +3,7 @@
     "update_id": 434235627,
     "message": {
       "message_id": 372,
+      // bot 在“私聊”收到“命令 /text”消息，from 是发消息的用户
       "from": {
         "id": 5499157826,
         "is_bot": false,

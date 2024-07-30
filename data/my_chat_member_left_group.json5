@@ -2,12 +2,7 @@
   "update": {
     "update_id": 624567969,
     "my_chat_member": {
-      "chat": {
-        "id": -1002103603147,
-        "title": "The Open VIP",
-        "username": "the_open_vip",
-        "type": "supergroup"
-      },
+      // bot 被踢出群，from 是发起用户
       "from": {
         "id": 5499157826,
         "is_bot": false,
@@ -16,6 +11,12 @@
         "username": "andrew_tonx",
         "language_code": "en",
         "is_premium": true
+      },
+      "chat": {
+        "id": -1002103603147,
+        "title": "The Open VIP",
+        "username": "the_open_vip",
+        "type": "supergroup"
       },
       "date": 1705670573,
       "old_chat_member": {

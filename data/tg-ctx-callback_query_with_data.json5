@@ -1,0 +1,91 @@
+
+
+{
+  "update_id": 312740143,
+  "callback_query": {
+    "id": "5171958946325499894",
+    // bot 收到回调消息，from 是操作人
+    // 操作方式是点击菜单按钮中的 menu.text("按钮",(ctx)=>{ ctx如下 })
+    "from": {
+      "id": 5499157826,
+      "is_bot": false,
+      "first_name": "Andrew 💎",
+      "last_name": "Memeclub",
+      "username": "andrew_tonx",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "message": {
+      "message_id": 584,
+      "from": {
+        "id": 7403155773,
+        "is_bot": true,
+        "first_name": "Memeclub Pre-Production",
+        "username": "mc_pre_production_bot"
+      },
+      "chat": {
+        "id": 5499157826,
+        "first_name": "Andrew 💎",
+        "last_name": "Memeclub",
+        "username": "andrew_tonx",
+        "type": "private"
+      },
+      "date": 1722320602,
+      "edit_date": 1722320747,
+      "text": "🎉Memecoin 222222222222222222 #15\n\nName: 111111111111111111111\nTicker: 222222222222222222\nGroup: Andy Group 👥(4)\nDescription: 3333333333333TRC-404444444444444444444555555555333",
+      "entities": [
+        {
+          "offset": 0,
+          "length": 33,
+          "type": "bold"
+        },
+        {
+          "offset": 35,
+          "length": 6,
+          "type": "bold"
+        },
+        {
+          "offset": 63,
+          "length": 8,
+          "type": "bold"
+        },
+        {
+          "offset": 90,
+          "length": 7,
+          "type": "bold"
+        },
+        {
+          "offset": 114,
+          "length": 13,
+          "type": "bold"
+        }
+      ],
+      "reply_markup": {
+        "inline_keyboard": [
+          [
+            {
+              "text": "50%",
+              "callback_data": "submenu_memecoin_sell/0/0//h0g�5"
+            },
+            {
+              "text": "80%",
+              "callback_data": "submenu_memecoin_sell/0/1//h0g�@"
+            },
+            {
+              "text": "100%",
+              "callback_data": "submenu_memecoin_sell/0/2//h����"
+            }
+          ],
+          [
+            {
+              "text": "◀️ Go Back",
+              "callback_data": "submenu_memecoin_sell/1/0//h^��M"
+            }
+          ]
+        ]
+      }
+    },
+    "chat_instance": "-6021677416033159048",
+    "data": "submenu_memecoin_sell/0/2//h����"
+  }
+}

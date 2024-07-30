@@ -3,6 +3,7 @@
     "update_id": 925706159,
     "message": {
       "message_id": 991,
+      // bot 在“群里”收到“command”消息，from 是发消息的用户
       "from": {
         "id": 5499157826,
         "is_bot": false,
