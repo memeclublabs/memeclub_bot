@@ -1,10 +1,10 @@
 import { MyContext } from "../../global.types";
 import { Group, Memecoin } from "@prisma/client";
-import prisma from "../../prisma";
+import dbPrisma from "../../db.prisma";
 import { InlineKeyboard } from "grammy";
 
 export async function listNewMemes(ctx: MyContext): Promise<void> {
-  let findMemecoins = await prisma.memecoin.findMany({
+  let findMemecoins = await dbPrisma.memecoin.findMany({
     orderBy: {
       createDt: "desc",
     },

@@ -36,3 +36,8 @@ export function tonviewerUrl(address: String | null) {
 export function botStatusValid(botStatus: string) {
   return botStatus === "member" || botStatus === "administrator";
 }
+
+// 自定义 replacer 函数，将 BigInt 转换为字符串
+export function bigintReplacer(key: string, value: any) {
+  return typeof value === "bigint" ? value.toString() : value;
+}

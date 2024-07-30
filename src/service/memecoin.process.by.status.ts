@@ -1,4 +1,4 @@
-import prisma from "../prisma";
+import dbPrisma from "../db.prisma";
 import { InlineKeyboard } from "grammy";
 import { MyContext } from "../global.types";
 
@@ -9,7 +9,7 @@ export async function processByCoinStatus(
   groupTitle: string,
 ) {
   if (memecoinId) {
-    let findMemecoin = await prisma.memecoin.findUnique({
+    let findMemecoin = await dbPrisma.memecoin.findUnique({
       where: { id: memecoinId },
     });
     if (findMemecoin) {

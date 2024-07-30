@@ -1,6 +1,6 @@
 // Function to convert big integer to alphabetic string
 
-import { Invite_ } from "./static";
+import { Invite_ } from "./com.static";
 
 export function generateReferralCode(tgId: number): string {
   // Convert the string to a BigInt

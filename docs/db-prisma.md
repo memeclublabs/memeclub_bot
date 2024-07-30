@@ -28,7 +28,7 @@ Take this output and paste it into [`wrangler.toml`](./wrangler.toml) which then
 
 ```diff
 # wrangler.toml
-name = "prisma-d1-example"
+name = "dbPrisma-d1-example"
 main = "src/index.ts"
 compatibility_date = "2024-03-20"
 compatibility_flags = ["nodejs_compat"]
@@ -47,9 +47,9 @@ terminal.
 
 ### 3. Create a table in the database and seed some dummy data
 
-Prisma Migrate doesn't support D1 yet, so you can't follow the "default" migration workflows using `prisma migrate dev`
-or `prisma db push`. For this example, the file [`./prisma/schema.sql`](./prisma/schema.sql) contains a SQL statement to
-create a `User` table that mirros the shape of the `User` model in [`./prisma/schema.prisma`](../prisma/schema.prisma).
+Prisma Migrate doesn't support D1 yet, so you can't follow the "default" migration workflows using `dbPrisma migrate dev`
+or `dbPrisma db push`. For this example, the file [`./dbPrisma/schema.sql`](./prisma/schema.sql) contains a SQL statement to
+create a `User` table that mirros the shape of the `User` model in [`./dbPrisma/schema.dbPrisma`](../prisma/schema.prisma).
 
 To apply this SQL statement to your D1 instance, run the following command.
 
@@ -67,9 +67,9 @@ And one more time for the _remote_ database which is managed by Cloudflare in th
 npx wrangler d1 execute whatever-app-test  --file=./db-schema/init_schema.sql  --remote
 ```
 
-### 4. generate prisma client
+### 4. generate dbPrisma client
 
-npx prisma generate
+npx dbPrisma generate
 
 ### 5. Run the Worker locally
 
@@ -86,7 +86,7 @@ data in the browser:
 [
   {
     "id": 1,
-    "email": "jane@prisma.io",
+    "email": "jane@dbPrisma.io",
     "name": "Jane Doe (Local)"
   }
 ]
@@ -107,7 +107,7 @@ JSON data in the browser:
 [
   {
     "id": 1,
-    "email": "jane@prisma.io",
+    "email": "jane@dbPrisma.io",
     "name": "Jane Doe (Remote)"
   }
 ]

@@ -1,10 +1,10 @@
 import { Bot, InlineKeyboard } from "grammy";
 import { MyContext, MyConversation } from "./global.types";
 import { conversations, createConversation } from "@grammyjs/conversations";
-import prisma from "./prisma";
-import { bigintReplacer } from "./functions.common";
+import dbPrisma from "./db.prisma";
 import { Prisma } from "@prisma/client";
 import { processByCoinStatus } from "./service/memecoin.process.by.status";
+import { bigintReplacer } from "./com.utils";
 
 export function use_conversations_plugin(bot: Bot<MyContext>) {
   // WARN: must run after sessions plugin
@@ -33,7 +33,7 @@ async function movie(conversation: MyConversation, ctx: MyContext) {
 
   await conversation.external(async () => {
     console.info("run for external" + JSON.stringify(movies));
-    let prismaPromise = await prisma.user.findMany();
+    let prismaPromise = await dbPrisma.user.findMany();
     console.info(
       "run for external" + JSON.stringify(prismaPromise, bigintReplacer),
     );
@@ -67,7 +67,7 @@ async function newMemeWithValidation(
   }
   const groupId = BigInt(groupIdStr);
 
-  let findGroup = await prisma.group.findUnique({
+  let findGroup = await dbPrisma.group.findUnique({
     where: { groupId: groupId },
   });
   if (findGroup) {
@@ -125,11 +125,11 @@ async function newMemeWithValidation(
           coinStatus: "Init",
         } satisfies Prisma.MemecoinCreateInput;
 
-        let newMemecoin = await prisma.memecoin.create({
+        let newMemecoin = await dbPrisma.memecoin.create({
           data: newData,
         });
 
-        let updateGroup = await prisma.group.update({
+        let updateGroup = await dbPrisma.group.update({
           where: { groupId: groupId },
           data: {
             mainMemecoinId: newMemecoin.id,

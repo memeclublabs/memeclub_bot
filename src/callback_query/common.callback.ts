@@ -1,11 +1,11 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
-import prisma from "../prisma";
+import dbPrisma from "../db.prisma";
 import { tonDeployMaster } from "../service/ton.deploy.master";
-import { tonviewerUrl, toTonAddressStr } from "../util";
 import { sleep, waitNextSeqNo } from "../service/ton/util.helpers";
 import { memecoinDeployedNotify } from "./memecoin.deployed.notify";
 import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.sender";
+import { tonviewerUrl, toTonAddressStr } from "../com.utils";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   // 处理通用的按钮点击事件 callback_query
@@ -13,7 +13,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
     console.info(
       "callback_query - start [",
       ctx.from?.username,
-      ctx,
+      JSON.stringify(ctx.callbackQuery),
       Date.now(),
     );
     const callbackData = ctx.callbackQuery.data;
@@ -49,13 +49,13 @@ export function on_callback_query(bot: Bot<MyContext>) {
       );
       // 【Confirm to Create Memecoin】
       const memecoinId = callbackData.split("callback_confirm_deploy_")[1];
-      let memecoin = await prisma.memecoin.findUnique({
+      let memecoin = await dbPrisma.memecoin.findUnique({
         where: { id: BigInt(memecoinId) },
       });
 
       if (memecoin) {
         if (memecoin.coinStatus == "Init") {
-          await prisma.memecoin.update({
+          await dbPrisma.memecoin.update({
             where: { id: memecoin.id },
             data: {
               coinStatus: "Processing",
@@ -70,7 +70,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
             memecoin.description + ` [id:${memecoin.id}]`,
           );
 
-          let newMemecoin = await prisma.memecoin.findUnique({
+          let newMemecoin = await dbPrisma.memecoin.findUnique({
             where: { id: BigInt(memecoinId) },
           });
           if (newMemecoin && newMemecoin.coinStatus !== "Processing") {
@@ -80,7 +80,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
             return;
           }
 
-          await prisma.memecoin.update({
+          await dbPrisma.memecoin.update({
             where: { id: memecoin.id },
             data: {
               masterAddress: masterAddress,
@@ -133,7 +133,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
             console.info(
               `Memecoin ${memecoin.id}-${memecoin.ticker} deployed.`,
             );
-            await prisma.memecoin.update({
+            await dbPrisma.memecoin.update({
               where: { id: memecoin.id },
               data: {
                 coinStatus: "Deployed",
@@ -184,7 +184,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
     } else if (callbackData.startsWith("callback_show_menu_memecoin_")) {
       let memecoinId = callbackData.split("callback_show_menu_memecoin_")[1];
 
-      let findMemecoin = await prisma.memecoin.findUnique({
+      let findMemecoin = await dbPrisma.memecoin.findUnique({
         where: { id: Number(memecoinId) },
       });
       if (!findMemecoin) {
@@ -193,7 +193,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
         await ctx.reply(errorInfo);
         return;
       }
-      let findGroup = await prisma.group.findUnique({
+      let findGroup = await dbPrisma.group.findUnique({
         where: { groupId: Number(findMemecoin.groupId) },
       });
       if (!findGroup) {

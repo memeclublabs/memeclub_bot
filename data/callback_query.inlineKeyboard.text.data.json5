@@ -1,0 +1,79 @@
+{
+  update: {
+    update_id: 312740304,
+    callback_query: {
+      "id": "2086464782504845831",
+      "from": {
+        "id": 6928243882,
+        "is_bot": false,
+        "first_name": "Andy",
+        "last_name": "King",
+        "username": "AndySkyKing",
+        "language_code": "en"
+      },
+      // 关键的是这个 data
+      //通过 inlineKeyboard.text(text,data) 定义一个按钮
+      // text 是用户文案
+      // data 是用户点击后，发出一个本消息结构的 callback 消息
+      // 下面的 message , 是按钮所在的消息详情
+      "data": "callback_show_menu_memecoin_13",
+      "message": {
+        "message_id": 770,
+        "from": {
+          "id": 7403155773,
+          "is_bot": true,
+          "first_name": "Memeclub Pre-Production",
+          "username": "mc_pre_production_bot"
+        },
+        "chat": {
+          "id": 6928243882,
+          "first_name": "Andy",
+          "last_name": "King",
+          "username": "AndySkyKing",
+          "type": "private"
+        },
+        "date": 1722334931,
+        "text": "🌟 New Listing Memes\n\nClick the button to view details of each Memecoin.",
+        "entities": [
+          {
+            "offset": 0,
+            "length": 20,
+            "type": "bold"
+          }
+        ],
+        "reply_markup": {
+          "inline_keyboard": [
+            [
+              {
+                "text": "#16 - AADADJ",
+                "callback_data": "callback_show_menu_memecoin_16"
+              },
+              {
+                "text": "#15 - 111111111111111111111",
+                "callback_data": "callback_show_menu_memecoin_15"
+              }
+            ],
+            [
+              {
+                "text": "#14 - Private group",
+                "callback_data": "callback_show_menu_memecoin_14"
+              },
+              {
+                "text": "#13 - Public",
+                "callback_data": "callback_show_menu_memecoin_13"
+              }
+            ],
+            [
+              {
+                "text": "#12 - Dogecoin",
+                "callback_data": "callback_show_menu_memecoin_12"
+              }
+            ]
+          ]
+        }
+      },
+      "chat_instance": "-5434831341509214666",
+
+    }
+  },
+}
