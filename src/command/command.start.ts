@@ -82,12 +82,18 @@ export function bind_command_start(bot: Bot<MyContext>) {
     .submenu("🤡 My Memes", "create_meme_menu")
     .row()
     .text("💎 My Wallet", async (ctx) => {
+      let start = Date.now();
+      console.info("DEBUG: ======== click [💎 My Wallet]", start);
       const chatId = ctx.msg?.chat.id;
       if (chatId) {
         await tonConnectMenu(ctx, chatId);
       } else {
         console.error("call 💎 My Wallet - chatId is null");
       }
+      console.info(
+        "DEBUG: ======== end [💎 My Wallet]. time elapse:",
+        Date.now() - start,
+      );
     })
     .submenu("⚙️ Setting", "create_meme_menu")
     .row()

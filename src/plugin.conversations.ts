@@ -6,7 +6,7 @@ import { bigintReplacer } from "./functions.common";
 import { Prisma } from "@prisma/client";
 import { processByCoinStatus } from "./service/memecoin.process.by.status";
 
-export function use_conversations(bot: Bot<MyContext>) {
+export function use_conversations_plugin(bot: Bot<MyContext>) {
   // WARN: must run after sessions plugin
   // WARN: must run after sessions plugin
   // WARN: must run after sessions plugin

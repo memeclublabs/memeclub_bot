@@ -13,8 +13,9 @@ export interface Dish {
 
 export interface SessionData {
   userDefinedIds?: string[];
-  groupId?: string;
   referCode?: string;
+  groupId?: string;
+  memecoinId?: number;
 }
 
 export type MyContext = Context &

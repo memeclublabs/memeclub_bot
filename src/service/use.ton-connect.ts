@@ -1,10 +1,10 @@
 import { MyContext } from "../global.types";
 import { formatTonAddressStr } from "../util";
 import { getConnector } from "../ton-connect/connector";
+import { getWallets } from "../ton-connect/wallets";
 
 export async function tonConnectMenu(ctx: MyContext, chatId: number) {
   let connector = getConnector(chatId);
-
   await connector.restoreConnection();
 
   if (connector.connected) {
@@ -29,24 +29,9 @@ export async function tonConnectMenu(ctx: MyContext, chatId: number) {
     }
   });
 
-  // const wallets = await getWallets();
-
+  const wallets = await getWallets();
   // 获得 tonkeeper 钱包
-  // const tonkeeper = wallets.find((wallet) => wallet.appName === "tonkeeper")!;
-  const tonkeeper = {
-    name: "Tonkeeper",
-    appName: "tonkeeper",
-    imageUrl: "https://tonkeeper.com/assets/tonconnect-icon.png",
-    aboutUrl: "https://tonkeeper.com",
-    tondns: "tonkeeper.ton",
-    platforms: ["ios", "android", "chrome", "firefox", "macos"],
-    bridgeUrl: "https://bridge.tonapi.io/bridge",
-    universalLink: "https://app.tonkeeper.com/ton-connect",
-    deepLink: "tonkeeper-tc://",
-    jsBridgeKey: "tonkeeper",
-    injected: false,
-    embedded: false,
-  };
+  const tonkeeper = wallets.find((wallet) => wallet.appName === "tonkeeper")!;
   const tonkeeperLink = connector.connect({
     bridgeUrl: tonkeeper.bridgeUrl,
     universalLink: tonkeeper.universalLink,

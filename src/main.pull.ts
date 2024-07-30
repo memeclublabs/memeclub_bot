@@ -8,9 +8,9 @@ import { on_message } from "./message/message";
 import { on_member } from "./member/on.member";
 import { on_add_to_group } from "./my_chat_member/on.add.to.group";
 import { use_time_tracer } from "./middleware.tracker";
-import { use_conversations } from "./plugin.conversations";
-import { use_sessions } from "./plugin.sessions";
+import { use_sessions_plugin } from "./plugin.sessions";
 import { on_callback_query } from "./callback_query/common.callback";
+import { use_conversations_plugin } from "./plugin.conversations";
 
 // ===========================================================================
 //                        Bot Init Section Start
@@ -40,8 +40,12 @@ export const bot = new Bot<MyContext>(token, config);
 //
 
 use_time_tracer(bot);
-use_sessions(bot); // must run before use_conversations
-use_conversations(bot);
+
+// session must run before use_conversations
+use_sessions_plugin(bot);
+use_conversations_plugin(bot);
+// use_menu_plugin(bot);
+
 on_callback_query(bot);
 
 bind_command(bot);
