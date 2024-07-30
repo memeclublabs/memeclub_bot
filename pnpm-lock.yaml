@@ -39,7 +39,7 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0(@ton/core@0.56.3(@ton/crypto@3.3.0))(@ton/crypto@3.3.0)
       '@tonconnect/sdk':
-        specifier: ^3.0.0-beta.1
+        specifier: ^3.0.3
         version: 3.0.3
       '@types/qrcode':
         specifier: ^1.5.5
