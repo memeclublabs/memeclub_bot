@@ -2,5 +2,8 @@ node_modules/
 .idea
 ./build
 ./dist/
+./dist/*
 .wrangler
 .env
+!/dist/
+/dist/
