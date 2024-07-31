@@ -4,6 +4,8 @@ import { Menu } from "@grammyjs/menu";
 import prisma from "./prisma";
 import { listNewMemes } from "./service/msg/tg.msg.sender";
 import { tonConnectInfoKeyboard } from "./service/use.ton-connect";
+import { CHAIN } from "@tonconnect/sdk";
+import { formatTonAddressStr } from "./com.utils";
 
 export const group_start_menu = new Menu<MyContext>("group_start_menu");
 export const start_menu = new Menu<MyContext>("start_menu");
@@ -68,8 +70,21 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
       console.info("DEBUG: ======== click [💎 My Wallet]", start);
       const chatId = ctx.msg?.chat.id;
       if (chatId) {
-        let { isConnected } = await tonConnectInfoKeyboard(ctx, chatId);
+        let { isConnected, connector } = await tonConnectInfoKeyboard(
+          ctx,
+          chatId,
+        );
         console.info("wallet connection:", isConnected);
+        let wallet = connector?.wallet;
+        if (wallet) {
+          await ctx.reply(
+            `<b>💎 Wallet Connected!</b> \n
+Wallet: ${wallet?.device?.appName}
+Network: ${wallet!.account.chain === CHAIN.TESTNET ? "Testnet" : "Mainnet"}
+Address:\n${formatTonAddressStr(wallet?.account.address!)}`,
+            { parse_mode: "HTML" },
+          );
+        }
       } else {
         console.error("call 💎 My Wallet - chatId is null");
       }

@@ -58,7 +58,7 @@ export async function tonConnectInfoKeyboard(
       newConnectRequestListenersMap.delete(chatId);
 
       await ctx.reply(
-        `<b>💎TON Wallet Connected!</b> \n
+        `<b>💎 Wallet Connected!</b> \n
 Wallet: ${wallet?.device?.appName}
 Network: ${wallet!.account.chain === CHAIN.TESTNET ? "Testnet" : "Mainnet"}
 Address:\n${formatTonAddressStr(connector.wallet?.account.address!)}`,
