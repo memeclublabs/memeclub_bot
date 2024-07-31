@@ -2,16 +2,25 @@ import { MyContext } from "../global.types";
 import { getConnector } from "../ton-connect/connector";
 import { formatTonAddressStr } from "../com.utils";
 import { getWallets } from "../ton-connect/wallets";
+import TonConnect, { CHAIN } from "@tonconnect/sdk";
 
-export async function tonConnectInfoKeyboard(ctx: MyContext, chatId: number) {
+export async function tonConnectInfoKeyboard(
+  ctx: MyContext,
+  chatId: number,
+  replyOfConnected: boolean = true,
+): Promise<{ isConnected: boolean; connector?: TonConnect }> {
+  let result = { isConnected: false };
+
   let connector = getConnector(chatId);
   await connector.restoreConnection();
 
   if (connector.connected) {
-    await ctx.reply(
-      `TON Wallet connected! \n\nAddress: ${formatTonAddressStr(connector.wallet?.account.address!)}`,
-    );
-    return;
+    if (replyOfConnected) {
+      await ctx.reply(
+        `TON Wallet connected! \n\nAddress: ${formatTonAddressStr(connector.wallet?.account.address!)}`,
+      );
+    }
+    return { isConnected: true, connector: connector };
   }
 
   //上面判断过未连接钱包，下面就准备连接菜单
@@ -24,7 +33,11 @@ export async function tonConnectInfoKeyboard(ctx: MyContext, chatId: number) {
     );
     if (wallet) {
       await ctx.reply(
-        `${wallet.device.appName} wallet ${formatTonAddressStr(wallet.account.address)} connected!`,
+        `<b>💎TON Wallet Connected!</b> \n
+        - Wallet: ${wallet?.device?.appName}
+        - Network: ${wallet!.account.chain === CHAIN.TESTNET ? "Testnet" : "Mainnet"}
+        - Address: ${formatTonAddressStr(connector.wallet?.account.address!)}`,
+        { parse_mode: "HTML" },
       );
     }
   });
@@ -76,4 +89,6 @@ export async function tonConnectInfoKeyboard(ctx: MyContext, chatId: number) {
       inline_keyboard: inlineKeyboard,
     },
   });
+
+  return result;
 }

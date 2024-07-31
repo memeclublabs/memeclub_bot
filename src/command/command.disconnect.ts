@@ -1,11 +1,16 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import { getConnector } from "../ton-connect/connector";
+import { contactAdminWithError } from "../com.utils";
 
 export function bind_command_disconnect(bot: Bot<MyContext>) {
   bot.command("disconnect", async (ctx) => {
     console.info("command - /disconnect [", ctx.from?.username, Date.now());
-    const chatId = ctx.msg.chat.id;
+    const chatId = ctx.from?.id;
+    if (!chatId) {
+      await contactAdminWithError(ctx);
+      return;
+    }
     const connector = getConnector(chatId);
     await connector.restoreConnection();
     if (!connector.connected) {

@@ -60,7 +60,7 @@ export async function contactAdminWithError(ctx: MyContext, clue?: string) {
 export function buildMemecoinInfoText(
   memecoin: Memecoin,
   group: Group,
-  title: string,
+  title?: string,
   description?: string,
 ) {
   if (!title) {
@@ -68,17 +68,18 @@ export function buildMemecoinInfoText(
   }
 
   if (!description) {
-    description = "";
+    description = `Let's make a big pump!`;
   }
 
-  return `<b>${title}\n
-
-${description}
-
+  return `<b>${title}</b>
+  
 Name: ${memecoin.name}
 Ticker: ${memecoin.ticker}
 Group: ${group.groupTitle} 👥(${group.memberCount})
-Description: ${memecoin.description}\n
+Description: ${memecoin.description}
+
+${description}\n
+
 
 `;
 }

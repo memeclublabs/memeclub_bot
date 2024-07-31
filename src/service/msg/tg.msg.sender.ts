@@ -3,7 +3,7 @@ import { Group, Memecoin } from "@prisma/client";
 import prisma from "../../prisma";
 import { InlineKeyboard } from "grammy";
 import { InlineKeyboardButton } from "@grammyjs/types";
-import { tonviewerUrl } from "../../com.utils";
+import { buildMemecoinInfoText, tonviewerUrl } from "../../com.utils";
 
 export async function listNewMemes(ctx: MyContext): Promise<void> {
   let findMemecoins = await prisma.memecoin.findMany({
@@ -48,24 +48,8 @@ export async function sendPrivateChatMemecoinInfo(
     console.error("group or memecoin not found");
     return;
   }
-  let text =
-    "<b>🎉Memecoin " +
-    memecoin.ticker +
-    " #" +
-    memecoin.id +
-    "</b>\n\n" +
-    "" +
-    "<b>Name: </b>" +
-    memecoin.name +
-    "\n<b>Ticker: </b>" +
-    memecoin.ticker +
-    "\n<b>Group: </b>" +
-    group.groupTitle +
-    " 👥(" +
-    group.memberCount +
-    ")" +
-    "\n<b>Description: </b>" +
-    memecoin.description;
+
+  let text = buildMemecoinInfoText(memecoin, group);
   let masterAddress = memecoin.masterAddress;
 
   let groupInfoLine: InlineKeyboardButton[] = [];

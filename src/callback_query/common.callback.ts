@@ -10,7 +10,8 @@ import {
   tonviewerUrl,
   toTonAddressStr,
 } from "../com.utils";
-import { handleBuyMemecoin } from "./handler.buy.memecoin";
+import { handlerClickBuyBtn } from "./handler.click.buy.btn";
+import { handlerBuyWithTon } from "./handler.buy.with.ton";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   //  下面的方法可以监控具体的 callback_data 的值进行处理
@@ -202,7 +203,13 @@ export function on_callback_query(bot: Bot<MyContext>) {
       if (!memecoinId) {
         await contactAdminWithError(ctx, callbackData);
       }
-      await handleBuyMemecoin(ctx, Number(memecoinId));
+      await handlerClickBuyBtn(ctx, Number(memecoinId));
+    } else if (callbackData.startsWith("click_buy_memecoin_19_with_ton_100")) {
+      //   click_buy_memecoin_19_with_ton_100
+      let memecoinInfo = callbackData.split("_with_ton_")[0];
+      let memecoinId = memecoinInfo.split("click_buy_memecoin_")[1];
+      let tonAmt = callbackData.split("_with_ton_")[1];
+      await handlerBuyWithTon(ctx, Number(memecoinId), Number(tonAmt));
     } else if (callbackData.startsWith("callback_sell_memecoin_")) {
     } else if (callbackData.startsWith("callback_show_memecoin_info_")) {
       let memecoinId = callbackData.split("callback_show_memecoin_info_")[1];
