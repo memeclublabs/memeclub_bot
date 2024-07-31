@@ -34,9 +34,9 @@ export async function tonConnectInfoKeyboard(
     if (wallet) {
       await ctx.reply(
         `<b>💎TON Wallet Connected!</b> \n
-        - Wallet: ${wallet?.device?.appName}
-        - Network: ${wallet!.account.chain === CHAIN.TESTNET ? "Testnet" : "Mainnet"}
-        - Address: ${formatTonAddressStr(connector.wallet?.account.address!)}`,
+Wallet: ${wallet?.device?.appName}
+Network: ${wallet!.account.chain === CHAIN.TESTNET ? "Testnet" : "Mainnet"}
+Address:\n${formatTonAddressStr(connector.wallet?.account.address!)}`,
         { parse_mode: "HTML" },
       );
     }

@@ -204,7 +204,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
         await contactAdminWithError(ctx, callbackData);
       }
       await handlerClickBuyBtn(ctx, Number(memecoinId));
-    } else if (callbackData.startsWith("click_buy_memecoin_19_with_ton_100")) {
+    } else if (callbackData.startsWith("click_buy_memecoin_")) {
       //   click_buy_memecoin_19_with_ton_100
       let memecoinInfo = callbackData.split("_with_ton_")[0];
       let memecoinId = memecoinInfo.split("click_buy_memecoin_")[1];
