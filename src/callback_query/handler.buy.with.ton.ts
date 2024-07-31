@@ -1,6 +1,6 @@
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
-import { contactAdminWithError } from "../com.utils";
+import { contactAdminWithError, tonTestOnly } from "../com.utils";
 import { tonConnectInfoKeyboard } from "../service/use.ton-connect";
 import { isTelegramUrl, UserRejectsError } from "@tonconnect/sdk";
 import {
@@ -9,6 +9,8 @@ import {
   pTimeoutException,
 } from "../ton-connect/utils";
 import { getWalletInfo } from "../ton-connect/wallets";
+import { Address, fromNano, toNano } from "@ton/core";
+import { buildBuyTokenMsg } from "../service/ton/dex/message/masterMsg";
 
 export async function handlerBuyWithTon(
   ctx: MyContext,
@@ -20,7 +22,11 @@ export async function handlerBuyWithTon(
     await contactAdminWithError(ctx);
     return;
   }
-  let { isConnected, connector } = await tonConnectInfoKeyboard(ctx, chatId);
+  let { isConnected, connector } = await tonConnectInfoKeyboard(
+    ctx,
+    chatId,
+    false,
+  );
   if (!isConnected) {
     return;
   }
@@ -45,6 +51,14 @@ export async function handlerBuyWithTon(
     return;
   }
 
+  let buyGasFee = 0.1; //0.1 TON
+  let gasAndTonAmount = toNano(tonAmt + buyGasFee);
+  console.log("gasAndTonAmount:", fromNano(gasAndTonAmount));
+
+  let toAddress = Address.parse(findMeme.masterAddress!);
+
+  let payloadCell = buildBuyTokenMsg(tonAmt, 0n);
+  let payloadBase64 = payloadCell.toBoc().toString("base64");
   pTimeout(
     connector.sendTransaction({
       validUntil: Math.round(
@@ -53,9 +67,12 @@ export async function handlerBuyWithTon(
       ),
       messages: [
         {
-          amount: "1000000",
-          address:
-            "0:0000000000000000000000000000000000000000000000000000000000000000",
+          address: toAddress.toString({
+            bounceable: false,
+            testOnly: tonTestOnly(),
+          }),
+          amount: "" + gasAndTonAmount,
+          payload: payloadBase64,
         },
       ],
     }),

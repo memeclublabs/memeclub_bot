@@ -102,7 +102,7 @@ export function buildChangeMasterAdminMsg(new_admin_address: Address) {
  * @param buy_amount
  * @param query_id
  */
-export function buildBuyTokenMsg(buy_amount: number, query_id: bigint) {
+export function buildBuyTokenMsg(buy_amount: number, query_id: bigint): Cell {
   let op_buy = 0xaf750d34;
   return beginCell()
     .storeUint(op_buy, 32) //op_code
