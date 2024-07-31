@@ -109,18 +109,21 @@ Address:\n${formatTonAddressStr(connector.wallet?.account.address!)}`,
   //   ]);
   // }
 
-  await ctx.replyWithPhoto("https://www.memeclub.ai/bot/ton-connect.png", {
-    reply_markup: {
-      inline_keyboard: inlineKeyboard,
+  let reply = await ctx.replyWithPhoto(
+    "https://www.memeclub.ai/bot/ton-connect.png",
+    {
+      reply_markup: {
+        inline_keyboard: inlineKeyboard,
+      },
     },
-  });
+  );
 
   // -----------------------------------------------------------
   const deleteMessage = async (): Promise<void> => {
     if (!messageWasDeleted) {
       messageWasDeleted = true;
       try {
-        await ctx.deleteMessage();
+        await ctx.api.deleteMessage(chatId, reply.message_id);
       } catch (e) {
         console.error(e);
       }
