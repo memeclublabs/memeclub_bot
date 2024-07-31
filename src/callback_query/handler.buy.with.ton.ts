@@ -17,12 +17,12 @@ export async function handlerBuyWithTon(
   memecoinId: number,
   tonAmt: number,
 ) {
-  const chatId = ctx.from?.id;
-  if (!chatId) {
+  const tgId = ctx.from?.id;
+  if (!tgId) {
     await contactAdminWithError(ctx);
     return;
   }
-  let { isConnected, connector } = await tonConnectInfoKeyboard(ctx, chatId);
+  let { isConnected, connector } = await tonConnectInfoKeyboard(ctx, tgId);
   if (!isConnected) {
     return;
   }
@@ -75,21 +75,36 @@ export async function handlerBuyWithTon(
     }),
     Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS),
   )
-    .then(() => {
-      ctx.reply(`Transaction sent successfully`);
+    .then(async () => {
+      let findUser = await prisma.user.findUnique({ where: { tgId: tgId } });
+
+      if (!findUser) {
+        console.error("User not found", tgId);
+        return;
+      }
+      let buyNotice2Group =
+        "<b>🟢 Big Pump </b>\n" +
+        `${findUser.firstName} ${findUser.lastName}` +
+        `buy ${tonAmt} TON of ${findMeme.name}(${findMeme.ticker})`;
+
+      await ctx.api.sendMessage(Number(findMeme.groupId), buyNotice2Group, {
+        parse_mode: "HTML",
+      });
+
+      await ctx.reply(`✅ Transaction sent successfully`);
     })
-    .catch((e) => {
+    .catch(async (e) => {
       if (e === pTimeoutException) {
-        ctx.reply(`Transaction was not confirmed`);
+        await ctx.reply(`❗️Transaction was not confirmed`);
         return;
       }
 
       if (e instanceof UserRejectsError) {
-        ctx.reply(`You rejected the transaction`);
+        await ctx.reply(`You rejected the transaction`);
         return;
       }
 
-      ctx.reply(`Unknown error happened`);
+      await ctx.reply(`Unknown error happened`);
     })
     .finally(() => connector.pauseConnection());
 

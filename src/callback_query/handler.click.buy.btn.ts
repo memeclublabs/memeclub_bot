@@ -28,6 +28,10 @@ export async function handlerClickBuyBtn(ctx: MyContext, memecoinId: number) {
     .text("20 TON", `click_buy_memecoin_${findMeme.id}_with_ton_20`)
     .text("50 TON", `click_buy_memecoin_${findMeme.id}_with_ton_50`)
     .text("100 TON", `click_buy_memecoin_${findMeme.id}_with_ton_100`);
-  let text = buildMemecoinInfoText(findMeme, findGroup, "🟢 Buy Memecoin");
+  let text = buildMemecoinInfoText(
+    findMeme,
+    findGroup,
+    `🟢 Buy Memecoin #${findMeme.id}`,
+  );
   await ctx.reply(text, { parse_mode: "HTML", reply_markup: inlineKeyboard });
 }

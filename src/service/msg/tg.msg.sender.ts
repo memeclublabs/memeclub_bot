@@ -19,7 +19,7 @@ export async function listNewMemes(ctx: MyContext): Promise<void> {
     for (const memecoin of findMemecoins) {
       i++;
       inlineKeyboard.text(
-        `#${memecoin.id} - ${memecoin.name}`,
+        `${getEmoji(memecoin.id)} #${memecoin.id} - ${memecoin.name}`,
         `callback_show_memecoin_info_${memecoin.id}`,
       );
       if (i % 2 === 0) {
@@ -27,7 +27,7 @@ export async function listNewMemes(ctx: MyContext): Promise<void> {
       }
     }
     await ctx.reply(
-      "<b>🌟 New Listing Memes</b>\n\n" +
+      "<b>🌟 New Memes</b>\n\n" +
         "Click the button to view details of each Memecoin.",
       {
         parse_mode: "HTML",
@@ -90,4 +90,94 @@ export async function sendPrivateChatMemecoinInfo(
       inline_keyboard: inlineKeyboard,
     },
   });
+}
+
+function getEmoji(index: bigint): string {
+  let result = Number(index % 100n);
+  let emojiArray = [
+    "🤡",
+    "🐬",
+    "😈",
+    "👽",
+    "🤖",
+    "🎃",
+    "😻",
+    "👨‍🚀",
+    "🦹‍",
+    "🧚‍",
+    "🧜‍",
+    "🤴",
+    "👑",
+    "🐸",
+    "🐻",
+    "🦊",
+    "🦄",
+    "🐞",
+    "🐡",
+    "🍄",
+    "💥",
+    "🍌",
+    "🍓",
+    "🍉",
+    "🍕",
+    "🍭",
+    "🍺",
+    "🎱",
+    "🏀",
+    "⚽️",
+    "🏆",
+    "🥇",
+    "🎰",
+    "🚀",
+    "🗽",
+    "💸",
+    "💎",
+    "🔫",
+    "🦠",
+    "🎉",
+    "🧧",
+    "🎏",
+    "🧸",
+    "🔑",
+    "💊",
+    "❤️",
+    "🆘",
+    "⚠️",
+    "🔱",
+    "💹",
+    "📣",
+    "🚩",
+    "🎠",
+    "🗾",
+    "🏦",
+    "🛝",
+    "🗺",
+    "⚓️",
+    "✈️",
+    "🎹",
+    "🏓",
+    "🥎",
+    "🍪",
+    "🥟",
+    "🍣",
+    "🍟",
+    "🍔",
+    "🍑",
+    "🍇",
+    "🥐",
+    "❄️",
+    "🌊",
+    "🌍",
+    "🍀",
+    "🐏",
+    "🐙",
+    "🦑",
+    "🦐",
+    "🦞",
+    "🦀",
+    "🐝",
+    "🐤",
+  ];
+
+  return emojiArray[result];
 }

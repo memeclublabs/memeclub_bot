@@ -91,13 +91,10 @@ Address:\n${formatTonAddressStr(connector.wallet?.account.address!)}`,
         process.env.TELEGRAM_BOT_LINK!,
       )
     : undefined;
-  console.info("========== TG Wallet ============");
-  console.info(tgWalletLink);
-
   let inlineKeyboard = [
     [
       {
-        text: "Connect Tonkeeper Wallet",
+        text: "Connect Tonkeeper",
         url: tonkeeperLink,
       },
     ],
@@ -106,7 +103,7 @@ Address:\n${formatTonAddressStr(connector.wallet?.account.address!)}`,
   if (tgWalletLink) {
     inlineKeyboard.push([
       {
-        text: "Connect Telegram Wallet",
+        text: "Connect TG Wallet",
         url: tgWalletLink,
       },
     ]);
