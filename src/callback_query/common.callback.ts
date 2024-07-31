@@ -5,9 +5,19 @@ import { tonDeployMaster } from "../service/ton.deploy.master";
 import { waitNextSeqNo } from "../service/ton/util.helpers";
 import { memecoinDeployedNotify } from "./memecoin.deployed.notify";
 import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.sender";
-import { tonviewerUrl, toTonAddressStr } from "../com.utils";
+import {
+  contactAdminWithError,
+  tonviewerUrl,
+  toTonAddressStr,
+} from "../com.utils";
+import { handleBuyMemecoin } from "./handler.buy.memecoin";
 
 export function on_callback_query(bot: Bot<MyContext>) {
+  //  下面的方法可以监控具体的 callback_data 的值进行处理
+  // bot.callbackQuery("具体的callback_data", async (ctx) => {
+  //   await ctx.conversation.enter("newMemeWithValidation");
+  // });
+
   // 处理通用的按钮点击事件 callback_query
   bot.on("callback_query", async (ctx, next) => {
     console.info(
@@ -188,6 +198,11 @@ export function on_callback_query(bot: Bot<MyContext>) {
         "callback_in_group_click_memecoinId_",
       )[1];
     } else if (callbackData.startsWith("callback_buy_memecoin_")) {
+      let memecoinId = callbackData.split("callback_buy_memecoin_")[1];
+      if (!memecoinId) {
+        await contactAdminWithError(ctx, callbackData);
+      }
+      await handleBuyMemecoin(ctx, Number(memecoinId));
     } else if (callbackData.startsWith("callback_sell_memecoin_")) {
     } else if (callbackData.startsWith("callback_show_memecoin_info_")) {
       let memecoinId = callbackData.split("callback_show_memecoin_info_")[1];
