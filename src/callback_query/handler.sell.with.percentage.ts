@@ -65,7 +65,6 @@ export async function handlerSellWithPercentage(
 
   // ------------
   let userWalletAddressStr = connector.account?.address;
-
   if (!userWalletAddressStr) {
     await contactAdminWithError(
       ctx,
@@ -87,10 +86,8 @@ export async function handlerSellWithPercentage(
     "get_wallet_data",
   );
   let jetton_wallet_result = jetton_wallet_tx.stack;
-  let jetton_balance_bigint = jetton_wallet_result.readBigNumber();
-  let jettonBalance: string = Number(
-    Number(jetton_balance_bigint) / BASE_NANO_NUMBER,
-  ).toFixed(3);
+  let jettonBalanceNanoBigint = jetton_wallet_result.readBigNumber();
+
   //    ==================================================================
   //   todo:
   //   todo: 没有余额，卖个毛线
@@ -101,7 +98,7 @@ export async function handlerSellWithPercentage(
   //   todo:
   let sell_gas = 0.1;
   let payloadCell = buildBurnTokenMsg(
-    Number(jetton_balance_bigint) / BASE_NANO_NUMBER,
+    (Number(jettonBalanceNanoBigint) * sellPercentage) / 100 / BASE_NANO_NUMBER,
     userWalletAddress,
     3n,
   );
@@ -185,11 +182,15 @@ async function getJettonAddress(
     .endCell();
   let stack: TupleItem[] = [];
   stack.push({ type: "slice", cell: ownerAddressCell });
-  const master_tx = await client.runMethod(
+  const queryResult = await client.runMethod(
     Address.parse(masterAddress),
     "get_wallet_address",
     stack,
   );
-  let jetton_master_result = master_tx.stack;
+  if (queryResult && queryResult) {
+  }
+
+  let jetton_master_result = queryResult.stack;
+  console.info(jetton_master_result);
   return jetton_master_result.readAddress();
 }
