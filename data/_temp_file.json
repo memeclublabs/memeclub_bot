@@ -1,0 +1,58 @@
+{
+  "id": "5171958946011992799",
+  "from": {
+    "id": 5499157826,
+    "is_bot": false,
+    "first_name": "Andrew 💎",
+    "last_name": "Memeclub",
+    "username": "andrew_tonx",
+    "language_code": "en",
+    "is_premium": true
+  },
+  "message": {
+    "message_id": 102,
+    "from": {
+      "id": 7212911867,
+      "is_bot": true,
+      "first_name": "MemeClub AppBot",
+      "username": "MemeClubAppBot"
+    },
+    "chat": {
+      "id": 5499157826,
+      "first_name": "Andrew 💎",
+      "last_name": "Memeclub",
+      "username": "andrew_tonx",
+      "type": "private"
+    },
+    "text": "🎉 Add to group successfully.\n\n        - Group Name: Open Test Group\n        - Member Count: 4\n\n\n⭐Your Meme Points: + 200",
+    "entities": [
+      {
+        "offset": 0,
+        "length": 29,
+        "type": "bold"
+      },
+      {
+        "offset": 41,
+        "length": 10,
+        "type": "bold"
+      },
+      {
+        "offset": 79,
+        "length": 12,
+        "type": "bold"
+      }
+    ],
+    "reply_markup": {
+      "inline_keyboard": [
+        [
+          {
+            "text": "Step 2: Create new Memecoin",
+            "callback_data": "callback_create_meme_groupId_-1002103603147"
+          }
+        ]
+      ]
+    }
+  },
+  "chat_instance": "-4297927899653640723",
+  "data": "callback_create_meme_groupId_-1002103603147"
+}

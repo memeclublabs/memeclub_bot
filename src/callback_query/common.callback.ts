@@ -2,7 +2,7 @@ import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
 import { tonDeployMaster } from "../service/ton.deploy.master";
-import { sleep, waitNextSeqNo } from "../service/ton/util.helpers";
+import { waitNextSeqNo } from "../service/ton/util.helpers";
 import { memecoinDeployedNotify } from "./memecoin.deployed.notify";
 import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.sender";
 import { tonviewerUrl, toTonAddressStr } from "../com.utils";
@@ -13,6 +13,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
     console.info(
       "callback_query - start [",
       ctx.from?.username,
+      ctx.callbackQuery.data,
       JSON.stringify(ctx.callbackQuery),
       Date.now(),
     );
@@ -127,8 +128,15 @@ export function on_callback_query(bot: Bot<MyContext>) {
               },
             },
           );
+          console.info(
+            "⚠️⚠️ ⚠️ ⚠️ ⚠️⚠️   enter waitNextSeqNo ======>",
+            Date.now(),
+          );
           let { isNextSeq } = await waitNextSeqNo(opWallet, seqNo);
-          await sleep(10000);
+          console.info(
+            "⚠️⚠️ ⚠️ ⚠️ ⚠️⚠️  exit waitNextSeqNo ======>",
+            Date.now(),
+          );
           if (isNextSeq) {
             console.info(
               `Memecoin ${memecoin.id}-${memecoin.ticker} deployed.`,
@@ -208,6 +216,6 @@ export function on_callback_query(bot: Bot<MyContext>) {
       await next();
     }
 
-    console.info(`callback_query - start ]`, ctx.from?.username, Date.now());
+    console.info(`callback_query - end ]`, ctx.from?.username, Date.now());
   });
 }
