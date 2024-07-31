@@ -108,3 +108,6 @@ template1=# \l
 
 
 
+## PM2
+
+pm2 start app.js --name tgbot
