@@ -3,6 +3,10 @@ import { getConnector } from "../ton-connect/connector";
 import { formatTonAddressStr } from "../com.utils";
 import { getWallets } from "../ton-connect/wallets";
 import TonConnect, { CHAIN, toUserFriendlyAddress } from "@tonconnect/sdk";
+import {
+  addTGReturnStrategy,
+  convertDeeplinkToUniversalLink,
+} from "../ton-connect/utils";
 
 let newConnectRequestListenersMap = new Map<number, () => void>();
 
@@ -76,20 +80,19 @@ Address:\n${formatTonAddressStr(connector.wallet?.account.address!)}`,
   });
 
   // 获得 TG 内置钱包
-  // const tgWallet = wallets.find(
-  //   (wallet) => wallet.appName === "telegram-wallet",
-  // )!;
+  const tgWallet = wallets.find(
+    (wallet) => wallet.appName === "telegram-wallet",
+  )!;
 
-  let tgWalletLink = "";
-  // const universalLink = connector.connect(wallets);
-  // const tgWalletLink = tgWallet
-  //   ? addTGReturnStrategy(
-  //       convertDeeplinkToUniversalLink(universalLink, tgWallet?.universalLink),
-  //       process.env.TELEGRAM_BOT_LINK!,
-  //     )
-  //   : undefined;
-  // console.info("========== TG Wallet ============");
-  // console.info(tgWalletLink);
+  const universalLink = connector.connect(wallets);
+  const tgWalletLink = tgWallet
+    ? addTGReturnStrategy(
+        convertDeeplinkToUniversalLink(universalLink, tgWallet?.universalLink),
+        process.env.TELEGRAM_BOT_LINK!,
+      )
+    : undefined;
+  console.info("========== TG Wallet ============");
+  console.info(tgWalletLink);
 
   let inlineKeyboard = [
     [
@@ -100,14 +103,14 @@ Address:\n${formatTonAddressStr(connector.wallet?.account.address!)}`,
     ],
   ];
 
-  // if (tgWalletLink) {
-  //   inlineKeyboard.unshift([
-  //     {
-  //       text: "Connect TG Wallet",
-  //       url: tgWalletLink,
-  //     },
-  //   ]);
-  // }
+  if (tgWalletLink) {
+    inlineKeyboard.push([
+      {
+        text: "Connect Telegram Wallet",
+        url: tgWalletLink,
+      },
+    ]);
+  }
 
   let reply = await ctx.replyWithPhoto(
     "https://www.memeclub.ai/bot/ton-connect.png",
