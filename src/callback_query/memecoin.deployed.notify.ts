@@ -48,7 +48,7 @@ export async function memecoinDeployedNotify(
       buildMemecoinInfoText(
         memecoin,
         findGroup,
-        `🎉Memecoin ${memecoin.ticker} is ready to fair launch! 🚀`,
+        `🎉Memecoin #${memecoin.id} is ready to fair launch! 🚀`,
       ),
       {
         parse_mode: "HTML",

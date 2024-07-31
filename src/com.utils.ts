@@ -68,7 +68,7 @@ export function buildMemecoinInfoText(
   description?: string,
 ) {
   if (!title) {
-    title = `🤡 Memecoin ${memecoin.ticker} #${memecoin.id}`;
+    title = `🤡 Memecoin Information #${memecoin.id}`;
   }
 
   if (!description) {

@@ -2,7 +2,7 @@ import { MyContext } from "../global.types";
 import { getConnector } from "../ton-connect/connector";
 import { formatTonAddressStr } from "../com.utils";
 import { getWallets } from "../ton-connect/wallets";
-import TonConnect, { CHAIN } from "@tonconnect/sdk";
+import TonConnect, { CHAIN, toUserFriendlyAddress } from "@tonconnect/sdk";
 
 export async function tonConnectInfoKeyboard(
   ctx: MyContext,
@@ -17,14 +17,21 @@ export async function tonConnectInfoKeyboard(
     return { isConnected: true, connector: connector };
   }
 
+  let connectedWallet = connector.wallet;
   //上面判断过未连接钱包，下面就准备连接菜单
   // 1. 如果连接状态变化，wallet 不为空，说明连接成功
   connector.onStatusChange(async (wallet) => {
+    let hexAddress = wallet?.account?.address;
+    if (hexAddress) {
+      hexAddress = toUserFriendlyAddress(hexAddress);
+    }
+
+    console.info("OLD wallet", connectedWallet);
+
     console.info(
-      "connector.onStatusChange @use.ton-connect.ts ",
-      wallet?.device?.appName,
-      wallet?.account?.address,
+      `connector.onStatusChange ==> New App: ${wallet?.device?.appName}, Address: ${hexAddress} `,
     );
+
     if (wallet) {
       await ctx.reply(
         `<b>💎TON Wallet Connected!</b> \n
