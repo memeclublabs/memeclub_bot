@@ -4,35 +4,59 @@ import { formatTonAddressStr } from "../com.utils";
 import { getWallets } from "../ton-connect/wallets";
 import TonConnect, { CHAIN, toUserFriendlyAddress } from "@tonconnect/sdk";
 
+let newConnectRequestListenersMap = new Map<number, () => void>();
+
+// 如果是相同的回话进入
+//
+// newConnectRequestListenersMap.set(chatId, async () => {
+//     unsubscribe();
+//
+//     await deleteMessage();
+//
+//     newConnectRequestListenersMap.delete(chatId);
+// });
+
 export async function tonConnectInfoKeyboard(
   ctx: MyContext,
   chatId: number,
 ): Promise<{ isConnected: boolean; connector?: TonConnect }> {
   let result = { isConnected: false };
+  let messageWasDeleted = false;
 
-  let connector = getConnector(chatId);
+  // 注意⚠️：这一句先不执行，原方案是每次发起 connect 调用
+  // newConnectRequestListenersMap.get(chatId)?.();
+
+  // 当链接过期时，做 unsubscribe 操作，删除 map 中的变量，删除消息
+  let connector = getConnector(chatId, () => {
+    unsubscribe();
+    newConnectRequestListenersMap.delete(chatId);
+    deleteMessage();
+  });
+
   await connector.restoreConnection();
 
   if (connector.connected) {
     return { isConnected: true, connector: connector };
   }
 
-  let connectedWallet = connector.wallet;
   //上面判断过未连接钱包，下面就准备连接菜单
   // 1. 如果连接状态变化，wallet 不为空，说明连接成功
-  connector.onStatusChange(async (wallet) => {
+  let unsubscribe = connector.onStatusChange(async (wallet) => {
     let hexAddress = wallet?.account?.address;
     if (hexAddress) {
       hexAddress = toUserFriendlyAddress(hexAddress);
     }
-
-    console.info("OLD wallet", connectedWallet);
-
     console.info(
       `connector.onStatusChange ==> New App: ${wallet?.device?.appName}, Address: ${hexAddress} `,
     );
 
     if (wallet) {
+      await deleteMessage();
+      // ⚠️注意：当新的状态变化被处理过后， 取消状态变化的订阅
+      // ⚠️注意：当新的状态变化被处理过后， 取消状态变化的订阅
+      unsubscribe();
+      newConnectRequestListenersMap.delete(chatId);
+
       await ctx.reply(
         `<b>💎TON Wallet Connected!</b> \n
 Wallet: ${wallet?.device?.appName}
@@ -90,6 +114,27 @@ Address:\n${formatTonAddressStr(connector.wallet?.account.address!)}`,
       inline_keyboard: inlineKeyboard,
     },
   });
+
+  // -----------------------------------------------------------
+  const deleteMessage = async (): Promise<void> => {
+    if (!messageWasDeleted) {
+      messageWasDeleted = true;
+      try {
+        await ctx.deleteMessage();
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      console.info("messageWasDeleted ", ctx);
+    }
+  };
+
+  newConnectRequestListenersMap.set(chatId, async () => {
+    unsubscribe();
+    await deleteMessage();
+    newConnectRequestListenersMap.delete(chatId);
+  });
+  // -----------------------------------------------------------
 
   return result;
 }
