@@ -1,6 +1,7 @@
 import prisma from "../prisma";
 import { InlineKeyboard } from "grammy";
 import { MyContext } from "../global.types";
+import { buildMemecoinInfoText, contactAdminWithError } from "../com.utils";
 
 export async function processByCoinStatus(
   ctx: MyContext,
@@ -21,14 +22,21 @@ export async function processByCoinStatus(
           `callback_confirm_deploy_${findMemecoin.id}`,
         );
 
-        let textFor = `🔔<b>Memecoin for ${groupTitle}</b>
+        let findGroup = await prisma.group.findUnique({
+          where: { groupId: findMemecoin.groupId! },
+        });
+        if (!findGroup) {
+          await contactAdminWithError(ctx);
+          return;
+        }
 
-The group is already bound to this Memecoin, please confirm to create it.
-    
-       Name: ${findMemecoin.name}
-       Ticker: ${findMemecoin.ticker}
-       Description: ${findMemecoin.description}`;
-        await ctx.api.sendMessage(opIgId, textFor, {
+        let text = buildMemecoinInfoText(
+          findMemecoin,
+          findGroup,
+          `🐸 Memecoin for ${groupTitle}`,
+          "The group is already bound to this Memecoin, please confirm to create it.",
+        );
+        await ctx.api.sendMessage(opIgId, text, {
           parse_mode: "HTML",
           reply_markup: keyboard,
         });

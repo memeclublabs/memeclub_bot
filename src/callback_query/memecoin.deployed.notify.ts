@@ -3,7 +3,11 @@ import { MyContext } from "../global.types";
 import prisma from "../prisma";
 import { FROM_GROUP_VIEW_MEME } from "../com.static";
 import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.sender";
-import { botStatusValid, tonviewerUrl } from "../com.utils";
+import {
+  botStatusValid,
+  buildMemecoinInfoText,
+  tonviewerUrl,
+} from "../com.utils";
 
 export async function memecoinDeployedNotify(
   ctx: MyContext,
@@ -41,14 +45,11 @@ export async function memecoinDeployedNotify(
 
     await ctx.api.sendMessage(
       Number(memecoin.groupId),
-      `<b>🎉Memecoin ${memecoin.ticker} is ready to fair launch!🚀</b>\n
-
-Name: ${memecoin.name}
-Ticker: ${memecoin.ticker}
-Group: ${findGroup.groupTitle}
-Description: ${memecoin.description}\n
-
-`,
+      buildMemecoinInfoText(
+        memecoin,
+        findGroup,
+        `🎉Memecoin ${memecoin.ticker} is ready to fair launch!🚀`,
+      ),
       {
         parse_mode: "HTML",
         reply_markup: replyMarkupGroup,

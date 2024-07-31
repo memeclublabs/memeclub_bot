@@ -1,5 +1,6 @@
 import { Address } from "@ton/core";
 import { MyContext } from "./global.types";
+import { Group, Memecoin } from "@prisma/client";
 
 export function tonTestOnly() {
   return process.env.CHAIN_NETWORK == "Testnet";
@@ -54,4 +55,30 @@ export async function contactAdminWithError(ctx: MyContext, clue?: string) {
       "" +
       `[Clue: ${clue}]`,
   );
+}
+
+export function buildMemecoinInfoText(
+  memecoin: Memecoin,
+  group: Group,
+  title: string,
+  description?: string,
+) {
+  if (!title) {
+    title = `🤡 Memecoin ${memecoin.ticker} #${memecoin.id}`;
+  }
+
+  if (!description) {
+    description = "";
+  }
+
+  return `<b>${title}\n
+
+${description}
+
+Name: ${memecoin.name}
+Ticker: ${memecoin.ticker}
+Group: ${group.groupTitle} 👥(${group.memberCount})
+Description: ${memecoin.description}\n
+
+`;
 }

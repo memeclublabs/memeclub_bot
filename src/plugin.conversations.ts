@@ -4,7 +4,7 @@ import { conversations, createConversation } from "@grammyjs/conversations";
 import prisma from "./prisma";
 import { Prisma } from "@prisma/client";
 import { processByCoinStatus } from "./service/memecoin.process.by.status";
-import { bigintReplacer } from "./com.utils";
+import { bigintReplacer, buildMemecoinInfoText } from "./com.utils";
 
 export function use_conversations_plugin(bot: Bot<MyContext>) {
   // WARN: must run after sessions plugin
@@ -145,11 +145,11 @@ async function newMemeWithValidation(
         );
 
         await ctx.reply(
-          `🔔<b>New Memecoin Information</b>
-      
-         Name: ${name}
-         Ticker: ${ticker}
-         Description: ${desc}`,
+          buildMemecoinInfoText(
+            newMemecoin,
+            updateGroup,
+            "🔔New Memecoin Information",
+          ),
           { parse_mode: "HTML", reply_markup: keyboard },
         );
       });

@@ -16,7 +16,7 @@
     "ts-node": "ts-node ./src/main.pull.ts",
     "compile_ts_2_js": "npx rimraf dist && npx tsc",
     "run_with_node": "node ./dist/main.pull.js",
-    "start:daemon": "pm2 start --name tgbot ./dist/main.pull.js",
+    "start:daemon": "npx rimraf dist && npx tsc && pm2 start --name tgbot ./dist/main.pull.js",
     "stop:daemon": "pm2 stop tgbot && pm2 delete tgbot",
     "logs:daemon": "pm2 logs",
     "show:daemon": "pm2 show tgbot",
