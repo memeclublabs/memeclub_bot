@@ -27,6 +27,6 @@ export async function handlerClickSellBtn(ctx: MyContext, memecoinId: number) {
     .text("75%", `click_sell_memecoin_${findMeme.id}_percentage_75`)
     .text("100%", `click_sell_memecoin_${findMeme.id}_percentage_100`);
 
-  let text = buildMemecoinInfoText(findMeme, findGroup, "🟢 Buy Memecoin");
+  let text = buildMemecoinInfoText(findMeme, findGroup, "🔴 Sell Memecoin");
   await ctx.reply(text, { parse_mode: "HTML", reply_markup: inlineKeyboard });
 }

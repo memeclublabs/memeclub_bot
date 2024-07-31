@@ -68,7 +68,8 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
       console.info("DEBUG: ======== click [💎 My Wallet]", start);
       const chatId = ctx.msg?.chat.id;
       if (chatId) {
-        await tonConnectInfoKeyboard(ctx, chatId);
+        let { isConnected } = await tonConnectInfoKeyboard(ctx, chatId);
+        console.info("wallet connection:", isConnected);
       } else {
         console.error("call 💎 My Wallet - chatId is null");
       }

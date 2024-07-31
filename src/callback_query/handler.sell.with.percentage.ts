@@ -28,11 +28,7 @@ export async function handlerSellWithPercentage(
     await contactAdminWithError(ctx);
     return;
   }
-  let { isConnected, connector } = await tonConnectInfoKeyboard(
-    ctx,
-    chatId,
-    false,
-  );
+  let { isConnected, connector } = await tonConnectInfoKeyboard(ctx, chatId);
   if (!isConnected) {
     return;
   }

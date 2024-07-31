@@ -7,7 +7,6 @@ import TonConnect, { CHAIN } from "@tonconnect/sdk";
 export async function tonConnectInfoKeyboard(
   ctx: MyContext,
   chatId: number,
-  replyOfConnected: boolean = true,
 ): Promise<{ isConnected: boolean; connector?: TonConnect }> {
   let result = { isConnected: false };
 
@@ -15,11 +14,6 @@ export async function tonConnectInfoKeyboard(
   await connector.restoreConnection();
 
   if (connector.connected) {
-    if (replyOfConnected) {
-      await ctx.reply(
-        `TON Wallet connected! \n\nAddress: ${formatTonAddressStr(connector.wallet?.account.address!)}`,
-      );
-    }
     return { isConnected: true, connector: connector };
   }
 
