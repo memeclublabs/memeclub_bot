@@ -25,7 +25,6 @@ export function on_callback_query(bot: Bot<MyContext>) {
       "callback_query - start [",
       ctx.from?.username,
       ctx.callbackQuery.data,
-      JSON.stringify(ctx.callbackQuery),
       Date.now(),
     );
     const callbackData = ctx.callbackQuery.data;
