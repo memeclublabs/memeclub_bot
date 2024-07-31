@@ -12,6 +12,8 @@ import {
 } from "../com.utils";
 import { handlerClickBuyBtn } from "./handler.click.buy.btn";
 import { handlerBuyWithTon } from "./handler.buy.with.ton";
+import { handlerClickSellBtn } from "./handler.click.sell.btn";
+import { handlerSellWithPercentage } from "./handler.sell.with.percentage";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   //  下面的方法可以监控具体的 callback_data 的值进行处理
@@ -197,8 +199,8 @@ export function on_callback_query(bot: Bot<MyContext>) {
       let memecoinId = callbackData.split(
         "callback_in_group_click_memecoinId_",
       )[1];
-    } else if (callbackData.startsWith("callback_buy_memecoin_")) {
-      let memecoinId = callbackData.split("callback_buy_memecoin_")[1];
+    } else if (callbackData.startsWith("callback_click_buy_btn_")) {
+      let memecoinId = callbackData.split("callback_click_buy_btn_")[1];
       if (!memecoinId) {
         await contactAdminWithError(ctx, callbackData);
       }
@@ -209,7 +211,22 @@ export function on_callback_query(bot: Bot<MyContext>) {
       let memecoinId = memecoinInfo.split("click_buy_memecoin_")[1];
       let tonAmt = callbackData.split("_with_ton_")[1];
       await handlerBuyWithTon(ctx, Number(memecoinId), Number(tonAmt));
-    } else if (callbackData.startsWith("callback_sell_memecoin_")) {
+    } else if (callbackData.startsWith("callback_click_sell_btn_")) {
+      let memecoinId = callbackData.split("callback_click_sell_btn_")[1];
+      if (!memecoinId) {
+        await contactAdminWithError(ctx, callbackData);
+      }
+      await handlerClickSellBtn(ctx, Number(memecoinId));
+    } else if (callbackData.startsWith("click_sell_memecoin_")) {
+      //click_sell_memecoin_12_percentage_50
+      let memecoinInfo = callbackData.split("_percentage_")[0];
+      let memecoinId = memecoinInfo.split("click_sell_memecoin_")[1];
+      let sellPercentage = callbackData.split("_percentage_")[1];
+      await handlerSellWithPercentage(
+        ctx,
+        Number(memecoinId),
+        Number(sellPercentage),
+      );
     } else if (callbackData.startsWith("callback_show_memecoin_info_")) {
       let memecoinId = callbackData.split("callback_show_memecoin_info_")[1];
 

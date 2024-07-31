@@ -6,6 +6,10 @@ export function tonTestOnly() {
   return process.env.CHAIN_NETWORK == "Testnet";
 }
 
+export function isMainnet() {
+  return !tonTestOnly();
+}
+
 export function tonNetwork() {
   return tonTestOnly() ? "Testnet" : "Mainnet";
 }

@@ -68,11 +68,11 @@ export async function sendPrivateChatMemecoinInfo(
     [
       {
         text: "🟢 Buy",
-        callback_data: `callback_buy_memecoin_${memecoin?.id}`,
+        callback_data: `callback_click_buy_btn_${memecoin?.id}`,
       },
       {
         text: "🔴 Sell",
-        callback_data: `callback_sell_memecoin_${memecoin?.id}`,
+        callback_data: `callback_click_sell_btn_${memecoin?.id}`,
       },
     ],
   ];

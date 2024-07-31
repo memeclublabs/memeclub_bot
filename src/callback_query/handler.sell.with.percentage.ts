@@ -1,21 +1,27 @@
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
-import { contactAdminWithError, tonTestOnly } from "../com.utils";
+import { contactAdminWithError, isMainnet, tonTestOnly } from "../com.utils";
 import { tonConnectInfoKeyboard } from "../service/use.ton-connect";
-import { isTelegramUrl, UserRejectsError } from "@tonconnect/sdk";
+import { TonClient, TupleItem } from "@ton/ton";
+import {
+  BASE_NANO_NUMBER,
+  ENDPOINT_MAINNET_RPC,
+  ENDPOINT_TESTNET_RPC,
+} from "../com.static";
+import { Address, beginCell, toNano } from "@ton/core";
 import {
   addTGReturnStrategy,
   pTimeout,
   pTimeoutException,
 } from "../ton-connect/utils";
+import { isTelegramUrl, UserRejectsError } from "@tonconnect/sdk";
 import { getWalletInfo } from "../ton-connect/wallets";
-import { Address, fromNano, toNano } from "@ton/core";
-import { buildBuyTokenMsg } from "../service/ton/dex/message/masterMsg";
+import { buildBurnTokenMsg } from "../service/ton/dex/message/walletMsg";
 
-export async function handlerBuyWithTon(
+export async function handlerSellWithPercentage(
   ctx: MyContext,
   memecoinId: number,
-  tonAmt: number,
+  sellPercentage: number,
 ) {
   const chatId = ctx.from?.id;
   if (!chatId) {
@@ -51,15 +57,55 @@ export async function handlerBuyWithTon(
     return;
   }
 
-  let buyGasFee = 0.1; //0.1 TON
-  let gasAndTonAmount = toNano(tonAmt + buyGasFee);
-  console.log("gasAndTonAmount:", fromNano(gasAndTonAmount));
+  //    ==================================================================
 
-  let toAddress = Address.parse(findMeme.masterAddress!);
+  const client = new TonClient({
+    endpoint: isMainnet() ? ENDPOINT_MAINNET_RPC : ENDPOINT_TESTNET_RPC,
+  });
 
-  let payloadCell = buildBuyTokenMsg(tonAmt, 0n);
+  // ------------
+  let userWalletAddressStr = connector.account?.address;
+
+  if (!userWalletAddressStr) {
+    await contactAdminWithError(
+      ctx,
+      `userWallet address ${userWalletAddressStr}`,
+    );
+    return;
+  }
+  let userWalletAddress = Address.parse(userWalletAddressStr!);
+
+  let jettonWalletAddress = await getJettonAddress(
+    findMeme.masterAddress!,
+    userWalletAddressStr!,
+    client,
+  );
+  // ------------
+
+  const jetton_wallet_tx = await client.runMethod(
+    jettonWalletAddress,
+    "get_wallet_data",
+  );
+  let jetton_wallet_result = jetton_wallet_tx.stack;
+  let jetton_balance_bigint = jetton_wallet_result.readBigNumber();
+  let jettonBalance: string = Number(
+    Number(jetton_balance_bigint) / BASE_NANO_NUMBER,
+  ).toFixed(3);
+  //    ==================================================================
+  //   todo:
+  //   todo: 没有余额，卖个毛线
+  //   todo: 没有余额，卖个毛线
+  //   todo: 没有余额，卖个毛线
+  //   todo: 没有余额，卖个毛线
+  //   todo:
+  //   todo:
+  let sell_gas = 0.1;
+  let payloadCell = buildBurnTokenMsg(
+    Number(jetton_balance_bigint) / BASE_NANO_NUMBER,
+    userWalletAddress,
+    3n,
+  );
   let payloadBase64 = payloadCell.toBoc().toString("base64");
-
   pTimeout(
     connector.sendTransaction({
       validUntil: Math.round(
@@ -68,11 +114,11 @@ export async function handlerBuyWithTon(
       ),
       messages: [
         {
-          address: toAddress.toString({
-            bounceable: false,
+          address: jettonWalletAddress.toString({
+            bounceable: true,
             testOnly: tonTestOnly(),
           }),
-          amount: "" + gasAndTonAmount,
+          amount: "" + toNano(sell_gas),
           payload: payloadBase64,
         },
       ],
@@ -127,4 +173,23 @@ export async function handlerBuyWithTon(
       },
     },
   );
+}
+
+async function getJettonAddress(
+  masterAddress: string,
+  walletAddress: string,
+  client: TonClient,
+): Promise<Address> {
+  let ownerAddressCell = beginCell()
+    .storeAddress(Address.parse(walletAddress))
+    .endCell();
+  let stack: TupleItem[] = [];
+  stack.push({ type: "slice", cell: ownerAddressCell });
+  const master_tx = await client.runMethod(
+    Address.parse(masterAddress),
+    "get_wallet_address",
+    stack,
+  );
+  let jetton_master_result = master_tx.stack;
+  return jetton_master_result.readAddress();
 }
