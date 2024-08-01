@@ -16,26 +16,30 @@ export const walletMenuCallbacks = {
 };
 async function onChooseWalletClick(ctx: MyContext, _: string): Promise<void> {
   const wallets = await getWallets();
+  let selectedApp = ["telegram-wallet", "tonkeeper", "mytonwallet", "tonhub"];
+  let selected = wallets
+    .filter((wallet) => selectedApp.includes(wallet.appName))
+    .map((wallet) => ({
+      text: wallet.name,
+      callback_data: JSON.stringify({
+        method: "select_wallet",
+        data: wallet.appName,
+      }),
+    }))
+    .map((app) => [app]);
+
+  selected.push([
+    {
+      text: "« Back",
+      callback_data: JSON.stringify({
+        method: "universal_qr",
+      }),
+    },
+  ]);
 
   await ctx.editMessageReplyMarkup({
     reply_markup: {
-      inline_keyboard: [
-        wallets.map((wallet) => ({
-          text: wallet.name,
-          callback_data: JSON.stringify({
-            method: "select_wallet",
-            data: wallet.appName,
-          }),
-        })),
-        [
-          {
-            text: "« Back",
-            callback_data: JSON.stringify({
-              method: "universal_qr",
-            }),
-          },
-        ],
-      ],
+      inline_keyboard: selected,
     },
   });
 }
@@ -55,6 +59,7 @@ async function onOpenUniversalQRClick(
 
   if (connector.connected) {
     await ctx.deleteMessage();
+    return;
   }
 
   const link = connector.connect(wallets);
