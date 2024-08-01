@@ -16,7 +16,8 @@ import { on_chat_member } from "./member/chat_member";
 // ===========================================================================
 //                        Bot Init Section Start
 
-dotenv.config(); // Load the environment variables
+// Load the environment variables
+dotenv.config();
 let config = {};
 
 if (process.env.NODE_ENV === "dev") {

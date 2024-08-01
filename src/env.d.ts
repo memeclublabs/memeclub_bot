@@ -10,5 +10,6 @@ declare namespace NodeJS {
     TELEGRAM_BOT_TOKEN: string;
     TELEGRAM_BOT_NAME: string;
     TELEGRAM_BOT_LINK: string;
+    BACKEND_SERVICE_URL: string;
   }
 }

@@ -110,6 +110,17 @@ async function newMemeWithValidation(
         let ticker = tickerFormat(tickerMsg?.message?.text);
         let desc = descFormat(descMsg?.message?.text);
         let photos = photoMsg?.message?.photo;
+        if (photos && photos.length > 0) {
+          const largestPhoto = photos[photos.length - 1]; // 获取分辨率最高的照片
+
+          // 获取文件ID
+          const fileId = largestPhoto.file_id;
+          // 获取文件链接
+          const fileLink = await ctx.api.getFile(fileId);
+
+          // 处理照片，例如下载或保存
+          console.log("Photo received:", fileLink);
+        }
 
         let devTgId = nameMsg?.message?.from.id;
 
