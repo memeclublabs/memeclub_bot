@@ -79,12 +79,12 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
   );
 
   const deleteMessage = async (): Promise<void> => {
-    if (!messageWasDeleted) {
-      messageWasDeleted = true;
-
-      await ctx.deleteMessage();
-      // await ctx.deleteMessage(chatId, botMessage.message_id);
-    }
+    // if (!messageWasDeleted) {
+    //   messageWasDeleted = true;
+    //
+    //   await ctx.deleteMessage();
+    //   // await ctx.deleteMessage(chatId, botMessage.message_id);
+    // }
   };
 
   newConnectRequestListenersMap.set(chatId, async () => {
