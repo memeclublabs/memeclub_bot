@@ -74,6 +74,10 @@ async function onWalletClick(ctx: MyContext, data: string): Promise<void> {
   }
 
   const connector = getConnector(chatId);
+  if (connector.connected) {
+    console.error("Already connected", connector);
+    return;
+  }
 
   const selectedWallet = await getWalletInfo(data);
   if (!selectedWallet) {

@@ -4,11 +4,6 @@ import { createMemeConversation } from "./processor.meme.creator";
 import { walletMenuCallbacks } from "../service/ton-connect-wallet-menu";
 
 export function on_callback_query(bot: Bot<MyContext>) {
-  //  下面的方法可以监控具体的 callback_data 的值进行处理
-  // bot.callbackQuery("具体的callback_data", async (ctx) => {
-  //   await ctx.conversation.enter("newMemeWithValidation");
-  // });
-
   const callbacks = {
     createMemeConversation: createMemeConversation,
     ...walletMenuCallbacks,
