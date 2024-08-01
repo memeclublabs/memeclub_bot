@@ -42,9 +42,9 @@ async function movie(conversation: MyConversation, ctx: MyContext) {
 }
 
 /**
- * - name: name too long: it must be less than 32 characters
- * - ticker: ticker must be less than 11 characters
- * - desc: description must be less than 256 characters
+ * - name: name too long: it must be less than 16 characters
+ * - ticker: ticker must be less than 8 characters
+ * - desc: description must be less than 128 characters
  *
  * @param conversation
  * @param ctx
@@ -106,9 +106,9 @@ async function newMemeWithValidation(
       const photoMsg = await conversation.waitFor(":photo");
 
       await conversation.external(async () => {
-        let name = nameMsg?.message?.text;
-        let ticker = tickerMsg?.message?.text;
-        let desc = descMsg?.message?.text;
+        let name = nameFormat(nameMsg?.message?.text);
+        let ticker = tickerFormat(tickerMsg?.message?.text);
+        let desc = descFormat(descMsg?.message?.text);
         let photos = photoMsg?.message?.photo;
 
         let devTgId = nameMsg?.message?.from.id;
@@ -173,4 +173,49 @@ async function newMemeWithValidation(
       `🔴 Cannot find group info ${groupIdStr}, pls contact memeclub helpdesk! ☎️`,
     );
   }
+}
+
+// 接受一个字符串，删除其中的除了字母和数字和空格以外的其他字符，如果最终的结果超过 16 个字符，截取前面 16 个字符返回
+function nameFormat(input: string | null | undefined): string {
+  if (!input) {
+    return "404: Name not found";
+  }
+
+  let cleanedString = input.replace(/[^a-zA-Z0-9 ]/g, "");
+
+  if (cleanedString.length > 16) {
+    cleanedString = cleanedString.substring(0, 16);
+  }
+
+  return cleanedString;
+}
+
+function descFormat(input: string | null | undefined): string {
+  if (!input) {
+    return "404: Description not found.";
+  }
+
+  let cleanedString = input.replace(/[^a-zA-Z0-9 ]/g, "");
+
+  if (cleanedString.length > 128) {
+    cleanedString = cleanedString.substring(0, 128);
+  }
+
+  return cleanedString;
+}
+
+//删除其中的除了字母和数字以外的其他字符，如果最终的结果超过8个字符，截取前面 8 个字符返回
+function tickerFormat(input: string | null | undefined): string {
+  if (!input) {
+    return "Ticker404";
+  }
+  // 使用正则表达式删除所有除了字母和数字以外的字符
+  let cleanedString = input.replace(/[^a-zA-Z0-9]/g, "");
+
+  // 如果结果超过8个字符，截取前面8个字符
+  if (cleanedString.length > 8) {
+    cleanedString = cleanedString.substring(0, 8);
+  }
+
+  return cleanedString;
 }
