@@ -15,7 +15,7 @@ import { handlerBuyWithTon } from "./handler.buy.with.ton";
 import { handlerClickSellBtn } from "./handler.click.sell.btn";
 import { handlerSellWithPercentage } from "./handler.sell.with.percentage";
 import { createMemeConversation } from "./processor.meme.creator";
-import { walletMenuCallbacks } from "../main.local";
+import { walletMenuCallbacks } from "../service/ton-connect-wallet-menu";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   //  下面的方法可以监控具体的 callback_data 的值进行处理
@@ -56,32 +56,16 @@ export function on_callback_query(bot: Bot<MyContext>) {
     }
 
     if (!callbacks[request.method as keyof typeof callbacks]) {
+      await next();
       return;
+    } else {
+      await callbacks[request.method as keyof typeof callbacks](
+        ctx,
+        request.data,
+      );
     }
 
-    await callbacks[request.method as keyof typeof callbacks](
-      ctx,
-      request.data,
-    );
-
-    if (callbackData.startsWith("callback_create_meme_groupId_")) {
-      // 点击 [Step 2: Create new Memecoin] 按钮会进入这个方法处理，按钮附带了 groupId 参数
-      // chatId 参数将会放到 session 中才可以传递给 conversation
-      // conversation 处理方法将从 session 中获取 groupId
-      let groupIdFromSession = callbackData.split(
-        "callback_create_meme_groupId_",
-      )[1];
-      if (!groupIdFromSession) {
-        console.error(
-          "Cannot find group info when click Step2 button",
-          callbackData,
-        );
-        await ctx.reply(
-          "Cannot find group info, pls contact memeclub helpdesk!",
-        );
-        return;
-      }
-    } else if (callbackData.startsWith("callback_confirm_deploy_")) {
+    if (callbackData.startsWith("callback_confirm_deploy_")) {
       console.info(" Click 🚀【Confirm to Create Memecoin】", callbackData);
       await ctx.reply(
         "The memecoin is deploying to the blockchain network, please wait…",
