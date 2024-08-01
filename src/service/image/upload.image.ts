@@ -7,7 +7,7 @@ export const uploadImageToGetUrl = async (
   imageUrl: string,
 ): Promise<string | undefined> => {
   const filename = path.basename(imageUrl);
-  const localFilePath = path.join(__dirname, "../../../data", filename);
+  const localFilePath = path.join(__dirname, filename);
 
   try {
     console.log(`Downloading image from ${imageUrl}...`);
