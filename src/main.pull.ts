@@ -38,8 +38,6 @@ export const bot = new Bot<MyContext>(token, config);
 
 // ===========================================================================
 //                        Main Start
-//
-on_callback_query(bot);
 
 // ⚠️⚠️⚠️ Make sure that you install all menus before other middleware, especially before middleware that uses callback query data
 // ⚠️⚠️⚠️ 请确保在其他中间件之前安装所有菜单，尤其是在使用回调查询数据的中间件之前
@@ -55,6 +53,8 @@ on_chat_member(bot);
 on_my_chat_member(bot);
 
 bind_command(bot);
+
+on_callback_query(bot);
 
 on_message(bot);
 

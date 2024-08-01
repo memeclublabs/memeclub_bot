@@ -3,14 +3,15 @@ import { handlerBuyWithTon } from "./handler.buy.with.ton";
 
 export async function clickBuyWithTon(
   ctx: MyContext,
-  json: string,
+  data: string,
 ): Promise<void> {
-  let request: { memecoinId: number; tonAmt: number };
   try {
-    request = JSON.parse(json);
+    let split = data.split("###");
+    let memecoinId = Number(split[0]);
+    let tonAmt = Number(split[1]);
+    await handlerBuyWithTon(ctx, memecoinId, tonAmt);
   } catch {
-    console.error("ERROR: clickBuyWithTon", json);
+    console.error("ERROR: clickBuyWithTon", data);
     return;
   }
-  await handlerBuyWithTon(ctx, request.memecoinId, request.tonAmt);
 }

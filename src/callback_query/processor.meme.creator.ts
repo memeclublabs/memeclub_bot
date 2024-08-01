@@ -4,6 +4,7 @@ export async function createMemeConversation(
   ctx: MyContext,
   groupId: string,
 ): Promise<void> {
-  ctx.session.groupId = Number(groupId);
+  let groupId1 = Number(groupId);
+  ctx.session.groupId = groupId1;
   await ctx.conversation.enter("newMemeWithValidation");
 }

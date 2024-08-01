@@ -24,30 +24,30 @@ export async function handlerClickSellBtn(ctx: MyContext, memecoinId: number) {
     .text(
       "25%",
       JSON.stringify({
-        method: "processorClickSellWithPercentage",
-        data: { json: { memecoinId: Number(findMeme.id), percentage: 25 } },
+        method: "clickSellWithPercentage",
+        data: `${findMeme.id}###25`,
       }),
     )
     .text(
       "50%",
       JSON.stringify({
-        method: "processorClickSellWithPercentage",
-        data: { json: { memecoinId: Number(findMeme.id), percentage: 50 } },
+        method: "clickSellWithPercentage",
+        data: `${findMeme.id}###50`,
       }),
     )
     .row()
     .text(
       "75%",
       JSON.stringify({
-        method: "processorClickSellWithPercentage",
-        data: { json: { memecoinId: Number(findMeme.id), percentage: 75 } },
+        method: "clickSellWithPercentage",
+        data: `${findMeme.id}###75`,
       }),
     )
     .text(
       "100%",
       JSON.stringify({
-        method: "processorClickSellWithPercentage",
-        data: { json: { memecoinId: Number(findMeme.id), percentage: 100 } },
+        method: "clickSellWithPercentage",
+        data: `${findMeme.id}###100`,
       }),
     );
 

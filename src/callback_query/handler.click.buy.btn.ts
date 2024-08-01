@@ -25,29 +25,43 @@ export async function handlerClickBuyBtn(ctx: MyContext, memecoinId: number) {
       "1 TON",
       JSON.stringify({
         method: "clickBuyWithTon",
-        data: { json: { memecoinId: Number(findMeme.id), tonAmt: 2 } },
+        data: `${findMeme.id}###1`,
       }),
     )
     .text(
       "5 TON",
       JSON.stringify({
         method: "clickBuyWithTon",
-        data: { json: { memecoinId: Number(findMeme.id), tonAmt: 5 } },
+        data: `${findMeme.id}###5`,
+      }),
+    )
+    .text(
+      "10 TON",
+      JSON.stringify({
+        method: "clickBuyWithTon",
+        data: `${findMeme.id}###10`,
       }),
     )
     .row()
     .text(
+      "25 TON",
+      JSON.stringify({
+        method: "clickBuyWithTon",
+        data: `${findMeme.id}###25`,
+      }),
+    )
+    .text(
       "50 TON",
       JSON.stringify({
         method: "clickBuyWithTon",
-        data: { json: { memecoinId: Number(findMeme.id), tonAmt: 50 } },
+        data: `${findMeme.id}###50`,
       }),
     )
     .text(
       "100 TON",
       JSON.stringify({
         method: "clickBuyWithTon",
-        data: { json: { memecoinId: Number(findMeme.id), tonAmt: 0.1 } },
+        data: `${findMeme.id}###0.1`,
       }),
     );
   let text = buildMemecoinInfoText(

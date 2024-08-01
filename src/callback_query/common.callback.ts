@@ -6,7 +6,7 @@ import { confirmDeploy } from "./processor.confirm.deploy";
 import { processorClickBuyBtn } from "./processor.click.buy.btn";
 import { processorClickSellBtn } from "./processor.click.sell.btn";
 import { clickBuyWithTon } from "./processor.click.buy.with.ton";
-import { processorClickSellWithPercentage } from "./processor.click.sell.with.percentage";
+import { clickSellWithPercentage } from "./processor.click.sell.with.percentage";
 import { processorShowMemecoinInfo } from "./processor.show.memecoin.info";
 
 export function on_callback_query(bot: Bot<MyContext>) {
@@ -17,7 +17,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
     processorClickBuyBtn: processorClickBuyBtn,
     processorClickSellBtn: processorClickSellBtn,
     clickBuyWithTon: clickBuyWithTon,
-    processorClickSellWithPercentage: processorClickSellWithPercentage,
+    clickSellWithPercentage: clickSellWithPercentage,
     ...walletMenuCallbacks,
   };
 

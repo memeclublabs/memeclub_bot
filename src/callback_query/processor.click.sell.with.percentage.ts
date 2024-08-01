@@ -1,16 +1,17 @@
 import { MyContext } from "../global.types";
 import { handlerSellWithPercentage } from "./handler.sell.with.percentage";
 
-export async function processorClickSellWithPercentage(
+export async function clickSellWithPercentage(
   ctx: MyContext,
-  json: string,
+  data: string,
 ): Promise<void> {
-  let request: { memecoinId: number; percentage: number };
   try {
-    request = JSON.parse(json);
+    let split = data.split("###");
+    let memecoinId = Number(split[0]);
+    let percentage = Number(split[1]);
+    await handlerSellWithPercentage(ctx, memecoinId, percentage);
   } catch {
-    console.error("ERROR: processorClickSellWithPercentage", json);
+    console.error("ERROR: clickSellWithPercentage", data);
     return;
   }
-  await handlerSellWithPercentage(ctx, request.memecoinId, request.percentage);
 }
