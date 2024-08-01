@@ -43,6 +43,7 @@
     "@types/qrcode": "^1.5.5",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
+    "form-data": "^4.0.0",
     "grammy": "^1.27.0",
     "nodemon": "^3.1.4",
     "qrcode": "^1.5.3",
