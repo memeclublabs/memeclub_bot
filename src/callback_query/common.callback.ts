@@ -14,12 +14,17 @@ import { handlerClickBuyBtn } from "./handler.click.buy.btn";
 import { handlerBuyWithTon } from "./handler.buy.with.ton";
 import { handlerClickSellBtn } from "./handler.click.sell.btn";
 import { handlerSellWithPercentage } from "./handler.sell.with.percentage";
+import { walletMenuCallbacks } from "../service/ton-connect-wallet-menu";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   //  下面的方法可以监控具体的 callback_data 的值进行处理
   // bot.callbackQuery("具体的callback_data", async (ctx) => {
   //   await ctx.conversation.enter("newMemeWithValidation");
   // });
+
+  const callbacks = {
+    ...walletMenuCallbacks,
+  };
 
   // 处理通用的按钮点击事件 callback_query
   bot.on("callback_query", async (ctx, next) => {
@@ -34,6 +39,24 @@ export function on_callback_query(bot: Bot<MyContext>) {
       console.error("ERROR: callback_query data is null!");
       return;
     }
+
+    let request: { method: string; data: string };
+
+    try {
+      request = JSON.parse(callbackData);
+    } catch {
+      console.error(
+        "ERROR: callback_query data is not a valid JSON.",
+        callbackData,
+      );
+      return;
+    }
+
+    if (!callbacks[request.method as keyof typeof callbacks]) {
+      return;
+    }
+
+    callbacks[request.method as keyof typeof callbacks](ctx, request.data);
 
     if (callbackData.startsWith("callback_create_meme_groupId_")) {
       // 点击 [Step 2: Create new Memecoin] 按钮会进入这个方法处理，按钮附带了 groupId 参数

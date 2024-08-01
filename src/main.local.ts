@@ -1,13 +1,16 @@
-import { getWalletInfo, getWallets } from "./ton-connect/wallets";
-
 console.info(Math.floor(Math.random() * 100001));
 
+export const walletMenuCallbacks = {
+  chose_wallet: () => {},
+  select_wallet: () => {},
+  universal_qr: () => {},
+};
+
+const callbacks = {
+  ...walletMenuCallbacks,
+};
+
 (async () => {
-  let walletInfoRemotes = await getWallets();
-
-  console.info(walletInfoRemotes);
-
-  let tk = await getWalletInfo("Tonkeeper");
-
-  console.info(tk);
+  let newVar = typeof callbacks;
+  let selectWallet = "notkey" as keyof typeof callbacks;
 })();
