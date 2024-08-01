@@ -5,7 +5,6 @@ import {
   UserRejectsError,
 } from "@tonconnect/sdk";
 import { getWalletInfo, getWallets } from "./ton-connect/wallets";
-import QRCode from "qrcode";
 import { getConnector } from "./ton-connect/connector";
 import {
   addTGReturnStrategy,
@@ -26,7 +25,23 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
   }
   let messageWasDeleted = false;
 
+  console.info(
+    `##### 1. ######  handleConnectCommand ${chatId} `,
+    ctx.msg?.from?.username,
+  );
+
+  console.info(
+    `##### 2. ######  newConnectRequestListenersMap ${chatId} `,
+    ctx.msg?.from?.username,
+    Date.now(),
+  );
   newConnectRequestListenersMap.get(chatId)?.();
+
+  console.info(
+    `##### 2.1. ######  already clear cache ${chatId} `,
+    ctx.msg?.from?.username,
+    Date.now(),
+  );
 
   const connector = getConnector(chatId, () => {
     unsubscribe();
@@ -34,7 +49,20 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
     deleteMessage();
   });
 
+  console.info(
+    `##### 3. ######  connector ${chatId} `,
+    ctx.msg?.from?.username,
+    Date.now(),
+  );
+
   await connector.restoreConnection();
+
+  console.info(
+    `##### 4. ######  restoreConnection ${chatId} `,
+    ctx.msg?.from?.username,
+    connector.connected,
+    Date.now(),
+  );
   if (connector.connected) {
     const connectedName =
       (await getWalletInfo(connector.wallet!.device.appName))?.name ||
@@ -49,7 +77,16 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
     return;
   }
 
+  console.info(
+    `##### 5. ######  onStatusChange ${chatId} `,
+    ctx.msg?.from?.username,
+    connector.connected,
+    Date.now(),
+  );
+
   const unsubscribe = connector.onStatusChange(async (wallet) => {
+    console.info("connector.onStatusChange.....");
+
     if (wallet) {
       await deleteMessage();
 
@@ -65,7 +102,6 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
   const wallets = await getWallets();
 
   const link = connector.connect(wallets);
-  const image = await QRCode.toBuffer(link);
 
   const keyboard = await buildUniversalKeyboard(link, wallets);
 
