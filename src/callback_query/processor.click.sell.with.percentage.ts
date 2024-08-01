@@ -16,6 +16,7 @@ import {
 } from "../service/ton-connect/ton-connect-utils";
 import { isTelegramUrl, UserRejectsError } from "@tonconnect/sdk";
 import { getWalletInfo } from "../service/ton-connect/wallets";
+import { getConnector } from "../service/ton-connect/connector";
 
 export async function clickSellWithPercentage(
   ctx: MyContext,
@@ -42,13 +43,10 @@ export async function handlerSellWithPercentage(
     await contactAdminWithError(ctx);
     return;
   }
-  // let { isConnected, connector } = await tonConnectInfoKeyboard(ctx, tgId);
-  let isConnected: any = false;
-  let connector: any = null;
-  if (!isConnected) {
-    return;
-  }
-  if (!connector) {
+  const connector = getConnector(chatId);
+  await connector.restoreConnection();
+  if (!connector.connected) {
+    await ctx.reply("Connect wallet to send transaction");
     return;
   }
 

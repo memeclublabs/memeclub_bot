@@ -98,7 +98,7 @@ async function handlerBuyWithTon(
       let buyNotice2Group =
         "<b>🟢 Big Pump </b>\n" +
         `${findUser.firstName} ${findUser.lastName}` +
-        `buy ${tonAmt} TON of ${findMeme.name}(${findMeme.ticker})`;
+        ` buy ${tonAmt} TON of ${findMeme.name}(${findMeme.ticker})`;
       await ctx.api.sendMessage(Number(findMeme.groupId), buyNotice2Group, {
         parse_mode: "HTML",
       });
