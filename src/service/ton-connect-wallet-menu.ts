@@ -44,46 +44,7 @@ async function onOpenUniversalQRClick(
   ctx: MyContext,
   _: string,
 ): Promise<void> {
-  const chatId = ctx.msg?.from?.id;
-  if (ctx.from?.id != ctx.msg?.from?.id) {
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-  } else {
-    console.info(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-  }
+  const chatId = ctx.from?.id;
   if (!chatId) {
     await contactAdminWithError(ctx);
     return;
@@ -106,7 +67,7 @@ async function onOpenUniversalQRClick(
 }
 
 async function onWalletClick(ctx: MyContext, data: string): Promise<void> {
-  const chatId = ctx.msg?.from?.id;
+  const chatId = ctx.from?.id;
   if (!chatId) {
     await contactAdminWithError(ctx);
     return;

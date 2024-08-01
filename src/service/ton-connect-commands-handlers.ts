@@ -18,54 +18,8 @@ import { contactAdminWithError } from "../com.utils";
 let newConnectRequestListenersMap = new Map<number, () => void>();
 
 export async function handleConnectCommand(ctx: MyContext): Promise<void> {
-  const chatId = ctx.msg?.from?.id;
+  const chatId = ctx.from?.id;
 
-  if (ctx.from?.id != ctx.msg?.from?.id) {
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-  } else {
-    console.info(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-  }
-
-  console.error(
-    "ctx.from?.id=",
-    ctx.from?.id,
-    "ctx.msg?.from?.id=",
-    ctx.msg?.from?.id,
-  );
   if (!chatId) {
     await contactAdminWithError(ctx);
     return;
@@ -74,7 +28,7 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
 
   console.info(
     `##### 1. ######  handleConnectCommand ${chatId} `,
-    ctx.msg?.from?.username,
+    ctx.from?.username,
   );
 
   console.info(
@@ -97,7 +51,7 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
 
   console.info(
     `##### 3. ######  connector ${chatId} `,
-    ctx.msg?.from?.username,
+    ctx.from?.username,
     Date.now(),
   );
 
@@ -105,7 +59,7 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
 
   console.info(
     `##### 4. ######  restoreConnection ${chatId} `,
-    ctx.msg?.from?.username,
+    ctx.from?.username,
     connector.connected,
     Date.now(),
   );
@@ -125,7 +79,7 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
 
   console.info(
     `##### 5. ######  onStatusChange ${chatId} `,
-    ctx.msg?.from?.username,
+    ctx.from?.username,
     connector.connected,
     Date.now(),
   );
@@ -179,46 +133,7 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
 }
 
 export async function handleSendTXCommand(ctx: MyContext): Promise<void> {
-  const chatId = ctx.msg?.from?.id;
-  if (ctx.from?.id != ctx.msg?.from?.id) {
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-  } else {
-    console.info(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-  }
+  const chatId = ctx.from?.id;
   if (!chatId) {
     await contactAdminWithError(ctx);
     return;
@@ -299,46 +214,7 @@ export async function handleSendTXCommand(ctx: MyContext): Promise<void> {
 }
 
 export async function handleDisconnectCommand(ctx: MyContext): Promise<void> {
-  const chatId = ctx.msg?.from?.id;
-  if (ctx.from?.id != ctx.msg?.from?.id) {
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-    console.error(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-  } else {
-    console.info(
-      "ctx.from?.id=",
-      ctx.from?.id,
-      "ctx.msg?.from?.id=",
-      ctx.msg?.from?.id,
-    );
-  }
+  const chatId = ctx.from?.id;
   if (!chatId) {
     await contactAdminWithError(ctx);
     return;
@@ -358,7 +234,7 @@ export async function handleDisconnectCommand(ctx: MyContext): Promise<void> {
 }
 
 export async function handleShowMyWalletCommand(ctx: MyContext): Promise<void> {
-  const chatId = ctx.msg?.from?.id;
+  const chatId = ctx.from?.id;
   if (!chatId) {
     await contactAdminWithError(ctx);
     return;

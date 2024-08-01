@@ -3,7 +3,7 @@ import { MyContext } from "../global.types";
 
 export function on_message(bot: Bot<MyContext>) {
   bot.on("message", async (ctx) => {
-    await ctx.reply(" " + ctx.msg?.text);
+    await ctx.reply(" ok");
   });
   // bot.on("message", async (ctx) => {
   //   let msg_text = ctx.message.text;

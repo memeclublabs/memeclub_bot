@@ -27,7 +27,6 @@ export function use_menu_plugin(bot: Bot<MyContext>) {
   //   .text("50%", (ctx: MyContext) => {})
   //   .text("80%", (ctx: MyContext) => {})
   //   .text("100%", async (ctx: MyContext) => {
-  //     await ctx.reply("点到了 by user" + ctx.msg?.chat?.username);
   //     console.info(ctx);
   //   })
   //   .row()

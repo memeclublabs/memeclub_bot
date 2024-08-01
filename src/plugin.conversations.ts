@@ -25,8 +25,8 @@ async function movie(conversation: MyConversation, ctx: MyContext) {
   const movies: string[] = [];
   for (let i = 0; i < count; i++) {
     await ctx.reply(`Tell me number ${i + 1}!`);
-    const titleCtx = await conversation.waitFor(":text");
-    movies.push(titleCtx.msg.text);
+    const title = await conversation.waitFor(":text");
+    movies.push(title.msg.text);
   }
   await ctx.reply("Here is a better ranking!");
   movies.sort();

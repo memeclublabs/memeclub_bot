@@ -65,7 +65,7 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
     .text("💎 My Wallet", async (ctx) => {
       let start = Date.now();
       console.info("DEBUG: ======== click [💎 My Wallet]", start);
-      const userTgId = ctx.msg?.from?.id;
+      const userTgId = ctx.from?.id;
       if (userTgId) {
         //         let { isConnected, connector } = await tonConnectInfoKeyboard(
         //           ctx,
