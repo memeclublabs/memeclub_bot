@@ -46,7 +46,6 @@ export async function processByCoinStatus(
           `This Memecoin ${findMemecoin.name} is in deploying, please wait...`,
         );
       } else if (findMemecoin.coinStatus === "Deployed") {
-        // TODO： 这里换成真实的买卖按钮
         await ctx.api.sendMessage(
           opIgId,
           `This Memecoin ${findMemecoin.name} is pumping, please join to have fun!`,

@@ -5,6 +5,7 @@ import prisma from "./prisma";
 import { Prisma } from "@prisma/client";
 import { processByCoinStatus } from "./service/memecoin.process.by.status";
 import { bigintReplacer, buildMemecoinInfoText } from "./com.utils";
+import { uploadImageToGetUrl } from "./service/image/upload.image";
 
 export function use_conversations_plugin(bot: Bot<MyContext>) {
   // WARN: must run after sessions plugin
@@ -100,7 +101,8 @@ async function newMemeWithValidation(
       );
       const descMsg = await conversation.waitFor(":text");
       await ctx.reply(
-        "Now upload an image for this Memecoin.  [4/4]\n\n" + "🌄🌅🏞🌃🌆",
+        "Now upload an image for this Memecoin.  [4/4]\n\n" +
+          "🌄🌅🏞🌃🌆\n\nRecommended format is 256x256 PNG or JPEG.",
         // "/empty to skip. /AIGC to generate by AI",
       );
       const photoMsg = await conversation.waitFor(":photo");
@@ -110,16 +112,22 @@ async function newMemeWithValidation(
         let ticker = tickerFormat(tickerMsg?.message?.text);
         let desc = descFormat(descMsg?.message?.text);
         let photos = photoMsg?.message?.photo;
+        let publicImageUrl = "https://www.memeclub.ai/bot/default512.png";
         if (photos && photos.length > 0) {
-          const largestPhoto = photos[photos.length - 1]; // 获取分辨率最高的照片
-
-          // 获取文件ID
-          const fileId = largestPhoto.file_id;
-          // 获取文件链接
-          const fileLink = await ctx.api.getFile(fileId);
-
-          // 处理照片，例如下载或保存
-          console.log("Photo received:", fileLink);
+          try {
+            const largestPhoto = photos[photos.length - 1];
+            const fileId = largestPhoto.file_id;
+            const fileInfo = await ctx.api.getFile(fileId);
+            const fileUrl = `https://api.telegram.org/file/bot${process.env.TELEGRAM_BOT_TOKEN}/${fileInfo.file_path}`;
+            let genUrl = await uploadImageToGetUrl(fileUrl);
+            if (genUrl) {
+              publicImageUrl = genUrl;
+            }
+            console.log("Public Images:", publicImageUrl);
+          } catch (err) {
+            console.error(err);
+            await ctx.reply("Image process fail!");
+          }
         }
 
         let devTgId = nameMsg?.message?.from.id;
@@ -134,6 +142,8 @@ async function newMemeWithValidation(
           devTgId: devTgId,
           groupId: groupId,
           coinStatus: "Init",
+          imageType: "MC_SERVICE",
+          image: publicImageUrl,
         } satisfies Prisma.MemecoinCreateInput;
 
         let newMemecoin = await prisma.memecoin.create({

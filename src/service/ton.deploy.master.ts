@@ -10,6 +10,7 @@ export async function tonDeployMaster(
   name: string,
   ticker: string,
   description: string,
+  imageUrl: string,
 ) {
   //1.加载平台钱包
   let { wallet_contract: opWallet, secretKey: user1_secretKey } =
@@ -22,8 +23,7 @@ export async function tonDeployMaster(
     jetton_name: name,
     jetton_description: description,
     jetton_symbol: ticker,
-    image_url:
-      "https://raw.githubusercontent.com/NotFoundLabs/TRC-404/main/meme_logo.png",
+    image_url: imageUrl,
     max_supply: "1000000000", //1 billion,10 亿 token
     admin_address: opWallet.address,
     jetton_wallet_code: Cell.fromBase64(compile_codes.meme_wallet),

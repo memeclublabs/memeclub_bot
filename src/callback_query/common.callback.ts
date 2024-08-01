@@ -81,6 +81,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
             memecoin.name,
             memecoin.ticker,
             memecoin.description + ` [id:${memecoin.id}]`,
+            memecoin.image!,
           );
 
           let newMemecoin = await prisma.memecoin.findUnique({
