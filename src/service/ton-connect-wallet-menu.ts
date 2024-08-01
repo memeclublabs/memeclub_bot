@@ -16,7 +16,7 @@ export const walletMenuCallbacks = {
 };
 async function onChooseWalletClick(ctx: MyContext, _: string): Promise<void> {
   const wallets = await getWallets();
-  let selectedApp = ["telegram-wallet", "tonkeeper", "mytonwallet", "tonhub"];
+  let selectedApp = ["tonkeeper", "mytonwallet", "tonhub"];
   let selected = wallets
     .filter((wallet) => selectedApp.includes(wallet.appName))
     .map((wallet) => ({

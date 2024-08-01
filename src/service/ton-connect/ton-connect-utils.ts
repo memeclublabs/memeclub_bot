@@ -69,7 +69,7 @@ export async function buildUniversalKeyboard(
   const keyboard: InlineKeyboardButton[][] = [
     [
       {
-        text: "Choose A Wallet",
+        text: "Choose More Wallet",
         callback_data: JSON.stringify({ method: "chose_wallet" }),
       },
     ],
