@@ -21,13 +21,35 @@ export async function handlerClickBuyBtn(ctx: MyContext, memecoinId: number) {
   }
 
   let inlineKeyboard = new InlineKeyboard()
-    .text("2 TON", `click_buy_memecoin_${findMeme.id}_with_ton_2`)
-    .text("5 TON", `click_buy_memecoin_${findMeme.id}_with_ton_5`)
-    .text("10 TON", `click_buy_memecoin_${findMeme.id}_with_ton_10`)
+    .text(
+      "1 TON",
+      JSON.stringify({
+        method: "clickBuyWithTon",
+        data: { json: { memecoinId: Number(findMeme.id), tonAmt: 2 } },
+      }),
+    )
+    .text(
+      "5 TON",
+      JSON.stringify({
+        method: "clickBuyWithTon",
+        data: { json: { memecoinId: Number(findMeme.id), tonAmt: 5 } },
+      }),
+    )
     .row()
-    .text("20 TON", `click_buy_memecoin_${findMeme.id}_with_ton_20`)
-    .text("50 TON", `click_buy_memecoin_${findMeme.id}_with_ton_50`)
-    .text("100 TON", `click_buy_memecoin_${findMeme.id}_with_ton_100`);
+    .text(
+      "50 TON",
+      JSON.stringify({
+        method: "clickBuyWithTon",
+        data: { json: { memecoinId: Number(findMeme.id), tonAmt: 50 } },
+      }),
+    )
+    .text(
+      "100 TON",
+      JSON.stringify({
+        method: "clickBuyWithTon",
+        data: { json: { memecoinId: Number(findMeme.id), tonAmt: 0.1 } },
+      }),
+    );
   let text = buildMemecoinInfoText(
     findMeme,
     findGroup,

@@ -21,11 +21,35 @@ export async function handlerClickSellBtn(ctx: MyContext, memecoinId: number) {
   }
 
   let inlineKeyboard = new InlineKeyboard()
-    .text("25%", `click_sell_memecoin_${findMeme.id}_percentage_25`)
-    .text("50%", `click_sell_memecoin_${findMeme.id}_percentage_50`)
+    .text(
+      "25%",
+      JSON.stringify({
+        method: "processorClickSellWithPercentage",
+        data: { json: { memecoinId: Number(findMeme.id), percentage: 25 } },
+      }),
+    )
+    .text(
+      "50%",
+      JSON.stringify({
+        method: "processorClickSellWithPercentage",
+        data: { json: { memecoinId: Number(findMeme.id), percentage: 50 } },
+      }),
+    )
     .row()
-    .text("75%", `click_sell_memecoin_${findMeme.id}_percentage_75`)
-    .text("100%", `click_sell_memecoin_${findMeme.id}_percentage_100`);
+    .text(
+      "75%",
+      JSON.stringify({
+        method: "processorClickSellWithPercentage",
+        data: { json: { memecoinId: Number(findMeme.id), percentage: 75 } },
+      }),
+    )
+    .text(
+      "100%",
+      JSON.stringify({
+        method: "processorClickSellWithPercentage",
+        data: { json: { memecoinId: Number(findMeme.id), percentage: 100 } },
+      }),
+    );
 
   let text = buildMemecoinInfoText(findMeme, findGroup, "🔴 Sell Memecoin");
   await ctx.reply(text, { parse_mode: "HTML", reply_markup: inlineKeyboard });
