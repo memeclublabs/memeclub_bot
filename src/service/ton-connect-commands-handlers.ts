@@ -26,43 +26,16 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
   }
   let messageWasDeleted = false;
 
-  console.info(
-    `##### 1. ######  handleConnectCommand ${chatId} `,
-    ctx.from?.username,
-  );
-
-  console.info(
-    `##### 2. ######  newConnectRequestListenersMap ${chatId} `,
-    ctx.from?.username,
-    ctx.from?.id,
-  );
   newConnectRequestListenersMap.get(chatId)?.();
-
-  console.info(
-    `##### 2.1. ######  already clear cache ${chatId} `,
-    ctx.from?.username,
-  );
 
   const connector = getConnector(chatId, () => {
     unsubscribe();
     newConnectRequestListenersMap.delete(chatId);
-    // deleteMessage();
+    deleteMessage();
   });
-
-  console.info(
-    `##### 3. ######  connector ${chatId} `,
-    ctx.from?.username,
-    Date.now(),
-  );
 
   await connector.restoreConnection();
 
-  console.info(
-    `##### 4. ######  restoreConnection ${chatId} `,
-    ctx.from?.username,
-    connector.connected,
-    Date.now(),
-  );
   if (connector.connected) {
     const connectedName =
       (await getWalletInfo(connector.wallet!.device.appName))?.name ||
@@ -77,18 +50,11 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
     return;
   }
 
-  console.info(
-    `##### 5. ######  onStatusChange ${chatId} `,
-    ctx.from?.username,
-    connector.connected,
-    Date.now(),
-  );
-
   const unsubscribe = connector.onStatusChange(async (wallet) => {
     console.info("connector.onStatusChange.....", wallet);
 
     if (wallet) {
-      // await deleteMessage();
+      await deleteMessage();
 
       const walletName =
         (await getWalletInfo(wallet.device.appName))?.name ||
@@ -106,22 +72,25 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
   const keyboard = await buildUniversalKeyboard(link, wallets);
 
   const botMessage = await ctx.replyWithPhoto(
-    "https://www.memeclub.ai/bot/bot-img-memeclub.png",
+    "https://www.memeclub.ai/bot/ton-connect.png",
     {
       reply_markup: {
-        inline_keyboard: [keyboard],
+        inline_keyboard: keyboard,
       },
     },
   );
 
-  // const deleteMessage = async (): Promise<void> => {
-  //   if (!messageWasDeleted) {
-  //     messageWasDeleted = true;
-  //
-  //     await ctx.deleteMessage();
-  //     // await ctx.deleteMessage(chatId, botMessage.message_id);
-  //   }
-  // };
+  const deleteMessage = async (): Promise<void> => {
+    if (!messageWasDeleted) {
+      messageWasDeleted = true;
+      try {
+        await ctx.deleteMessage();
+      } catch (e) {
+        console.error(e);
+      }
+      // await ctx.deleteMessage(chatId, botMessage.message_id);
+    }
+  };
 
   newConnectRequestListenersMap.set(chatId, async () => {
     unsubscribe();

@@ -53,6 +53,10 @@ async function onOpenUniversalQRClick(
 
   const connector = getConnector(chatId);
 
+  if (connector.connected) {
+    await ctx.deleteMessage();
+  }
+
   const link = connector.connect(wallets);
 
   // await editQR(query.message!, link);
@@ -61,7 +65,7 @@ async function onOpenUniversalQRClick(
 
   await ctx.editMessageReplyMarkup({
     reply_markup: {
-      inline_keyboard: [keyboard],
+      inline_keyboard: keyboard,
     },
   });
 }
