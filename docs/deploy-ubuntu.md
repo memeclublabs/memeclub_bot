@@ -81,7 +81,20 @@ https://ubuntu.com/server/docs/install-and-configure-postgresql
 
 ALTER USER postgres with encrypted password 'memeclub2024localDB';
 
+```bash
 psql --host localhost --username postgres --password --dbname template1
+\c postgres
+postgres=# SELECT * FROM public."User";
+postgres=#
+postgres=# DELETE FROM public."Memecoin";
+DELETE 5
+postgres=# DELETE FROM public."Group";
+DELETE 5
+postgres=# DELETE FROM public."User";
+DELETE 3
+
+```
+
 
 ```bash
                                   List of roles
