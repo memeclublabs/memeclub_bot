@@ -71,7 +71,7 @@ export async function handlerClickBuyBtn(ctx: MyContext, memecoinId: number) {
       "100 TON",
       JSON.stringify({
         method: "clickBuyWithTon",
-        data: `${findMeme.id}###0.1`,
+        data: `${findMeme.id}###100`,
       }),
     );
   let text = buildMemecoinInfoText(
