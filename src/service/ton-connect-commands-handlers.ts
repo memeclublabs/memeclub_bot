@@ -79,15 +79,14 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
 
   console.info(
     `##### 2. ######  newConnectRequestListenersMap ${chatId} `,
-    ctx.msg?.from?.username,
-    Date.now(),
+    ctx.from?.username,
+    ctx.from?.id,
   );
   newConnectRequestListenersMap.get(chatId)?.();
 
   console.info(
     `##### 2.1. ######  already clear cache ${chatId} `,
-    ctx.msg?.from?.username,
-    Date.now(),
+    ctx.from?.username,
   );
 
   const connector = getConnector(chatId, () => {

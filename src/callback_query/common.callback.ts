@@ -15,7 +15,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
       "callback_query - start [",
       ctx.from?.username,
       ctx.callbackQuery.data,
-      Date.now(),
+      ctx.from?.id,
     );
     const callbackData = ctx.callbackQuery.data;
     if (!callbackData) {
@@ -241,6 +241,6 @@ export function on_callback_query(bot: Bot<MyContext>) {
     //   await next();
     // }
 
-    console.info(`callback_query - end ]`, ctx.from?.username, Date.now());
+    console.info(`callback_query - end ]`, ctx.from?.username, ctx.from?.id);
   });
 }
