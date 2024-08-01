@@ -1,7 +1,17 @@
 import { MyContext } from "../global.types";
-import prisma from "../prisma";
 import { buildMemecoinInfoText, contactAdminWithError } from "../com.utils";
+import prisma from "../prisma";
 import { InlineKeyboard } from "grammy";
+
+export async function processorClickSellBtn(
+  ctx: MyContext,
+  memecoinId: string,
+): Promise<void> {
+  if (!memecoinId) {
+    await contactAdminWithError(ctx, memecoinId);
+  }
+  await handlerClickSellBtn(ctx, Number(memecoinId));
+}
 
 export async function handlerClickSellBtn(ctx: MyContext, memecoinId: number) {
   let findMeme = await prisma.memecoin.findUnique({
@@ -21,11 +31,35 @@ export async function handlerClickSellBtn(ctx: MyContext, memecoinId: number) {
   }
 
   let inlineKeyboard = new InlineKeyboard()
-    .text("25%", `click_sell_memecoin_${findMeme.id}_percentage_25`)
-    .text("50%", `click_sell_memecoin_${findMeme.id}_percentage_50`)
+    .text(
+      "25%",
+      JSON.stringify({
+        method: "clickSellWithPercentage",
+        data: `${findMeme.id}###25`,
+      }),
+    )
+    .text(
+      "50%",
+      JSON.stringify({
+        method: "clickSellWithPercentage",
+        data: `${findMeme.id}###50`,
+      }),
+    )
     .row()
-    .text("75%", `click_sell_memecoin_${findMeme.id}_percentage_75`)
-    .text("100%", `click_sell_memecoin_${findMeme.id}_percentage_100`);
+    .text(
+      "75%",
+      JSON.stringify({
+        method: "clickSellWithPercentage",
+        data: `${findMeme.id}###75`,
+      }),
+    )
+    .text(
+      "100%",
+      JSON.stringify({
+        method: "clickSellWithPercentage",
+        data: `${findMeme.id}###100`,
+      }),
+    );
 
   let text = buildMemecoinInfoText(findMeme, findGroup, "🔴 Sell Memecoin");
   await ctx.reply(text, { parse_mode: "HTML", reply_markup: inlineKeyboard });

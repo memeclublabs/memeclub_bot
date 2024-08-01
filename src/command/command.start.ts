@@ -14,7 +14,12 @@ import {
 export function bind_command_start(bot: Bot<MyContext>) {
   bot.command("start", async (ctx) => {
     //判断是私聊还是群聊，发送不同的菜单
-    console.info("command - /start [", ctx.from?.username, Date.now());
+    console.info(
+      "command - /start [",
+      ctx.from?.username,
+      "chatId=",
+      ctx.from?.id,
+    );
 
     if (ctx.chat.type == "private") {
       // 这是私聊，发送全量菜单，创建用户
@@ -135,7 +140,12 @@ export function bind_command_start(bot: Bot<MyContext>) {
           console.error(reason);
         });
     } //in group
-    console.info("command - /start ]", ctx.from?.username, Date.now());
+    console.info(
+      "command - /start ]",
+      ctx.from?.username,
+      "chatId=",
+      ctx.from?.id,
+    );
   });
 }
 

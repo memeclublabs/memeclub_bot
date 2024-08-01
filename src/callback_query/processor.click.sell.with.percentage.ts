@@ -1,7 +1,6 @@
 import { MyContext } from "../global.types";
-import prisma from "../prisma";
 import { contactAdminWithError, isMainnet, tonTestOnly } from "../com.utils";
-import { tonConnectInfoKeyboard } from "../service/use.ton-connect";
+import prisma from "../prisma";
 import { TonClient, TupleItem } from "@ton/ton";
 import {
   BASE_NANO_NUMBER,
@@ -9,14 +8,30 @@ import {
   ENDPOINT_TESTNET_RPC,
 } from "../com.static";
 import { Address, beginCell, toNano } from "@ton/core";
+import { buildBurnTokenMsg } from "../service/ton/dex/message/walletMsg";
 import {
   addTGReturnStrategy,
   pTimeout,
   pTimeoutException,
-} from "../ton-connect/utils";
+} from "../service/ton-connect/ton-connect-utils";
 import { isTelegramUrl, UserRejectsError } from "@tonconnect/sdk";
-import { getWalletInfo } from "../ton-connect/wallets";
-import { buildBurnTokenMsg } from "../service/ton/dex/message/walletMsg";
+import { getWalletInfo } from "../service/ton-connect/wallets";
+import { getConnector } from "../service/ton-connect/connector";
+
+export async function clickSellWithPercentage(
+  ctx: MyContext,
+  data: string,
+): Promise<void> {
+  try {
+    let split = data.split("###");
+    let memecoinId = Number(split[0]);
+    let percentage = Number(split[1]);
+    await handlerSellWithPercentage(ctx, memecoinId, percentage);
+  } catch {
+    console.error("ERROR: clickSellWithPercentage", data);
+    return;
+  }
+}
 
 export async function handlerSellWithPercentage(
   ctx: MyContext,
@@ -28,11 +43,10 @@ export async function handlerSellWithPercentage(
     await contactAdminWithError(ctx);
     return;
   }
-  let { isConnected, connector } = await tonConnectInfoKeyboard(ctx, chatId);
-  if (!isConnected) {
-    return;
-  }
-  if (!connector) {
+  const connector = getConnector(chatId);
+  await connector.restoreConnection();
+  if (!connector.connected) {
+    await ctx.reply("Connect wallet to send transaction");
     return;
   }
 

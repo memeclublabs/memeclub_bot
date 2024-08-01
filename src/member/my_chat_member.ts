@@ -154,6 +154,6 @@ Let's pump a new Memecoin and have fun together!
 function buildStep2Keyboard(groupId: bigint) {
   return new InlineKeyboard().text(
     "Step 2: Create new Memecoin",
-    `callback_create_meme_groupId_${groupId}`,
+    JSON.stringify({ method: "createMemeConversation", data: `${groupId}` }),
   );
 }
