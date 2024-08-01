@@ -32,6 +32,7 @@ export async function confirmDeploy(
         memecoin.name,
         memecoin.ticker,
         memecoin.description + ` [id:${memecoin.id}]`,
+        memecoin.image!,
       );
 
       let newMemecoin = await prisma.memecoin.findUnique({
