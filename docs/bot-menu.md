@@ -7,6 +7,8 @@ start - start
 connect -  connect
 my_wallet - my_wallet
 disconnect - disconnect
+referral - referral
+profile - profile
 
 
 
