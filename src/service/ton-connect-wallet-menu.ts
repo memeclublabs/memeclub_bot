@@ -45,6 +45,45 @@ async function onOpenUniversalQRClick(
   _: string,
 ): Promise<void> {
   const chatId = ctx.msg?.from?.id;
+  if (ctx.from?.id != ctx.msg?.from?.id) {
+    console.error(
+      "ctx.from?.id=",
+      ctx.from?.id,
+      "ctx.msg?.from?.id=",
+      ctx.msg?.from?.id,
+    );
+    console.error(
+      "ctx.from?.id=",
+      ctx.from?.id,
+      "ctx.msg?.from?.id=",
+      ctx.msg?.from?.id,
+    );
+    console.error(
+      "ctx.from?.id=",
+      ctx.from?.id,
+      "ctx.msg?.from?.id=",
+      ctx.msg?.from?.id,
+    );
+    console.error(
+      "ctx.from?.id=",
+      ctx.from?.id,
+      "ctx.msg?.from?.id=",
+      ctx.msg?.from?.id,
+    );
+    console.error(
+      "ctx.from?.id=",
+      ctx.from?.id,
+      "ctx.msg?.from?.id=",
+      ctx.msg?.from?.id,
+    );
+  } else {
+    console.info(
+      "ctx.from?.id=",
+      ctx.from?.id,
+      "ctx.msg?.from?.id=",
+      ctx.msg?.from?.id,
+    );
+  }
   if (!chatId) {
     await contactAdminWithError(ctx);
     return;
