@@ -46,7 +46,7 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
   const connector = getConnector(chatId, () => {
     unsubscribe();
     newConnectRequestListenersMap.delete(chatId);
-    deleteMessage();
+    // deleteMessage();
   });
 
   console.info(
@@ -85,10 +85,10 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
   );
 
   const unsubscribe = connector.onStatusChange(async (wallet) => {
-    console.info("connector.onStatusChange.....");
+    console.info("connector.onStatusChange.....", wallet);
 
     if (wallet) {
-      await deleteMessage();
+      // await deleteMessage();
 
       const walletName =
         (await getWalletInfo(wallet.device.appName))?.name ||
@@ -114,19 +114,19 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
     },
   );
 
-  const deleteMessage = async (): Promise<void> => {
-    // if (!messageWasDeleted) {
-    //   messageWasDeleted = true;
-    //
-    //   await ctx.deleteMessage();
-    //   // await ctx.deleteMessage(chatId, botMessage.message_id);
-    // }
-  };
+  // const deleteMessage = async (): Promise<void> => {
+  //   if (!messageWasDeleted) {
+  //     messageWasDeleted = true;
+  //
+  //     await ctx.deleteMessage();
+  //     // await ctx.deleteMessage(chatId, botMessage.message_id);
+  //   }
+  // };
 
   newConnectRequestListenersMap.set(chatId, async () => {
     unsubscribe();
 
-    await deleteMessage();
+    // await deleteMessage();
 
     newConnectRequestListenersMap.delete(chatId);
   });
