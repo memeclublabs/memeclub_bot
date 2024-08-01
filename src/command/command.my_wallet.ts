@@ -5,7 +5,11 @@ import { handleShowMyWalletCommand } from "../service/ton-connect-commands-handl
 
 export function bind_command_my_wallet(bot: Bot<MyContext>) {
   bot.command("my_wallet", async (ctx) => {
-    console.info("command - /my_wallet [", ctx.from?.username, Date.now());
+    console.info(
+      "command - /my_wallet command [",
+      ctx.from?.username,
+      Date.now(),
+    );
     const chatId = ctx.from?.id;
     if (!chatId) {
       await contactAdminWithError(ctx);
