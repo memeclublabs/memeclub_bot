@@ -6,7 +6,9 @@ news - 🎉 Announcement
 start - start
 connect -  connect
 my_wallet - my_wallet
+send_tx - send_tx
 disconnect - disconnect
+
 referral - referral
 profile - profile
 

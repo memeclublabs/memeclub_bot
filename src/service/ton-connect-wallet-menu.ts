@@ -7,6 +7,7 @@ import {
   buildUniversalKeyboard,
 } from "./ton-connect/ton-connect-utils";
 import { MyContext } from "../global.types";
+import { contactAdminWithError } from "../com.utils";
 
 export const walletMenuCallbacks = {
   chose_wallet: onChooseWalletClick,
@@ -17,23 +18,25 @@ async function onChooseWalletClick(ctx: MyContext, _: string): Promise<void> {
   const wallets = await getWallets();
 
   await ctx.editMessageReplyMarkup({
-    inline_keyboard: [
-      wallets.map((wallet) => ({
-        text: wallet.name,
-        callback_data: JSON.stringify({
-          method: "select_wallet",
-          data: wallet.appName,
-        }),
-      })),
-      [
-        {
-          text: "« Back",
+    reply_markup: {
+      inline_keyboard: [
+        wallets.map((wallet) => ({
+          text: wallet.name,
           callback_data: JSON.stringify({
-            method: "universal_qr",
+            method: "select_wallet",
+            data: wallet.appName,
           }),
-        },
+        })),
+        [
+          {
+            text: "« Back",
+            callback_data: JSON.stringify({
+              method: "universal_qr",
+            }),
+          },
+        ],
       ],
-    ],
+    },
   });
 }
 
@@ -41,7 +44,11 @@ async function onOpenUniversalQRClick(
   ctx: MyContext,
   _: string,
 ): Promise<void> {
-  const chatId = query.message!.chat.id;
+  const chatId = ctx.msg?.from?.id;
+  if (!chatId) {
+    await contactAdminWithError(ctx);
+    return;
+  }
   const wallets = await getWallets();
 
   const connector = getConnector(chatId);
@@ -52,19 +59,20 @@ async function onOpenUniversalQRClick(
 
   const keyboard = await buildUniversalKeyboard(link, wallets);
 
-  await bot.editMessageReplyMarkup(
-    {
+  await ctx.editMessageReplyMarkup({
+    reply_markup: {
       inline_keyboard: [keyboard],
     },
-    {
-      message_id: query.message?.message_id,
-      chat_id: query.message?.chat.id,
-    },
-  );
+  });
 }
 
 async function onWalletClick(ctx: MyContext, data: string): Promise<void> {
-  const chatId = query.message!.chat.id;
+  const chatId = ctx.msg?.from?.id;
+  if (!chatId) {
+    await contactAdminWithError(ctx);
+    return;
+  }
+
   const connector = getConnector(chatId);
 
   const selectedWallet = await getWalletInfo(data);
@@ -89,8 +97,8 @@ async function onWalletClick(ctx: MyContext, data: string): Promise<void> {
 
   // await editQR(query.message!, qrLink);
 
-  await bot.editMessageReplyMarkup(
-    {
+  await ctx.editMessageReplyMarkup({
+    reply_markup: {
       inline_keyboard: [
         [
           {
@@ -104,11 +112,7 @@ async function onWalletClick(ctx: MyContext, data: string): Promise<void> {
         ],
       ],
     },
-    {
-      message_id: query.message?.message_id,
-      chat_id: chatId,
-    },
-  );
+  });
 }
 
 async function editQR(message: Message, link: string): Promise<void> {

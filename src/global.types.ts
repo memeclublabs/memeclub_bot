@@ -10,7 +10,7 @@ export interface BotConfig {
 export interface SessionData {
   userDefinedIds?: string[];
   referCode?: string;
-  groupId?: string;
+  groupId?: number;
   memecoinId?: number;
 }
 

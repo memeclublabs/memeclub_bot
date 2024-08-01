@@ -1,6 +1,7 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import { contactAdminWithError } from "../com.utils";
+import { handleDisconnectCommand } from "../service/ton-connect-commands-handlers";
 
 export function bind_command_disconnect(bot: Bot<MyContext>) {
   bot.command("disconnect", async (ctx) => {
@@ -11,6 +12,7 @@ export function bind_command_disconnect(bot: Bot<MyContext>) {
       return;
     }
 
+    await handleDisconnectCommand(ctx);
     console.info("command - /disconnect ]", ctx.from?.username, Date.now());
   });
 }

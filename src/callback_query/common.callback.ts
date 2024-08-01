@@ -14,7 +14,8 @@ import { handlerClickBuyBtn } from "./handler.click.buy.btn";
 import { handlerBuyWithTon } from "./handler.buy.with.ton";
 import { handlerClickSellBtn } from "./handler.click.sell.btn";
 import { handlerSellWithPercentage } from "./handler.sell.with.percentage";
-import { walletMenuCallbacks } from "../service/ton-connect-wallet-menu";
+import { createMemeConversation } from "./processor.meme.creator";
+import { walletMenuCallbacks } from "../main.local";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   //  下面的方法可以监控具体的 callback_data 的值进行处理
@@ -23,6 +24,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
   // });
 
   const callbacks = {
+    createMemeConversation: createMemeConversation,
     ...walletMenuCallbacks,
   };
 
@@ -37,11 +39,11 @@ export function on_callback_query(bot: Bot<MyContext>) {
     const callbackData = ctx.callbackQuery.data;
     if (!callbackData) {
       console.error("ERROR: callback_query data is null!");
+      await next();
       return;
     }
 
     let request: { method: string; data: string };
-
     try {
       request = JSON.parse(callbackData);
     } catch {
@@ -49,6 +51,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
         "ERROR: callback_query data is not a valid JSON.",
         callbackData,
       );
+      await next();
       return;
     }
 
@@ -56,7 +59,10 @@ export function on_callback_query(bot: Bot<MyContext>) {
       return;
     }
 
-    callbacks[request.method as keyof typeof callbacks](ctx, request.data);
+    await callbacks[request.method as keyof typeof callbacks](
+      ctx,
+      request.data,
+    );
 
     if (callbackData.startsWith("callback_create_meme_groupId_")) {
       // 点击 [Step 2: Create new Memecoin] 按钮会进入这个方法处理，按钮附带了 groupId 参数
@@ -75,9 +81,6 @@ export function on_callback_query(bot: Bot<MyContext>) {
         );
         return;
       }
-
-      ctx.session.groupId = groupIdFromSession;
-      await ctx.conversation.enter("newMemeWithValidation");
     } else if (callbackData.startsWith("callback_confirm_deploy_")) {
       console.info(" Click 🚀【Confirm to Create Memecoin】", callbackData);
       await ctx.reply(

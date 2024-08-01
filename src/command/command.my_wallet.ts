@@ -1,6 +1,7 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import { contactAdminWithError } from "../com.utils";
+import { handleShowMyWalletCommand } from "../service/ton-connect-commands-handlers";
 
 export function bind_command_my_wallet(bot: Bot<MyContext>) {
   bot.command("my_wallet", async (ctx) => {
@@ -10,7 +11,7 @@ export function bind_command_my_wallet(bot: Bot<MyContext>) {
       await contactAdminWithError(ctx);
       return;
     }
-
+    await handleShowMyWalletCommand(ctx);
     console.info("command - /my_wallet ]", ctx.from?.username, Date.now());
   });
 }

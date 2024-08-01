@@ -61,11 +61,7 @@ async function newMemeWithValidation(
   // 2.1 没有绑定， 新建 Memecoin
   // 2.2 已经绑定， 根据 Memecoin 状态，发送不同消息
 
-  let groupIdStr = ctx.session.groupId;
-  if (!groupIdStr) {
-    groupIdStr = "-1";
-  }
-  const groupId = BigInt(groupIdStr);
+  const groupId = ctx.session.groupId;
 
   let findGroup = await prisma.group.findUnique({
     where: { groupId: groupId },
@@ -73,9 +69,7 @@ async function newMemeWithValidation(
   if (findGroup) {
     if (!findGroup.mainMemecoinId) {
       // 2.1 没有绑定， 新建 Memecoin
-
       // === Conversation Start ==========================
-
       await ctx.reply(
         "Please enter a name for this Memecoin?  [1/4]\n\n" +
           "Examples:\n" +
@@ -170,7 +164,7 @@ async function newMemeWithValidation(
     // 没有发现群组，异常
     console.error("🔴点击 Step2 按钮，找不到对应群组");
     await ctx.reply(
-      `🔴 Cannot find group info ${groupIdStr}, pls contact memeclub helpdesk! ☎️`,
+      `🔴 Cannot find group info ${groupId}, pls contact memeclub helpdesk! ☎️`,
     );
   }
 }
