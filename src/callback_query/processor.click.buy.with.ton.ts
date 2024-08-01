@@ -5,10 +5,12 @@ import { Address, fromNano, toNano } from "@ton/core";
 import { buildBuyTokenMsg } from "../service/ton/dex/message/masterMsg";
 import { getConnector } from "../service/ton-connect/connector";
 import {
+  addTGReturnStrategy,
   pTimeout,
   pTimeoutException,
 } from "../service/ton-connect/ton-connect-utils";
-import { UserRejectsError } from "@tonconnect/sdk";
+import { isTelegramUrl, UserRejectsError } from "@tonconnect/sdk";
+import { getWalletInfo } from "../service/ton-connect/wallets";
 
 export async function clickBuyWithTon(
   ctx: MyContext,
@@ -62,9 +64,7 @@ async function handlerBuyWithTon(
   let buyGasFee = 0.1; //0.1 TON
   let gasAndTonAmount = toNano(tonAmt + buyGasFee);
   console.log("gasAndTonAmount:", fromNano(gasAndTonAmount));
-
   let toAddress = Address.parse(findMeme.masterAddress!);
-
   let payloadCell = buildBuyTokenMsg(tonAmt, 0n);
   let payloadBase64 = payloadCell.toBoc().toString("base64");
 
@@ -88,8 +88,9 @@ async function handlerBuyWithTon(
     Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS),
   )
     .then(async () => {
-      let findUser = await prisma.user.findUnique({ where: { tgId: tgId } });
+      await ctx.reply(`✅ Transaction sent successfully`);
 
+      let findUser = await prisma.user.findUnique({ where: { tgId: tgId } });
       if (!findUser) {
         console.error("User not found", tgId);
         return;
@@ -98,12 +99,9 @@ async function handlerBuyWithTon(
         "<b>🟢 Big Pump </b>\n" +
         `${findUser.firstName} ${findUser.lastName}` +
         `buy ${tonAmt} TON of ${findMeme.name}(${findMeme.ticker})`;
-
       await ctx.api.sendMessage(Number(findMeme.groupId), buyNotice2Group, {
         parse_mode: "HTML",
       });
-
-      await ctx.reply(`✅ Transaction sent successfully`);
     })
     .catch(async (e) => {
       if (e === pTimeoutException) {
@@ -119,4 +117,37 @@ async function handlerBuyWithTon(
       await ctx.reply(`Unknown error happened`);
     })
     .finally(() => connector.pauseConnection());
+
+  // send Sign Btn to user
+
+  let deeplink = "";
+  const walletInfo = await getWalletInfo(connector.wallet!.device.appName);
+  if (walletInfo) {
+    deeplink = walletInfo.universalLink;
+  }
+
+  if (isTelegramUrl(deeplink)) {
+    const url = new URL(deeplink);
+    url.searchParams.append("startattach", "tonconnect");
+    deeplink = addTGReturnStrategy(
+      url.toString(),
+      process.env.TELEGRAM_BOT_LINK!,
+    );
+  }
+
+  await ctx.reply(
+    `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`,
+    {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: `Open ${walletInfo?.name || connector.wallet!.device.appName}`,
+              url: deeplink,
+            },
+          ],
+        ],
+      },
+    },
+  );
 }
