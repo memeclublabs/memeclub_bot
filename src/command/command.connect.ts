@@ -5,7 +5,12 @@ import { handleConnectCommand } from "../service/ton-connect-commands-handlers";
 
 export function bind_command_connect(bot: Bot<MyContext>) {
   bot.command("connect", async (ctx) => {
-    console.info("command - /connect [", ctx.from?.username, Date.now());
+    console.info(
+      "command - /connect [",
+      ctx.from?.username,
+      "chatId=",
+      ctx.from?.id,
+    );
 
     const chatId = ctx.from?.id;
     if (!chatId) {
@@ -13,6 +18,11 @@ export function bind_command_connect(bot: Bot<MyContext>) {
       return;
     }
     await handleConnectCommand(ctx);
-    console.info("command - /connect ]", ctx.from?.username, Date.now());
+    console.info(
+      "command - /connect ]",
+      ctx.from?.username,
+      "chatId=",
+      ctx.from?.id,
+    );
   });
 }

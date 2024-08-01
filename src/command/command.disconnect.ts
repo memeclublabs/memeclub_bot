@@ -5,7 +5,12 @@ import { handleDisconnectCommand } from "../service/ton-connect-commands-handler
 
 export function bind_command_disconnect(bot: Bot<MyContext>) {
   bot.command("disconnect", async (ctx) => {
-    console.info("command - /disconnect [", ctx.from?.username, Date.now());
+    console.info(
+      "command - /disconnect [",
+      ctx.from?.username,
+      "chatId=",
+      ctx.from?.id,
+    );
     const chatId = ctx.from?.id;
     if (!chatId) {
       await contactAdminWithError(ctx);
@@ -13,6 +18,11 @@ export function bind_command_disconnect(bot: Bot<MyContext>) {
     }
 
     await handleDisconnectCommand(ctx);
-    console.info("command - /disconnect ]", ctx.from?.username, Date.now());
+    console.info(
+      "command - /disconnect ]",
+      ctx.from?.username,
+      "chatId=",
+      ctx.from?.id,
+    );
   });
 }
