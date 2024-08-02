@@ -40,8 +40,8 @@ export async function compileFuncFile(
 }
 
 export function getMemeDexBase64() {
-  const meme_master = process.env.DATABASE_URL;
-  const meme_wallet = process.env.DATABASE_URL;
+  const meme_master = process.env.CONTRACT_MASTER;
+  const meme_wallet = process.env.CONTRACT_JETTON_WALLET;
   return { meme_master, meme_wallet };
 }
 
