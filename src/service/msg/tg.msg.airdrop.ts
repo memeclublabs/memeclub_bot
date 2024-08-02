@@ -27,8 +27,20 @@ export async function listAirdrop(ctx: MyContext): Promise<void> {
       }),
     )
     .row()
-    .text("👬 My Friends", "dd-todo1")
-    .text("🔖 Points History", "dd-todo2");
+    .text(
+      "👬 My Friends",
+      JSON.stringify({
+        method: "triggerViewMyFriends",
+        data: `${ctx.from?.id}`,
+      }),
+    )
+    .text(
+      "🔖 Point History",
+      JSON.stringify({
+        method: "triggerViewPointsHistory",
+        data: `${ctx.from?.id}`,
+      }),
+    );
   let startReferralLink = getStartReferralLink(findUser.refCode);
   await ctx.reply(
     `<b>🎁 Airdrop & Referral </b>

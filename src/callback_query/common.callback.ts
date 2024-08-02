@@ -9,6 +9,8 @@ import { clickBuyWithTon } from "./processor.click.buy.with.ton";
 import { clickSellWithPercentage } from "./processor.click.sell.with.percentage";
 import { processorShowMemecoinInfo } from "./processor.show.memecoin.info";
 import { triggerGetReferralLink } from "./trigger.get.referral.link";
+import { triggerViewMyFriends } from "./trigger.view.my.friends";
+import { triggerViewPointsHistory } from "./trigger.view.points.history";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   const callbacks = {
@@ -20,6 +22,8 @@ export function on_callback_query(bot: Bot<MyContext>) {
     clickBuyWithTon: clickBuyWithTon,
     clickSellWithPercentage: clickSellWithPercentage,
     triggerGetReferralLink: triggerGetReferralLink,
+    triggerViewMyFriends: triggerViewMyFriends,
+    triggerViewPointsHistory: triggerViewPointsHistory,
     ...walletMenuCallbacks,
   };
 
