@@ -4,14 +4,13 @@ import { tonDeployMaster } from "../service/ton.deploy.master";
 import { tonviewerUrl, toTonAddressStr } from "../com.utils";
 import { waitNextSeqNo } from "../service/ton/util.helpers";
 import { memecoinDeployedNotify } from "./memecoin.deployed.notify";
+import { updateUserActionUnified } from "../service/user/user.dao";
+import { ActionTypes } from "../com.enums";
 
 export async function confirmDeploy(
   ctx: MyContext,
   memecoinId: string,
 ): Promise<void> {
-  await ctx.reply(
-    "The memecoin is deploying to the blockchain network, please wait…",
-  );
   // 【Confirm to Create Memecoin】
   let memecoin = await prisma.memecoin.findUnique({
     where: { id: BigInt(memecoinId) },
@@ -28,6 +27,15 @@ export async function confirmDeploy(
       console.info(
         `${memecoin.ticker}#${memecoin.id} status update from Init to Processing`,
       );
+
+      // deduct points for deploy
+      await updateUserActionUnified(
+        ctx.from?.id!,
+        ActionTypes.MemeDeploy,
+        -100n,
+      );
+      // deduct points for deploy end
+
       let { opWallet, masterAddress, seqNo } = await tonDeployMaster(
         memecoin.name,
         memecoin.ticker,

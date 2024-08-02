@@ -43,12 +43,12 @@ export async function processByCoinStatus(
       } else if (findMemecoin.coinStatus == "Deploying") {
         await ctx.api.sendMessage(
           opIgId,
-          `This Memecoin ${findMemecoin.name} is in deploying, please wait...`,
+          `The Memecoin ${findMemecoin.name} #${findMemecoin.id} is in deploying, please wait...`,
         );
       } else if (findMemecoin.coinStatus === "Deployed") {
         await ctx.api.sendMessage(
           opIgId,
-          `This Memecoin ${findMemecoin.name} is pumping, please join to have fun!`,
+          `This Memecoin ${findMemecoin.name} #${findMemecoin.id} is deployed, please join to have fun!`,
           {
             reply_markup: {
               inline_keyboard: [
