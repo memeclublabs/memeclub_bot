@@ -2,6 +2,10 @@
 
 import { Invite_ } from "./com.static";
 
+export function getStartReferralLink(referCode: string) {
+  return `https://t.me/${process.env.TELEGRAM_BOT_NAME}?start=${referCode}`;
+}
+
 export function generateReferralCode(tgId: number): string {
   // Convert the string to a BigInt
   const bigIntValue = BigInt(tgId);

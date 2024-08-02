@@ -3,6 +3,7 @@ import { MyContext } from "./global.types";
 import { Menu } from "@grammyjs/menu";
 import prisma from "./prisma";
 import { listNewMemes } from "./service/msg/tg.msg.sender";
+import { listAirdrop } from "./service/msg/tg.msg.airdrop";
 
 export const group_start_menu = new Menu<MyContext>("group_start_menu");
 export const start_menu = new Menu<MyContext>("start_menu");
@@ -92,7 +93,9 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
     })
     .submenu("⚙️ Setting", "submenu_create_meme")
     .row()
-    .submenu("🎁 Airdrop", "submenu_create_meme");
+    .text("🎁 Airdrop & Referral", async (ctx) => {
+      await listAirdrop(ctx);
+    });
 
   let addGroupUrl = `https://t.me/${process.env.TELEGRAM_BOT_NAME}?startgroup=true`;
   const submenu_create_meme = new Menu<MyContext>("submenu_create_meme")

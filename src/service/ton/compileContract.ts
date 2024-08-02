@@ -39,9 +39,9 @@ export async function compileFuncFile(
   return result;
 }
 
-export async function getMemeDexBase64() {
-  const meme_master = process.env.CONTRACT_MASTER;
-  const meme_wallet = process.env.CONTRACT_JETTON_WALLET;
+export function getMemeDexBase64() {
+  const meme_master = process.env.DATABASE_URL;
+  const meme_wallet = process.env.DATABASE_URL;
   return { meme_master, meme_wallet };
 }
 
