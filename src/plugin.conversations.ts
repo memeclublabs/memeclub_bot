@@ -166,7 +166,7 @@ async function newMemeWithValidation(
           buildMemecoinInfoText(
             newMemecoin,
             updateGroup,
-            "🔔New Memecoin Information",
+            "🚀 Create New Memecoin ",
           ),
           { parse_mode: "HTML", reply_markup: keyboard },
         );

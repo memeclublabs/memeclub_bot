@@ -98,8 +98,8 @@ export function on_my_chat_member(bot: Bot<MyContext>) {
           } else {
             let addToChatCaption = `
 <b>🎉 Add to group successfully.</b>\n
-        - <b>Group Name</b>: ${chatTitle}
-        - <b>Member Count</b>: ${chatMemberCount}\n
+- <b>Group Name</b>: ${chatTitle}
+- <b>Member Count</b>: ${chatMemberCount}\n
 
 ⭐Your Meme Points: + ${addGroupPoints}
 `;

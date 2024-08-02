@@ -60,7 +60,7 @@ export async function confirmDeploy(
       );
 
       await ctx.reply(
-        "🏗<b>Memecoin " +
+        "<b>🏗 Memecoin " +
           memecoin.ticker +
           " #" +
           memecoin.id +
