@@ -86,11 +86,7 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
         Date.now() - start,
       );
     })
-    .text("⚙️ Setting", async (ctx) => {
-      await ctx.reply(
-        "The multi-language switching function is under development",
-      );
-    })
+    .submenu("⚙️ Settings", "submenu_settings")
     .row()
     .text("🎁 Airdrop & Referral", async (ctx) => {
       await listAirdrop(ctx);
@@ -106,14 +102,26 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
         .then((r) => {});
     });
 
-  const community_menu = new Menu<MyContext>("community_menu")
-    .url("👥 Chat Group", "https://t.me/meme_club_chat")
+  const submenu_settings = new Menu<MyContext>("submenu_settings")
+    .url("👥 Chat Group", "https://t.me/memeclub_chats")
+    .url("📣 News Channel", "https://t.me/memeclub_news")
     .row()
-    .url("🎉 Official Channel", "https://t.me/meme_club_news")
+    .url("𝕏 Twitter", "https://x.com/memeclubai")
+    .url("🌎 Website", "https://www.memeclub.ai/")
     .row()
-    .url("𝕏 Twitter @memeclubai", "https://x.com/memeclubai")
+    .url("🙋‍♂️ Help", "https://telegra.ph/Memeclub-Document-08-02")
+    .url("📒 FAQ", "https://telegra.ph/Memeclub-FAQ-08-02")
     .row()
-    .url("🌎 Official Website", "https://www.memeclub.ai/")
+    .text("🔔 Notification ", async (ctx) => {
+      await ctx.reply(
+        "🔔 You can define different notification rules for different groups. This function is under development. Stay tuned for further updates.",
+      );
+    })
+    .text("🇬🇧 Languages ", async (ctx) => {
+      await ctx.reply(
+        "🇬🇧 The multi-language switching function is under development. Stay tuned for further updates.",
+      );
+    })
     .row()
     .back("◀️ Go Back", async (ctx) => {
       await ctx
@@ -122,7 +130,7 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
     });
 
   start_menu.register(submenu_create_meme);
-  start_menu.register(community_menu);
+  start_menu.register(submenu_settings);
   bot.use(start_menu);
 
   group_start_menu.register(submenu_how_it_works);
