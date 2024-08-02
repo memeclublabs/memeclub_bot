@@ -27,7 +27,7 @@ export function formatTonAddressStr(address: string): string {
   return toTonAddressStr(addressObj);
 }
 
-export function tonviewerUrl(address: String | null) {
+export function tonviewerUrl(address: String | null | undefined): string {
   let url = tonTestOnly()
     ? "https://testnet.tonviewer.com/"
     : "https://tonviewer.com/";

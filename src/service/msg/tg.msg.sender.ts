@@ -88,7 +88,7 @@ export async function sendPrivateChatMemecoinInfo(
   inlineKeyboard.push(groupInfoLine);
   inlineKeyboard.push([
     {
-      text: "🌐 View Transaction at Tonviewer",
+      text: "🌐 View Transaction",
       url: tonviewerUrl(masterAddress),
     },
   ]);

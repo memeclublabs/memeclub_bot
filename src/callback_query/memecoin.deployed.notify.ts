@@ -36,7 +36,7 @@ export async function memecoinDeployedNotify(
         ],
         [
           {
-            text: "🌐 View Transaction at Tonviewer",
+            text: "🌐 View Transaction",
             url: tonviewerUrl(memecoin.masterAddress),
           },
         ],

@@ -1,5 +1,5 @@
 import { MyContext } from "../global.types";
-import { contactAdminWithError, tonTestOnly } from "../com.utils";
+import { contactAdminWithError, tonTestOnly, tonviewerUrl } from "../com.utils";
 import prisma from "../prisma";
 import { Address, fromNano, toNano } from "@ton/core";
 import { buildBuyTokenMsg } from "../service/ton/dex/message/masterMsg";
@@ -88,7 +88,23 @@ async function handlerBuyWithTon(
     Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS),
   )
     .then(async () => {
-      await ctx.reply(`✅ Transaction sent successfully`);
+      let userAddress: string | undefined = connector.account?.address;
+      if (!userAddress) {
+        userAddress = toAddress.toString();
+      }
+      await ctx.reply(`✅ Buy transaction sent successfully`, {
+        parse_mode: "HTML",
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "🌐 View Transaction",
+                url: tonviewerUrl(userAddress),
+              },
+            ],
+          ],
+        },
+      });
 
       let findUser = await prisma.user.findUnique({ where: { tgId: tgId } });
       if (!findUser) {
@@ -96,11 +112,21 @@ async function handlerBuyWithTon(
         return;
       }
       let buyNotice2Group =
-        "<b>🟢 Big Pump </b>\n" +
+        `<b>🟢 Buy Alert ${tonAmt > 10 ? " 📈 Big Pump" : " "} </b>\n\n` +
         `${findUser.firstName} ${findUser.lastName}` +
-        ` buy ${tonAmt} TON of ${findMeme.name}(${findMeme.ticker})`;
+        ` bought ${tonAmt} TON of ${findMeme.name}(${findMeme.ticker})`;
       await ctx.api.sendMessage(Number(findMeme.groupId), buyNotice2Group, {
         parse_mode: "HTML",
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "🌐 View Transaction",
+                url: tonviewerUrl(userAddress),
+              },
+            ],
+          ],
+        },
       });
     })
     .catch(async (e) => {

@@ -86,7 +86,7 @@ export async function confirmDeploy(
             inline_keyboard: [
               [
                 {
-                  text: "🌐 View Transaction at Tonviewer",
+                  text: "🌐 View Transaction",
                   url: tonviewerUrl(masterAddress),
                 },
               ],
