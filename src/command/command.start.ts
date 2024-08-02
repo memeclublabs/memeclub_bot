@@ -1,15 +1,14 @@
 import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
-import { Prisma, User } from "@prisma/client";
-import { FROM_GROUP_VIEW_MEME, Invite_ } from "../com.static";
-import { generateReferralCode } from "../com.referral";
+import { FROM_GROUP_VIEW_MEME } from "../com.static";
 import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.sender";
 import {
   group_start_menu,
   start_menu,
   startCaptionText,
 } from "../plugin.menu.start";
+import { createNewUser } from "../service/user/user.dao";
 
 export function bind_command_start(bot: Bot<MyContext>) {
   bot.command("start", async (ctx) => {
@@ -26,6 +25,7 @@ export function bind_command_start(bot: Bot<MyContext>) {
       //1.  判断消息来源的operator，按需创建用户
       let tgId = ctx.from?.id;
       if (tgId && ctx.from) {
+        // 1.1 send start menu
         await ctx
           .replyWithPhoto("https://www.memeclub.ai/bot/bot-img-memeclub.png", {
             caption: startCaptionText,
@@ -38,77 +38,26 @@ export function bind_command_start(bot: Bot<MyContext>) {
         let userById = await prisma.user.findUnique({
           where: { tgId: tgId },
         });
-        if (userById) {
-          let match = ctx.match;
-          if (match.startsWith(FROM_GROUP_VIEW_MEME)) {
-            // 通过群里点击 meme Buy/Sell 按钮加入，老用户要发送 Meme 菜单
-            const memecoinId = match.split(FROM_GROUP_VIEW_MEME)[1];
-            let findMeme = await prisma.memecoin.findUnique({
-              where: { id: Number(memecoinId) },
-            });
-            if (findMeme) {
-              let findGroup = await prisma.group.findUnique({
-                where: { groupId: Number(findMeme.groupId) },
-              });
-              if (findGroup) {
-                await sendPrivateChatMemecoinInfo(ctx, findGroup, findMeme);
-              }
-            }
-          }
-        } else {
-          //create user
-          // https://t.me/your_bot?start=Invite_ABCDEFGHIJK
-          let match = ctx.match;
-          let referUser: User | undefined = undefined;
-          if (match.startsWith(Invite_)) {
-            let userByRefCode = await prisma.user.findUnique({
-              where: { refCode: match },
-            });
-            // if not find, userByRefCode is null
-            if (userByRefCode) {
-              referUser = userByRefCode;
-              await ctx.reply(
-                `You are invited by ${userByRefCode.firstName} ${userByRefCode.lastName}`,
-              );
-            }
-          } else if (match.startsWith(FROM_GROUP_VIEW_MEME)) {
-            // 通过群里点击 meme Buy/Sell 按钮加入，这个推荐关系要算到邀请人身上
-            const memecoinId = match.split(FROM_GROUP_VIEW_MEME)[1];
-            let findMeme = await prisma.memecoin.findUnique({
-              where: { id: Number(memecoinId) },
-            });
-            if (findMeme) {
-              let findGroup = await prisma.group.findUnique({
-                where: { groupId: Number(findMeme.groupId) },
-              });
-              if (findGroup) {
-                let findUser = await prisma.user.findUnique({
-                  where: { tgId: findGroup.inviterTgId },
-                });
-                if (findUser) {
-                  referUser = findUser;
-                  console.info(
-                    `${ctx.from.first_name} 通过群里点击 meme Buy/Sell 按钮加入，这个推荐关系要算到邀请人 ${referUser.firstName}身上`,
-                  );
-                }
 
-                await sendPrivateChatMemecoinInfo(ctx, findGroup, findMeme);
-              }
+        if (!userById) {
+          //1.2 create user
+          await createNewUser(ctx);
+        }
+        // 1.3 if click meme btn, send meme info
+        let match = ctx.match;
+        if (match.startsWith(FROM_GROUP_VIEW_MEME)) {
+          const memecoinId = match.split(FROM_GROUP_VIEW_MEME)[1];
+          let findMeme = await prisma.memecoin.findUnique({
+            where: { id: Number(memecoinId) },
+          });
+          if (findMeme) {
+            let findGroup = await prisma.group.findUnique({
+              where: { groupId: Number(findMeme.groupId) },
+            });
+            if (findGroup) {
+              await sendPrivateChatMemecoinInfo(ctx, findGroup, findMeme);
             }
           }
-          const userData = {
-            tgId: tgId,
-            tgUsername: ctx.from.username,
-            firstName: ctx.from.first_name,
-            lastName: ctx.from.last_name,
-            refCode: generateReferralCode(tgId),
-            isPremium: ctx.from.is_premium,
-            langCode: ctx.from.language_code,
-            createBy: tgId,
-            ...(referUser ? { referBy: referUser.tgId } : {}),
-          } satisfies Prisma.UserCreateInput;
-          let newUser = await prisma.user.create({ data: userData });
-          console.info(`new user created. ${newUser.id}`);
         }
       }
     } else {
