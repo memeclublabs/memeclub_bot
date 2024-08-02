@@ -27,7 +27,7 @@ export async function tonDeployMaster(
     max_supply: "1000000000", //1 billion,10 亿 token
     admin_address: opWallet.address,
     jetton_wallet_code: Cell.fromBase64(compile_codes.meme_wallet),
-    tx_fee_numerator: 1000, //1000/10000,即10%卖出手续费
+    tx_fee_numerator: 500, //1000/10000,即10%卖出手续费
     curve_type: 1, //1: 线性函数  y= a*x/10^9 + b  5:友好型S函数
     param_a: 4, // param_a 越小，token价格越低，1TON可以买2.2万个token
     param_b: 0,
