@@ -10,10 +10,6 @@ export function isMainnet() {
   return !tonTestOnly();
 }
 
-export function tonNetwork() {
-  return tonTestOnly() ? "Testnet" : "Mainnet";
-}
-
 export function toTonAddressStr(address: Address): string {
   return address.toString({
     urlSafe: true,
