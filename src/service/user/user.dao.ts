@@ -41,13 +41,34 @@ async function addUserActionRecord(
   tgId: number | bigint,
   displayName: string,
   actionType: string,
-  selfReward: bigint,
+  selfReward: bigint | number,
 ) {
   const userActionData = {
     opTgId: tgId,
     opDisplayName: displayName,
     actionType: actionType,
     selfReward: selfReward,
+  } satisfies Prisma.UserActionCreateInput;
+  await prisma.userAction.create({ data: userActionData });
+}
+
+async function addUserActionWithTargetRecord(
+  tgId: number | bigint,
+  displayName: string,
+  actionType: string,
+  selfReward: bigint | number,
+  targetTgId: number | bigint,
+  targetReward: bigint | number,
+  targetDisplayName: string,
+) {
+  const userActionData = {
+    opTgId: tgId,
+    opDisplayName: displayName,
+    actionType: actionType,
+    selfReward: selfReward,
+    targetTgId: targetTgId,
+    targetReward: targetReward,
+    targetDisplayName: targetDisplayName,
   } satisfies Prisma.UserActionCreateInput;
   await prisma.userAction.create({ data: userActionData });
 }
@@ -136,6 +157,47 @@ export async function updateUserActionUnified(
       actionType,
       deltaPoints,
     );
+  }
+}
+
+export async function updateBuyOrSellReward(
+  opTgId: number,
+  actionType: ActionTypes,
+  amtRate: number,
+) {
+  let opUser = await prisma.user.findUnique({
+    where: {
+      tgId: opTgId,
+    },
+  });
+  if (opUser) {
+    let opReward = Math.ceil(amtRate * 100);
+    let targetTgId = opUser.referBy;
+    if (targetTgId) {
+      let targetUser = await prisma.user.findUnique({
+        where: {
+          tgId: targetTgId,
+        },
+      });
+      if (targetUser) {
+        let targetReward = Math.ceil(amtRate * 10);
+        await updateUserTotalPoints(
+          opTgId,
+          opUser.totalPoints + BigInt(opReward),
+        );
+        await addUserActionWithTargetRecord(
+          opTgId,
+          opUser.firstName + " " + opUser.lastName,
+          actionType,
+          opReward,
+          targetTgId,
+          targetReward,
+          targetUser.firstName + " " + targetUser.lastName,
+        );
+      }
+    } else {
+      await updateUserActionUnified(opTgId, actionType, BigInt(opReward));
+    }
   }
 }
 

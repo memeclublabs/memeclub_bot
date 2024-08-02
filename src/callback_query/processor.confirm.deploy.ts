@@ -17,6 +17,13 @@ export async function confirmDeploy(
   });
 
   if (memecoin) {
+    await ctx.reply(
+      "🕑 Memecoin Deploying\n\n " + "" + "Please wait a few seconds...",
+      {
+        parse_mode: "HTML",
+      },
+    );
+
     if (memecoin.coinStatus == "Init") {
       await prisma.memecoin.update({
         where: { id: memecoin.id },

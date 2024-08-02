@@ -11,6 +11,9 @@ import {
 } from "../service/ton-connect/ton-connect-utils";
 import { isTelegramUrl, UserRejectsError } from "@tonconnect/sdk";
 import { getWalletInfo } from "../service/ton-connect/wallets";
+import { Prisma } from "@prisma/client";
+import { updateBuyOrSellReward } from "../service/user/user.dao";
+import { ActionTypes } from "../com.enums";
 
 export async function clickBuyWithTon(
   ctx: MyContext,
@@ -106,13 +109,23 @@ async function handlerBuyWithTon(
         },
       });
 
+      // buy order & award start
+      let insertData = {
+        memecoinId: memecoinId,
+        fromCoin: "TON",
+        fromAmt: tonAmt,
+      } satisfies Prisma.BuyOrderCreateInput;
+      await prisma.buyOrder.create({ data: insertData });
+      await updateBuyOrSellReward(tgId, ActionTypes.MemeBuy, tonAmt);
+      // buy order & award end
+
       let findUser = await prisma.user.findUnique({ where: { tgId: tgId } });
       if (!findUser) {
         console.error("User not found", tgId);
         return;
       }
       let buyNotice2Group =
-        `<b>🟢 Buy Alert ${tonAmt > 10 ? " 📈 Big Pump" : " "} </b>\n\n` +
+        `<b>🟢 Buy Alert ${tonAmt >= 10 ? " 📈 Big Pump" : " "} </b>\n\n` +
         `${findUser.firstName} ${findUser.lastName}` +
         ` bought ${tonAmt} TON of ${findMeme.name}(${findMeme.ticker})`;
       await ctx.api.sendMessage(Number(findMeme.groupId), buyNotice2Group, {

@@ -1,5 +1,10 @@
 import { MyContext } from "../global.types";
-import { contactAdminWithError, isMainnet, tonTestOnly } from "../com.utils";
+import {
+  contactAdminWithError,
+  isMainnet,
+  tonTestOnly,
+  tonviewerUrl,
+} from "../com.utils";
 import prisma from "../prisma";
 import { TonClient, TupleItem } from "@ton/ton";
 import {
@@ -17,6 +22,9 @@ import {
 import { isTelegramUrl, UserRejectsError } from "@tonconnect/sdk";
 import { getWalletInfo } from "../service/ton-connect/wallets";
 import { getConnector } from "../service/ton-connect/connector";
+import { Prisma } from "@prisma/client";
+import { updateBuyOrSellReward } from "../service/user/user.dao";
+import { ActionTypes } from "../com.enums";
 
 export async function clickSellWithPercentage(
   ctx: MyContext,
@@ -38,12 +46,12 @@ export async function handlerSellWithPercentage(
   memecoinId: number,
   sellPercentage: number,
 ) {
-  const chatId = ctx.from?.id;
-  if (!chatId) {
+  const tgId = ctx.from?.id;
+  if (!tgId) {
     await contactAdminWithError(ctx);
     return;
   }
-  const connector = getConnector(chatId);
+  const connector = getConnector(tgId);
   await connector.restoreConnection();
   if (!connector.connected) {
     await ctx.reply("Connect wallet to send transaction");
@@ -132,8 +140,61 @@ export async function handlerSellWithPercentage(
     }),
     Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS),
   )
-    .then(() => {
-      ctx.reply(`Transaction sent successfully`);
+    .then(async () => {
+      let userAddress: string | undefined = connector.account?.address;
+      if (!userAddress) {
+        userAddress = jettonWalletAddress.toString();
+      }
+      await ctx.reply(`✅ Sell transaction sent successfully`, {
+        parse_mode: "HTML",
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "🌐 View Transaction",
+                url: tonviewerUrl(userAddress),
+              },
+            ],
+          ],
+        },
+      });
+
+      // sell order & award start
+      let insertData = {
+        memecoinId: memecoinId,
+        sellMode: "Percentage",
+        sellPercent: sellPercentage,
+        toCoin: "TON",
+      } satisfies Prisma.SellOrderCreateInput;
+      await prisma.sellOrder.create({ data: insertData });
+      await updateBuyOrSellReward(tgId, ActionTypes.MemeSell, 1);
+      // sell order & award end
+
+      //   sell alert
+      let findUser = await prisma.user.findUnique({ where: { tgId: tgId } });
+      if (!findUser) {
+        console.error("User not found", tgId);
+        return;
+      }
+      let buyNotice2Group =
+        `<b>🔴 Sell Alert ${Number(sellPercentage) == 100 ? " 📉 Big Dump" : " "} </b>\n\n` +
+        `${findUser.firstName} ${findUser.lastName}` +
+        ` sold ${sell_gas}% of ${findMeme.name}(${findMeme.ticker})`;
+      await ctx.api.sendMessage(Number(findMeme.groupId), buyNotice2Group, {
+        parse_mode: "HTML",
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "🌐 View Transaction",
+                url: tonviewerUrl(userAddress),
+              },
+            ],
+          ],
+        },
+      });
+
+      //   sell alert end
     })
     .catch((e) => {
       if (e === pTimeoutException) {

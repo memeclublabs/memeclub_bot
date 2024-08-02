@@ -177,18 +177,20 @@ model BuyOrder {
 }
 
 model SellOrder {
-  id         BigInt   @id @default(autoincrement())
-  memecoinId BigInt
-  sellAmt    BigInt?
-  toCoin     String?
-  toAmt      BigInt?
-  txHash     String?
-  extJson    Json?
-  traceId    String?
-  createBy   BigInt?
-  createDt   DateTime @default(now())
-  modifyBy   BigInt?
-  modifyDt   DateTime @updatedAt
+  id          BigInt   @id @default(autoincrement())
+  memecoinId  BigInt
+  sellMode    String?
+  sellPercent BigInt?
+  sellAmt     BigInt?
+  toCoin      String?
+  toAmt       BigInt?
+  txHash      String?
+  extJson     Json?
+  traceId     String?
+  createBy    BigInt?
+  createDt    DateTime @default(now())
+  modifyBy    BigInt?
+  modifyDt    DateTime @updatedAt
 
   @@index([memecoinId])
 }
