@@ -4,6 +4,8 @@ import { Menu } from "@grammyjs/menu";
 import prisma from "./prisma";
 import { listNewMemes } from "./service/msg/tg.msg.sender";
 import { listAirdrop } from "./service/msg/tg.msg.airdrop";
+import { contactAdminWithError } from "./com.utils";
+import { handleConnectCommand } from "./service/ton-connect-commands-handlers";
 
 export const group_start_menu = new Menu<MyContext>("group_start_menu");
 export const start_menu = new Menu<MyContext>("start_menu");
@@ -61,28 +63,21 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
     .text("🌟 New Listing", async (ctx) => {
       await listNewMemes(ctx);
     })
-    .submenu("🤡 My Memes", "submenu_create_meme")
+    .text("🤡 My Memes", async (ctx) => {
+      await ctx.reply("Connect Wallet to Make Memes Great Again.");
+    })
     .row()
     .text("💎 My Wallet", async (ctx) => {
       let start = Date.now();
       console.info("DEBUG: ======== click [💎 My Wallet]", start);
       const userTgId = ctx.from?.id;
       if (userTgId) {
-        //         let { isConnected, connector } = await tonConnectInfoKeyboard(
-        //           ctx,
-        //             userTgId,
-        //         );
-        //         console.info("wallet connection:", isConnected);
-        //         let wallet = connector?.wallet;
-        //         if (wallet) {
-        //           await ctx.reply(
-        //             `<b>💎 Wallet Connected!</b> \n
-        // Wallet: ${wallet?.device?.appName}
-        // Network: ${wallet!.account.chain === CHAIN.TESTNET ? "Testnet" : "Mainnet"}
-        // Address:\n${formatTonAddressStr(wallet?.account.address!)}`,
-        //             { parse_mode: "HTML" },
-        //           );
-        //         }
+        const chatId = ctx.from?.id;
+        if (!chatId) {
+          await contactAdminWithError(ctx);
+          return;
+        }
+        await handleConnectCommand(ctx);
       } else {
         console.error("call 💎 My Wallet - userTgId is null");
       }
@@ -91,7 +86,11 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
         Date.now() - start,
       );
     })
-    .submenu("⚙️ Setting", "submenu_create_meme")
+    .text("⚙️ Setting", async (ctx) => {
+      await ctx.reply(
+        "The multi-language switching function is under development",
+      );
+    })
     .row()
     .text("🎁 Airdrop & Referral", async (ctx) => {
       await listAirdrop(ctx);

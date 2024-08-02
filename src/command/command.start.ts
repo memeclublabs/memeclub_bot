@@ -97,5 +97,3 @@ export function bind_command_start(bot: Bot<MyContext>) {
     );
   });
 }
-
-function fromGroupClickMeme(ctx: MyContext) {}
