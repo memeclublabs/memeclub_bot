@@ -3,6 +3,7 @@ import { Prisma, User } from "@prisma/client";
 import { FROM_GROUP_VIEW_MEME, Invite_ } from "../../com.static";
 import prisma from "../../prisma";
 import { generateReferralCode } from "../../com.referral";
+import { ActionTypes } from "../../com.enums";
 
 async function getReferralUser(match: string): Promise<User | undefined> {
   if (match.startsWith(Invite_)) {
@@ -36,6 +37,22 @@ async function getReferralUser(match: string): Promise<User | undefined> {
   }
 }
 
+async function userActionUpdatePoints(
+  tgId: bigint,
+  displayName: string,
+  actionType: string,
+
+  selfReward: bigint,
+) {
+  const userActionData = {
+    opTgId: tgId,
+    opDisplayName: displayName,
+    actionType: actionType,
+    selfReward: selfReward,
+  } satisfies Prisma.UserActionCreateInput;
+  await prisma.userAction.create({ data: userActionData });
+}
+
 export async function createNewUser(ctx: MyContext) {
   let match = ctx.match;
   let referUser: User | undefined = undefined;
@@ -52,20 +69,60 @@ export async function createNewUser(ctx: MyContext) {
     console.error("ERROR: ctx.from is null when create user", ctx);
     return;
   }
-  let tgId = ctx.from.id;
+
   const userData = {
-    tgId: tgId,
+    tgId: ctx.from.id,
     tgUsername: ctx.from.username,
     firstName: ctx.from.first_name,
     lastName: ctx.from.last_name,
-    refCode: generateReferralCode(tgId),
+    refCode: generateReferralCode(ctx.from.id),
     isPremium: ctx.from.is_premium,
+    totalPoints: ctx.from.is_premium ? 1000 : 100,
     langCode: ctx.from.language_code,
-    createBy: tgId,
+    createBy: ctx.from.id,
     ...(referUser ? { referBy: referUser.tgId } : {}),
   } satisfies Prisma.UserCreateInput;
   let newUser = await prisma.user.create({ data: userData });
   console.info(`new user created. ${newUser.id}`);
 
+  const userActionData = {
+    opTgId: ctx.from.id,
+    opDisplayName: ctx.from.first_name + " " + ctx.from.last_name,
+    actionType: ctx.from.is_premium
+      ? ActionTypes.RegisterPremium
+      : ActionTypes.Register,
+    selfReward: ctx.from.is_premium ? 1000 : 100,
+  } satisfies Prisma.UserActionCreateInput;
+  await prisma.userAction.create({ data: userActionData });
+
+  // refer award start
+  if (referUser) {
+    let referPoint = ctx.from.is_premium ? 200n : 20n;
+    let newPoints = referUser.totalPoints + referPoint;
+    await updateUserTotalPoints(referUser.tgId, newPoints);
+
+    let actionType = ctx.from.is_premium
+      ? ActionTypes.InvitedPremium
+      : ActionTypes.InvitedUser;
+    let referName = referUser.firstName + " " + referUser.lastName;
+    await userActionUpdatePoints(
+      referUser.tgId,
+      referName,
+      actionType,
+      referPoint,
+    );
+  }
+
+  // refer award end
+
   return newUser;
+}
+
+async function updateUserTotalPoints(tgId: bigint, newPoints: bigint) {
+  await prisma.user.update({
+    where: { tgId: tgId },
+    data: {
+      totalPoints: newPoints,
+    },
+  });
 }
