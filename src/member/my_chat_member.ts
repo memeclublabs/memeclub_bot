@@ -3,6 +3,8 @@ import { MyContext } from "../global.types";
 import prisma from "../prisma";
 import { Group, Prisma } from "@prisma/client";
 import { processByCoinStatus } from "../service/memecoin.process.by.status";
+import { ActionTypes } from "../com.enums";
+import { updateUserActionUnified } from "../service/user/user.dao";
 
 export function on_my_chat_member(bot: Bot<MyContext>) {
   bot.on("my_chat_member", async (ctx) => {
@@ -25,6 +27,7 @@ export function on_my_chat_member(bot: Bot<MyContext>) {
         let opFirstName = ctx.myChatMember.from.first_name;
         let opLastName = ctx.myChatMember.from.last_name;
         let opDisplayName = `${opFirstName} ${opLastName}`;
+        let addGroupPoints = calculateAddGroupReward(chatMemberCount);
 
         let findGroup = await prisma.group.findUnique({
           where: { groupId: chatId },
@@ -34,6 +37,7 @@ export function on_my_chat_member(bot: Bot<MyContext>) {
           // 准备按需更新
           // 判断群组绑定的 mainBotId 是否是本 bot，有可能本项目有多个 bot 实例
           // 如果是本 bot 就更新，否则先跳过
+          // todo： 已有群组，更新 id
           if (
             findGroup.mainBotId ==
             BigInt(ctx.myChatMember.new_chat_member.user.id)
@@ -57,7 +61,6 @@ export function on_my_chat_member(bot: Bot<MyContext>) {
             console.error("mainBotId is another bot, pending support.");
           }
         } else {
-          // 创建
           const insertData = {
             groupId: chatId,
             groupType: chatType,
@@ -72,6 +75,12 @@ export function on_my_chat_member(bot: Bot<MyContext>) {
             createBy: opIgId,
           } satisfies Prisma.GroupCreateInput;
           realGroup = await prisma.group.create({ data: insertData });
+
+          await updateUserActionUnified(
+            opIgId,
+            ActionTypes.GroupAdd,
+            BigInt(addGroupPoints),
+          );
         }
 
         if (realGroup) {
@@ -92,7 +101,7 @@ export function on_my_chat_member(bot: Bot<MyContext>) {
         - <b>Group Name</b>: ${chatTitle}
         - <b>Member Count</b>: ${chatMemberCount}\n
 
-⭐Your Meme Points: + 200
+⭐Your Meme Points: + ${addGroupPoints}
 `;
             let inlineKeyboard = buildStep2Keyboard(realGroup.groupId);
             await ctx.api
@@ -124,31 +133,41 @@ Let's pump a new Memecoin and have fun together!
           }
         }
       } else {
-        // 下面是处理 bot 被剔除群组的情况
-        console.info(
-          ` new chatMemberStatus ${chatMemberStatus} at chat ${chatId}`,
-        );
-        // 去除 member ，admin 和 creator，还有如下 3个状态
-        // let status: "restricted" | "left" | "kicked"
-        let findChat = await prisma.group.findUnique({
-          where: { groupId: chatId },
-        });
-        if (findChat) {
-          await prisma.group.update({
-            where: { groupId: chatId },
-            data: {
-              botStatus: chatMemberStatus,
-              modifyBy: ctx.myChatMember?.from.id,
-            },
-          });
-          console.info(
-            `Chat ${findChat.groupId} botStatus updated from ${findChat.botStatus} to ${chatMemberStatus}`,
-          );
-        }
-        // await prisma.user.findUnique({ where: { tgId: tgId }});
+        await processLeaveGroup(ctx, chatId, chatMemberStatus);
       } //end join group / channel
     } //end chat in group / channel loop
   });
+}
+
+async function processLeaveGroup(
+  ctx: MyContext,
+  chatId: number,
+  chatMemberStatus:
+    | "member"
+    | "creator"
+    | "administrator"
+    | "restricted"
+    | "left"
+    | "kicked",
+) {
+  console.info(` new chatMemberStatus ${chatMemberStatus} at chat ${chatId}`);
+  // 去除 member ，admin 和 creator，还有如下 3个状态
+  // let status: "restricted" | "left" | "kicked"
+  let findChat = await prisma.group.findUnique({
+    where: { groupId: chatId },
+  });
+  if (findChat) {
+    await prisma.group.update({
+      where: { groupId: chatId },
+      data: {
+        botStatus: chatMemberStatus,
+        modifyBy: ctx.myChatMember?.from.id,
+      },
+    });
+    console.info(
+      `Chat ${findChat.groupId} botStatus updated from ${findChat.botStatus} to ${chatMemberStatus}`,
+    );
+  }
 }
 
 function buildStep2Keyboard(groupId: bigint) {
@@ -156,4 +175,15 @@ function buildStep2Keyboard(groupId: bigint) {
     "Step 2: Create new Memecoin",
     JSON.stringify({ method: "createMemeConversation", data: `${groupId}` }),
   );
+}
+
+export function calculateAddGroupReward(input: number): number {
+  if (input <= 5000) {
+    return input;
+  } else if (input > 5000 && input < 10000) {
+    const additionalValue = Math.floor((input - 5000) / 1000) * 100;
+    return 5000 + additionalValue;
+  } else {
+    return 6000;
+  }
 }

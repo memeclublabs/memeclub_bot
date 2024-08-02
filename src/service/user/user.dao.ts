@@ -37,11 +37,10 @@ async function getReferralUser(match: string): Promise<User | undefined> {
   }
 }
 
-async function userActionUpdatePoints(
-  tgId: bigint,
+async function addUserActionRecord(
+  tgId: number | bigint,
   displayName: string,
   actionType: string,
-
   selfReward: bigint,
 ) {
   const userActionData = {
@@ -105,7 +104,7 @@ export async function createNewUser(ctx: MyContext) {
       ? ActionTypes.InvitedPremium
       : ActionTypes.InvitedUser;
     let referName = referUser.firstName + " " + referUser.lastName;
-    await userActionUpdatePoints(
+    await addUserActionRecord(
       referUser.tgId,
       referName,
       actionType,
@@ -118,7 +117,29 @@ export async function createNewUser(ctx: MyContext) {
   return newUser;
 }
 
-async function updateUserTotalPoints(tgId: bigint, newPoints: bigint) {
+export async function updateUserActionUnified(
+  tgId: number,
+  actionType: ActionTypes,
+  deltaPoints: bigint,
+) {
+  let findUser = await prisma.user.findUnique({
+    where: {
+      tgId: tgId,
+    },
+  });
+  if (findUser) {
+    let newPoints = findUser.totalPoints + deltaPoints;
+    await updateUserTotalPoints(tgId, newPoints);
+    await addUserActionRecord(
+      tgId,
+      findUser.firstName + " " + findUser.lastName,
+      actionType,
+      deltaPoints,
+    );
+  }
+}
+
+async function updateUserTotalPoints(tgId: bigint | number, newPoints: bigint) {
   await prisma.user.update({
     where: { tgId: tgId },
     data: {

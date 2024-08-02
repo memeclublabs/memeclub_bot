@@ -33,9 +33,9 @@ export async function listAirdrop(ctx: MyContext): Promise<void> {
   await ctx.reply(
     `<b>🎁 Airdrop & Referral </b>
 
-🔗Your referral link: ${startReferralLink}
+🔗Your Referral Link: ${startReferralLink}
 
-⭐️Your MEME Points: ${findUser.totalPoints}
+⭐️Your Meme Points: ${findUser.totalPoints}
 
 💰Share and earn upto 10% commission forever from your friends!`,
     {

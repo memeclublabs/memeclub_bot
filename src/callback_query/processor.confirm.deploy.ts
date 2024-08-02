@@ -82,12 +82,12 @@ export async function confirmDeploy(
                   url: tonviewerUrl(masterAddress),
                 },
               ],
-              [
-                {
-                  text: "Check Status",
-                  callback_data: `callback_check_status_memecoin_${memecoin?.id}`,
-                },
-              ],
+              // [
+              //   {
+              //     text: "Check Status",
+              //     callback_data: `callback_check_status_memecoin_${memecoin?.id}`,
+              //   },
+              // ],
             ],
           },
         },
