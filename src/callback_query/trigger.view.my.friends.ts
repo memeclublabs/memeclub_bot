@@ -24,7 +24,7 @@ export async function triggerViewMyFriends(
 
     let text =
       "👬 <b>My Friends</b> \n\n" +
-      `You've invited a total of ${friendsCount} friends\n\n` +
+      `You've invited ${friendsCount} friends\n\n` +
       "<b>Here is a short list:</b> " +
       friendList;
     await ctx.reply(text, { parse_mode: "HTML" });

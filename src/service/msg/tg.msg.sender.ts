@@ -30,8 +30,8 @@ export async function listNewMemes(ctx: MyContext): Promise<void> {
       }
     }
     await ctx.reply(
-      "<b>🌟 New Memes</b>\n\n" +
-        "Click the button to view details of each Memecoin.",
+      "<b>🌟 New Memecoins</b>\n\n" +
+        `Here are the latest ${findMemecoins.length} memecoins.\nClick to view details and pump it!`,
       {
         parse_mode: "HTML",
         reply_markup: inlineKeyboard,
