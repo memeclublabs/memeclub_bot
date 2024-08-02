@@ -109,6 +109,7 @@ async function newMemeWithValidation(
         let publicImageUrl = "https://www.memeclub.ai/bot/default512.png";
         if (photos && photos.length > 0) {
           try {
+            await ctx.reply("Processing image .....");
             const largestPhoto = photos[photos.length - 1];
             const fileId = largestPhoto.file_id;
             const fileInfo = await ctx.api.getFile(fileId);
