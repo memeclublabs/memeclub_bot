@@ -11,5 +11,7 @@ declare namespace NodeJS {
     TELEGRAM_BOT_NAME: string;
     TELEGRAM_BOT_LINK: string;
     BACKEND_SERVICE_URL: string;
+    CONTRACT_MASTER: string;
+    CONTRACT_JETTON_WALLET: string;
   }
 }
