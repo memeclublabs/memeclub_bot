@@ -11,6 +11,7 @@ import { processorShowMemecoinInfo } from "./processor.show.memecoin.info";
 import { triggerGetReferralLink } from "./trigger.get.referral.link";
 import { triggerViewMyFriends } from "./trigger.view.my.friends";
 import { triggerViewPointsHistory } from "./trigger.view.points.history";
+import { triggerCoinsCreated } from "./trigger.coins.created";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   const callbacks = {
@@ -24,6 +25,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
     triggerGetReferralLink: triggerGetReferralLink,
     triggerViewMyFriends: triggerViewMyFriends,
     triggerViewPointsHistory: triggerViewPointsHistory,
+    triggerCoinsCreated: triggerCoinsCreated,
     ...walletMenuCallbacks,
   };
 
