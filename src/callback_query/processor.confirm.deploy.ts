@@ -17,6 +17,27 @@ export async function confirmDeploy(
   });
 
   if (memecoin) {
+    // deduct points for deploy
+    let findUser = await prisma.user.findUnique({
+      where: { tgId: ctx.from?.id },
+    });
+    if (!findUser) {
+      console.error("no user found. fail to deduct points for deploy");
+      return;
+    }
+    if (findUser && findUser.totalPoints >= 100) {
+      await updateUserActionUnified(
+        ctx.from?.id!,
+        ActionTypes.MemeDeploy,
+        -100n,
+      );
+    } else {
+      let text = `🛑 <b>Insufficient Points</b>\n\n⭐️ Need 100 points to deploy new memecoin for free 🆓.\n\n⚠️ Your total points is ${findUser.totalPoints}. \n\n🎁 Invite friends to get more points.\n`;
+      await ctx.reply(text, { parse_mode: "HTML" });
+      return;
+    }
+    // deduct points for deploy end
+
     await ctx.reply(
       "🕑 Memecoin Deploying\n\n " + "" + "Please wait a few seconds...",
       {
@@ -34,26 +55,6 @@ export async function confirmDeploy(
       console.info(
         `${memecoin.ticker}#${memecoin.id} status update from Init to Processing`,
       );
-
-      // deduct points for deploy
-      let findUser = await prisma.user.findUnique({
-        where: { tgId: ctx.from?.id },
-      });
-      if (!findUser) {
-        console.error("no user found. fail to deduct points for deploy");
-        return;
-      }
-      if (findUser && findUser.totalPoints >= 100) {
-        await updateUserActionUnified(
-          ctx.from?.id!,
-          ActionTypes.MemeDeploy,
-          -100n,
-        );
-      } else {
-        let text = `🛑<b>Insufficient total Points<b/>\n\n⭐️ Need 100 points to deploy new memecoin.\nYour total points is ${findUser.totalPoints}`;
-        await ctx.reply(text, { parse_mode: "HTML" });
-      }
-      // deduct points for deploy end
 
       let { opWallet, masterAddress, seqNo } = await tonDeployMaster(
         memecoin.name,
