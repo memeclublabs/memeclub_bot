@@ -69,7 +69,10 @@ export async function contactAdminWithError(ctx: MyContext, clue?: string) {
       `[Clue: ${clue}]`,
   );
 }
-
+export function isValidNumber(value: string): boolean {
+  let number = Number(value);
+  return !Number.isNaN(number) && Number.isFinite(number);
+}
 export function buildMemecoinInfoText(
   memecoin: Memecoin,
   group: Group,

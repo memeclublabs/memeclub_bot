@@ -12,7 +12,7 @@ export function buildKeyboardWithBuyOrder(buyOrders: BuyOrder[]) {
       `${getEmoji(buyOrder.memecoinId)} #${buyOrder.memecoinId} - ${buyOrder.name}`,
       JSON.stringify({
         method: "processorShowMemecoinInfo",
-        data: `${buyOrder.id}`,
+        data: `${buyOrder.memecoinId}`,
       }),
     );
     if (i % 2 === 0) {

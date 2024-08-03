@@ -4,7 +4,11 @@ import { conversations, createConversation } from "@grammyjs/conversations";
 import prisma from "./prisma";
 import { Prisma } from "@prisma/client";
 import { processByCoinStatus } from "./service/memecoin.process.by.status";
-import { bigintReplacer, buildMemecoinInfoText } from "./com.utils";
+import {
+  bigintReplacer,
+  buildMemecoinInfoText,
+  isValidNumber,
+} from "./com.utils";
 import { uploadImageToGetUrl } from "./service/image/upload.image";
 
 export function use_conversations_plugin(bot: Bot<MyContext>) {
@@ -241,11 +245,9 @@ function tickerFormat(input: string | null | undefined): string {
   } else if (cleanedString.length == 0) {
     cleanedString = input;
   }
-  try {
-    let number = Number(cleanedString);
-    return "$" + number;
-  } catch (e) {
-    console.info("convert number start with $", cleanedString);
+  // 如果是纯数字，加上一个 $
+  if (isValidNumber(cleanedString)) {
+    return "$" + cleanedString;
   }
 
   return cleanedString;
