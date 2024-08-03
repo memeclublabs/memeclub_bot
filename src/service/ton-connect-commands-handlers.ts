@@ -13,7 +13,7 @@ import {
   pTimeoutException,
 } from "./ton-connect/ton-connect-utils";
 import { MyContext } from "../global.types";
-import { contactAdminWithError } from "../com.utils";
+import { contactAdminWithError, toFriendlyAddress } from "../com.utils";
 
 let newConnectRequestListenersMap = new Map<number, () => void>();
 
@@ -60,7 +60,7 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
         (await getWalletInfo(wallet.device.appName))?.name ||
         wallet.device.appName;
       await ctx.reply(
-        `<b>${walletName} wallet connected successfully</b>\n\n ${toUserFriendlyAddress(wallet.account.address)}`,
+        `<b>💎${walletName} wallet connected successfully</b>\n ${toFriendlyAddress(wallet.account.address)}`,
         {
           parse_mode: "HTML",
         },
@@ -227,9 +227,8 @@ export async function handleShowMyWalletCommand(ctx: MyContext): Promise<void> {
     connector.wallet!.device.appName;
 
   await ctx.reply(
-    `Connected wallet: ${walletName}\nYour address: ${toUserFriendlyAddress(
+    `Connected wallet: ${walletName}\nYour address: ${toFriendlyAddress(
       connector.wallet!.account.address,
-      connector.wallet!.account.chain === CHAIN.TESTNET,
     )}`,
   );
 }

@@ -10,17 +10,30 @@ export function isMainnet() {
   return !tonTestOnly();
 }
 
-export function toTonAddressStr(address: Address): string {
-  return address.toString({
+export function toFriendlyAddress(addressArg: Address | string) {
+  let oneAddress: Address;
+  if (addressArg instanceof Address) {
+    oneAddress = addressArg;
+  } else {
+    try {
+      oneAddress = Address.parse(addressArg);
+    } catch (e) {
+      return "InvalidAddress";
+    }
+  }
+  return oneAddress.toString({
     urlSafe: true,
     bounceable: false,
     testOnly: tonTestOnly(),
   });
 }
 
-export function formatTonAddressStr(address: string): string {
-  let addressObj = Address.parse(address);
-  return toTonAddressStr(addressObj);
+export function toTonAddressStr(address: Address): string {
+  return address.toString({
+    urlSafe: true,
+    bounceable: false,
+    testOnly: tonTestOnly(),
+  });
 }
 
 export function tonviewerUrl(address: String | null | undefined): string {
