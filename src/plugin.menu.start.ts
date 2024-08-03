@@ -2,10 +2,11 @@ import { Bot } from "grammy";
 import { MyContext } from "./global.types";
 import { Menu } from "@grammyjs/menu";
 import prisma from "./prisma";
-import { listNewMemes } from "./service/msg/tg.msg.sender";
 import { listAirdrop } from "./service/msg/tg.msg.airdrop";
 import { contactAdminWithError } from "./com.utils";
 import { handleConnectCommand } from "./service/ton-connect-commands-handlers";
+import { listMyMemes } from "./service/msg/tg.msg.list.my";
+import { listNewMemes } from "./service/msg/tg.msg.list.new";
 
 export const group_start_menu = new Menu<MyContext>("group_start_menu");
 export const start_menu = new Menu<MyContext>("start_menu");
@@ -64,7 +65,7 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
       await listNewMemes(ctx);
     })
     .text("🤡 My Memes", async (ctx) => {
-      await ctx.reply("Connect Wallet to Make Memes Great Again.");
+      await listMyMemes(ctx);
     })
     .row()
     .text("💎 My Wallet", async (ctx) => {
@@ -138,7 +139,7 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
 }
 
 export const startCaptionText: string =
-  "<b>#1 Memecoin launchpad on TON </b>\n\nMake Memecoins Great Again";
+  "<b>#1 Memecoin launchpad on TON </b>\n\nMake Memes Great Again";
 
 const backCaptionText: string =
   "<b>#1 Memecoin launchpad on TON </b>\n\nMake sure the memecoins revolution happens on TON";

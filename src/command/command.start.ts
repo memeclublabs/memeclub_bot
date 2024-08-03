@@ -2,13 +2,13 @@ import { Bot } from "grammy";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
 import { FROM_GROUP_VIEW_MEME } from "../com.static";
-import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.sender";
 import {
   group_start_menu,
   start_menu,
   startCaptionText,
 } from "../plugin.menu.start";
 import { createNewUser } from "../service/user/user.dao";
+import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.private.meme.info";
 
 export function bind_command_start(bot: Bot<MyContext>) {
   bot.command("start", async (ctx) => {

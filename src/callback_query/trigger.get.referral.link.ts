@@ -21,7 +21,7 @@ export async function triggerGetReferralLink(
   let text =
     "🥇#1 Memecoin launchpad on TON \n" +
     "\n" +
-    "🚀Make Memecoins Great Again\n\n" +
+    "🚀Make Memes Great Again\n\n" +
     getStartReferralLink(findUser.refCode);
 
   await ctx.reply(text, { parse_mode: "HTML" });

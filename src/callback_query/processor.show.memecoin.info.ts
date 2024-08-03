@@ -1,7 +1,7 @@
 import { MyContext } from "../global.types";
 import { contactAdminWithError } from "../com.utils";
 import prisma from "../prisma";
-import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.sender";
+import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.private.meme.info";
 
 export async function processorShowMemecoinInfo(
   ctx: MyContext,

@@ -204,6 +204,8 @@ function nameFormat(input: string | null | undefined): string {
 
   if (cleanedString.length > 16) {
     cleanedString = cleanedString.substring(0, 16);
+  } else if (cleanedString.length == 0) {
+    cleanedString = input;
   }
 
   return cleanedString;
@@ -218,6 +220,8 @@ function descFormat(input: string | null | undefined): string {
 
   if (cleanedString.length > 128) {
     cleanedString = cleanedString.substring(0, 128);
+  } else if (cleanedString.length == 0) {
+    cleanedString = input;
   }
 
   return cleanedString;
@@ -234,6 +238,14 @@ function tickerFormat(input: string | null | undefined): string {
   // 如果结果超过8个字符，截取前面8个字符
   if (cleanedString.length > 8) {
     cleanedString = cleanedString.substring(0, 8);
+  } else if (cleanedString.length == 0) {
+    cleanedString = input;
+  }
+  try {
+    let number = Number(cleanedString);
+    return "$" + number;
+  } catch (e) {
+    console.info("convert number start with $", cleanedString);
   }
 
   return cleanedString;

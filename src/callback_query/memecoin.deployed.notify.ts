@@ -2,12 +2,12 @@ import { Memecoin } from "@prisma/client";
 import { MyContext } from "../global.types";
 import prisma from "../prisma";
 import { FROM_GROUP_VIEW_MEME } from "../com.static";
-import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.sender";
 import {
   botStatusValid,
   buildMemecoinInfoText,
   tonviewerUrl,
 } from "../com.utils";
+import { sendPrivateChatMemecoinInfo } from "../service/msg/tg.msg.private.meme.info";
 
 export async function memecoinDeployedNotify(
   ctx: MyContext,
