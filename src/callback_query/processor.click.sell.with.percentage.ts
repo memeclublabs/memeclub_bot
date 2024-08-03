@@ -11,11 +11,11 @@ import {
 import { isTelegramUrl, UserRejectsError } from "@tonconnect/sdk";
 import { getWalletInfo } from "../service/ton-connect/wallets";
 import { getConnector } from "../service/ton-connect/connector";
-import { Prisma } from "@prisma/client";
 import { updateBuyOrSellReward } from "../service/user/user.dao";
-import { ActionTypes } from "../com.enums";
+import { ActionTypes, OrderStatus } from "../com.enums";
 import { getJettonWalletInfo } from "../service/jetton/get.jetton.balance";
 import { BASE_NANO_BIGINT } from "../com.static";
+import { Prisma } from "@prisma/client";
 
 export async function clickSellWithPercentage(
   ctx: MyContext,
@@ -115,6 +115,21 @@ export async function handlerSellWithPercentage(
     3n,
   );
   let payloadBase64 = payloadCell.toBoc().toString("base64");
+
+  // init sell order
+  let insertData = {
+    sellerTgId: tgId,
+    memecoinId: memecoinId,
+    name: findMeme.name,
+    ticker: findMeme.ticker,
+    status: OrderStatus.Init,
+    sellMode: "Percentage",
+    sellPercent: sellPercentage,
+    toCoin: "TON",
+  } satisfies Prisma.SellOrderCreateInput;
+  let sellOrder = await prisma.sellOrder.create({ data: insertData });
+  // init sell order end
+
   pTimeout(
     connector.sendTransaction({
       validUntil: Math.round(
@@ -150,13 +165,12 @@ export async function handlerSellWithPercentage(
       });
 
       // sell order & award start
-      let insertData = {
-        memecoinId: memecoinId,
-        sellMode: "Percentage",
-        sellPercent: sellPercentage,
-        toCoin: "TON",
-      } satisfies Prisma.SellOrderCreateInput;
-      await prisma.sellOrder.create({ data: insertData });
+      await prisma.sellOrder.update({
+        where: { id: sellOrder.id },
+        data: {
+          status: OrderStatus.Signed,
+        },
+      });
       await updateBuyOrSellReward(tgId, ActionTypes.MemeSell, 1);
       // sell order & award end
 
@@ -203,10 +217,22 @@ export async function handlerSellWithPercentage(
             },
           },
         );
+        await prisma.sellOrder.update({
+          where: { id: sellOrder.id },
+          data: {
+            status: OrderStatus.Timeout,
+          },
+        });
         return;
       }
 
       if (e instanceof UserRejectsError) {
+        await prisma.sellOrder.update({
+          where: { id: sellOrder.id },
+          data: {
+            status: OrderStatus.UserReject,
+          },
+        });
         await ctx.reply(`🔸You rejected the sell transaction.`);
         return;
       }

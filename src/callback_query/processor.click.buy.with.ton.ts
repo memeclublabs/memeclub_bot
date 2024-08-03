@@ -11,9 +11,9 @@ import {
 } from "../service/ton-connect/ton-connect-utils";
 import { isTelegramUrl, UserRejectsError } from "@tonconnect/sdk";
 import { getWalletInfo } from "../service/ton-connect/wallets";
-import { Prisma } from "@prisma/client";
 import { updateBuyOrSellReward } from "../service/user/user.dao";
-import { ActionTypes } from "../com.enums";
+import { ActionTypes, OrderStatus } from "../com.enums";
+import { Prisma } from "@prisma/client";
 
 export async function clickBuyWithTon(
   ctx: MyContext,
@@ -71,6 +71,19 @@ async function handlerBuyWithTon(
   let payloadCell = buildBuyTokenMsg(tonAmt, 0n);
   let payloadBase64 = payloadCell.toBoc().toString("base64");
 
+  // init order
+  let insertData = {
+    buyerTgId: tgId,
+    memecoinId: memecoinId,
+    name: findMeme.name,
+    ticker: findMeme.ticker,
+    fromCoin: "TON",
+    fromAmt: tonAmt,
+    status: OrderStatus.Init,
+  } satisfies Prisma.BuyOrderCreateInput;
+  let buyOrder = await prisma.buyOrder.create({ data: insertData });
+  // init order end
+
   pTimeout(
     connector.sendTransaction({
       validUntil: Math.round(
@@ -109,12 +122,12 @@ async function handlerBuyWithTon(
       });
 
       // buy order & award start
-      let insertData = {
-        memecoinId: memecoinId,
-        fromCoin: "TON",
-        fromAmt: tonAmt,
-      } satisfies Prisma.BuyOrderCreateInput;
-      await prisma.buyOrder.create({ data: insertData });
+      await prisma.buyOrder.update({
+        where: { id: buyOrder.id },
+        data: {
+          status: OrderStatus.Signed,
+        },
+      });
       await updateBuyOrSellReward(tgId, ActionTypes.MemeBuy, tonAmt);
       // buy order & award end
 
@@ -158,6 +171,13 @@ async function handlerBuyWithTon(
             },
           },
         );
+
+        await prisma.buyOrder.update({
+          where: { id: buyOrder.id },
+          data: {
+            status: OrderStatus.Timeout,
+          },
+        });
         return;
       }
 
@@ -165,6 +185,12 @@ async function handlerBuyWithTon(
         await ctx.reply(
           `🔸You rejected the transaction.\nPlease refer to TON network for the final result.`,
         );
+        await prisma.buyOrder.update({
+          where: { id: buyOrder.id },
+          data: {
+            status: OrderStatus.UserReject,
+          },
+        });
         return;
       }
       console.error(e);

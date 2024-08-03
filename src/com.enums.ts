@@ -8,3 +8,13 @@ export enum ActionTypes {
   InvitedUser = "InvitedUser",
   InvitedPremium = "InvitedPremium",
 }
+
+export enum OrderStatus {
+  Init = "Init",
+  PendingSign = "PendingSign",
+  Signed = "Signed",
+  UserReject = "UserReject",
+  Timeout = "Timeout",
+  Fail = "Fail",
+  Delete = "Delete",
+}

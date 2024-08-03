@@ -161,7 +161,11 @@ model Memecoin {
 
 model BuyOrder {
   id         BigInt   @id @default(autoincrement())
+  buyerTgId  BigInt
   memecoinId BigInt
+  name       String
+  ticker     String
+  status     String
   buyAmt     BigInt?
   fromCoin   String?
   fromAmt    BigInt?
@@ -178,7 +182,11 @@ model BuyOrder {
 
 model SellOrder {
   id          BigInt   @id @default(autoincrement())
+  sellerTgId  BigInt
   memecoinId  BigInt
+  name        String
+  ticker      String
+  status      String
   sellMode    String?
   sellPercent BigInt?
   sellAmt     BigInt?
