@@ -170,7 +170,7 @@ export async function handlerSellWithPercentage(
       let buyNotice2Group =
         `<b>🔴 Sell Alert ${Number(sellPercentage) == 100 ? " 📉 Big Dump" : " "} </b>\n\n` +
         `${findUser.firstName} ${findUser.lastName}` +
-        ` sold ${sell_gas}% of ${findMeme.name}(${findMeme.ticker})`;
+        ` sold ${sellPercentage}% of ${findMeme.name}(${findMeme.ticker})`;
       await ctx.api.sendMessage(Number(findMeme.groupId), buyNotice2Group, {
         parse_mode: "HTML",
         reply_markup: {

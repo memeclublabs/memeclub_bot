@@ -5,7 +5,7 @@ dotenv.config();
 
 (() => {
   const BASE_NANO_BIGINT: bigint = 1000000000n;
-  let a = 77525512860841n;
+  let a = 199999999999999n;
   const BASE_NANO_NUMBER: number = 1000000000;
   console.info(a);
   console.info(a / BASE_NANO_BIGINT);
