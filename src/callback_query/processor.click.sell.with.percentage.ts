@@ -85,8 +85,7 @@ export async function handlerSellWithPercentage(
 
   if (!jettonBalanceResult.success) {
     await ctx.reply(
-      `♦️Fail to get balance of ${findMeme.name}(${findMeme.ticker}). \n ` +
-        jettonBalanceResult.msg,
+      `♦️You don't have any balance of ${findMeme.name}(${findMeme.ticker}) or network is processing.\n\n Please buy it first and try again later.  `,
     );
     return;
   }

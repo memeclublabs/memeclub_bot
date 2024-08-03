@@ -1,5 +1,6 @@
-drop table if exists _prisma_migrations cascade;
 
+
+drop table if exists _prisma_migrations cascade;
 drop table if exists "User" cascade;
 
 drop table if exists "UserAction" cascade;

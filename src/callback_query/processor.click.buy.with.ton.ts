@@ -144,7 +144,7 @@ async function handlerBuyWithTon(
     .catch(async (e) => {
       if (e === pTimeoutException) {
         await ctx.reply(
-          `🔸Buy transaction was not confirmed.\nPlease refer to TON network for the final result.`,
+          `🔸Buy transaction was not confirmed.\n\nPlease refer to TON network for the final result.`,
           {
             reply_markup: {
               inline_keyboard: [
