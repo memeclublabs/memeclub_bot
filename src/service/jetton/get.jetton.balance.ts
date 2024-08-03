@@ -1,7 +1,6 @@
 import TonConnect from "@tonconnect/sdk";
 import { TonClient, TupleItem } from "@ton/ton";
 import { isMainnet, tonTestOnly } from "../../com.utils";
-import { ENDPOINT_MAINNET_RPC, ENDPOINT_TESTNET_RPC } from "../../com.static";
 import { Address, beginCell } from "@ton/core";
 
 export async function getJettonWalletInfo(
@@ -24,7 +23,13 @@ export async function getJettonWalletInfo(
 
   try {
     const client = new TonClient({
-      endpoint: isMainnet() ? ENDPOINT_MAINNET_RPC : ENDPOINT_TESTNET_RPC,
+      // endpoint: isMainnet() ? ENDPOINT_MAINNET_RPC : ENDPOINT_TESTNET_RPC,
+      endpoint: isMainnet()
+        ? "https://toncenter.com/api/v2/jsonRPC"
+        : "https://testnet.toncenter.com/api/v2/jsonRPC",
+      apiKey:
+        "5ffbbb8d775362f8333f2767b530c643ed99a6e13950fcb3dc9137e4863f81fb",
+      timeout: 60000, // 60s 超时
     });
 
     // ------------
