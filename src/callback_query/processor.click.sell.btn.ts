@@ -86,7 +86,7 @@ export async function handlerClickSellBtn(ctx: MyContext, memecoinId: number) {
   }
   if (jettonBalanceResult.success && jettonBalanceResult.balance == 0) {
     await ctx.reply(
-      `🤡You don't have any balance of ${findMeme.name}(${findMeme.ticker}) to sell.`,
+      `🤡 You don't have any balance of ${findMeme.name}(${findMeme.ticker}) to sell.`,
     );
     return;
   }

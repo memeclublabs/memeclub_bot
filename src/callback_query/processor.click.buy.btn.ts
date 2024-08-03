@@ -2,6 +2,8 @@ import { MyContext } from "../global.types";
 import { buildMemecoinInfoText, contactAdminWithError } from "../com.utils";
 import prisma from "../prisma";
 import { InlineKeyboard } from "grammy";
+import { getConnector } from "../service/ton-connect/connector";
+import { handleConnectCommand } from "../service/ton-connect-commands-handlers";
 
 export async function processorClickBuyBtn(
   ctx: MyContext,
@@ -14,6 +16,14 @@ export async function processorClickBuyBtn(
 }
 
 export async function handlerClickBuyBtn(ctx: MyContext, memecoinId: number) {
+  const connector = getConnector(ctx.from?.id!);
+  await connector.restoreConnection();
+  if (!connector.connected) {
+    await ctx.reply("💎 Connect wallet to buy.");
+    await handleConnectCommand(ctx);
+    return;
+  }
+
   let findMeme = await prisma.memecoin.findUnique({
     where: { id: memecoinId },
   });
