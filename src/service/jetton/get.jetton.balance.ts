@@ -76,6 +76,8 @@ async function getJettonAddress(
   walletAddress: string,
   client: TonClient,
 ): Promise<Address> {
+  console.info("masterAddress", masterAddress);
+  console.info("walletAddress", walletAddress);
   let ownerAddressCell = beginCell()
     .storeAddress(Address.parse(walletAddress))
     .endCell();
@@ -86,10 +88,6 @@ async function getJettonAddress(
     "get_wallet_address",
     stack,
   );
-  if (queryResult && queryResult) {
-  }
-
   let jetton_master_result = queryResult.stack;
-  console.info(jetton_master_result);
   return jetton_master_result.readAddress();
 }
