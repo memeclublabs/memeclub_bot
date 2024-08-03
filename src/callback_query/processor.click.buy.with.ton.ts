@@ -149,11 +149,11 @@ async function handlerBuyWithTon(
       }
 
       if (e instanceof UserRejectsError) {
-        await ctx.reply(`You rejected the transaction`);
+        await ctx.reply(`🔸You rejected the transaction`);
         return;
       }
-
-      await ctx.reply(`Unknown error happened`);
+      console.error(e);
+      // await ctx.reply(`🔸Unknown error happened`);
     })
     .finally(() => connector.pauseConnection());
 

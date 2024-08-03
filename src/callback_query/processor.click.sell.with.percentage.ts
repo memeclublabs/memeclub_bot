@@ -48,7 +48,7 @@ export async function handlerSellWithPercentage(
 ) {
   const tgId = ctx.from?.id;
   if (!tgId) {
-    await contactAdminWithError(ctx);
+    await contactAdminWithError(ctx, "handlerSellWithPercentage");
     return;
   }
   const connector = getConnector(tgId);
@@ -115,11 +115,13 @@ export async function handlerSellWithPercentage(
   //   todo:
   //   todo:
   let sell_gas = 0.1;
-  let payloadCell = buildBurnTokenMsg(
-    (Number(jettonBalanceNanoBigint) * sellPercentage) / 100 / BASE_NANO_NUMBER,
-    userWalletAddress,
-    3n,
-  );
+  let burnAmount =
+    (Number(jettonBalanceNanoBigint) * sellPercentage) / 100 / BASE_NANO_NUMBER;
+  console.info("jettonBalanceNanoBigint", jettonBalanceNanoBigint);
+  console.info("sellPercentage", sellPercentage);
+  console.info("burnAmount", burnAmount);
+
+  let payloadCell = buildBurnTokenMsg(burnAmount, userWalletAddress, 3n);
   let payloadBase64 = payloadCell.toBoc().toString("base64");
   pTimeout(
     connector.sendTransaction({
@@ -198,16 +200,17 @@ export async function handlerSellWithPercentage(
     })
     .catch((e) => {
       if (e === pTimeoutException) {
-        ctx.reply(`Transaction was not confirmed`);
+        ctx.reply(`🔸Sell transaction was not confirmed.`);
         return;
       }
 
       if (e instanceof UserRejectsError) {
-        ctx.reply(`You rejected the transaction`);
+        ctx.reply(`🔸You rejected the sell transaction.`);
         return;
       }
 
-      ctx.reply(`Unknown error happened`);
+      console.error(e);
+      // ctx.reply(`Unknown error happened`);
     })
     .finally(() => connector.pauseConnection());
 
