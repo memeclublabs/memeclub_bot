@@ -59,7 +59,12 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
       const walletName =
         (await getWalletInfo(wallet.device.appName))?.name ||
         wallet.device.appName;
-      await ctx.reply(`${walletName} wallet connected successfully`);
+      await ctx.reply(
+        `<b>${walletName} wallet connected successfully</b>\n\n ${toUserFriendlyAddress(wallet.account.address)}`,
+        {
+          parse_mode: "HTML",
+        },
+      );
       unsubscribe();
       newConnectRequestListenersMap.delete(chatId);
     }
