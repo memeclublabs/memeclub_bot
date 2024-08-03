@@ -1,11 +1,7 @@
 import TonConnect from "@tonconnect/sdk";
 import { TonClient, TupleItem } from "@ton/ton";
 import { isMainnet, tonTestOnly } from "../../com.utils";
-import {
-  BASE_NANO_BIGINT,
-  ENDPOINT_MAINNET_RPC,
-  ENDPOINT_TESTNET_RPC,
-} from "../../com.static";
+import { ENDPOINT_MAINNET_RPC, ENDPOINT_TESTNET_RPC } from "../../com.static";
 import { Address, beginCell } from "@ton/core";
 
 export async function getJettonWalletInfo(
@@ -14,13 +10,13 @@ export async function getJettonWalletInfo(
 ): Promise<{
   success: boolean;
   msg?: string;
-  balance?: number;
+  nanoBalance?: bigint;
   jettonWalletAddress?: string;
 }> {
   let result: {
     success: boolean;
     msg?: string;
-    balance?: number;
+    nanoBalance?: bigint;
     jettonWalletAddress?: string;
   } = {
     success: false,
@@ -52,7 +48,7 @@ export async function getJettonWalletInfo(
     let jetton_wallet_result = jetton_wallet_tx.stack;
     let jettonBalanceNanoBigint = jetton_wallet_result.readBigNumber();
     result.success = true;
-    result.balance = Number(jettonBalanceNanoBigint / BASE_NANO_BIGINT);
+    result.nanoBalance = jettonBalanceNanoBigint;
     result.jettonWalletAddress = jettonWalletAddress.toString({
       bounceable: true,
       testOnly: tonTestOnly(),

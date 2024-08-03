@@ -5,6 +5,7 @@ import { InlineKeyboard } from "grammy";
 import { getJettonWalletInfo } from "../service/jetton/get.jetton.balance";
 import { getConnector } from "../service/ton-connect/connector";
 import { handleConnectCommand } from "../service/ton-connect-commands-handlers";
+import { BASE_NANO_NUMBER } from "../com.static";
 
 export async function processorClickSellBtn(
   ctx: MyContext,
@@ -84,14 +85,14 @@ export async function handlerClickSellBtn(ctx: MyContext, memecoinId: number) {
     );
     return;
   }
-  if (jettonBalanceResult.success && jettonBalanceResult.balance == 0) {
+  if (jettonBalanceResult.success && jettonBalanceResult.nanoBalance == 0n) {
     await ctx.reply(
       `🤡 You don't have any balance of ${findMeme.name}(${findMeme.ticker}) to sell.`,
     );
     return;
   }
 
-  let desc = `💰Your ${findMeme.ticker} Balance: ${jettonBalanceResult.balance}`;
+  let desc = `💰Your ${findMeme.ticker} Balance: ${(Number(jettonBalanceResult.nanoBalance!) / BASE_NANO_NUMBER).toFixed(2)}`;
 
   // description add meme balance of this user end.
 

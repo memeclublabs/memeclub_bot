@@ -1,25 +1,29 @@
 import * as dotenv from "dotenv";
-import { Address } from "@ton/core";
-import { toFriendlyAddress } from "./com.utils";
 // Load the environment variables
 dotenv.config();
 // Main function to handle the download and upload process
 
 (() => {
-  console.info(
-    toFriendlyAddress(
-      Address.parse("0QAAHhCqsOu88gmvcjLnZwBnRTbHZMIEucSqfFaAJBKhCngN"),
-    ),
-  );
+  const BASE_NANO_BIGINT: bigint = 1000000000n;
+  let a = 77525512860841n;
+  const BASE_NANO_NUMBER: number = 1000000000;
+  console.info(a);
+  console.info(a / BASE_NANO_BIGINT);
+  console.info((Number(a) / BASE_NANO_NUMBER).toFixed(2));
 
-  console.info(
-    toFriendlyAddress("kQAUO3ODqx2hB0wDlHm-4sVKe1VxLn5qUdcul_4AW0DPt9u4"),
-  );
-
-  console.info(
-    toFriendlyAddress("tUQBOop4AF9RNh2DG1N1yZfzFM28vZNUlRjAtjphOEVMd0j-8"),
-  );
-
+  // console.info(
+  //   toFriendlyAddress(
+  //     Address.parse("0QAAHhCqsOu88gmvcjLnZwBnRTbHZMIEucSqfFaAJBKhCngN"),
+  //   ),
+  // );
+  //
+  // console.info(
+  //   toFriendlyAddress("kQAUO3ODqx2hB0wDlHm-4sVKe1VxLn5qUdcul_4AW0DPt9u4"),
+  // );
+  //
+  // console.info(
+  //   toFriendlyAddress("tUQBOop4AF9RNh2DG1N1yZfzFM28vZNUlRjAtjphOEVMd0j-8"),
+  // );
   // console.info(typeof ActionTypes.InvitedPremium === "string");
   //
   // console.info(ActionTypes.InvitedPremium);

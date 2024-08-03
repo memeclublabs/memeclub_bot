@@ -1,10 +1,8 @@
 import { MyContext } from "../global.types";
-import { contactAdminWithError, isMainnet, tonviewerUrl } from "../com.utils";
+import { contactAdminWithError, tonviewerUrl } from "../com.utils";
 import prisma from "../prisma";
-import { TonClient } from "@ton/ton";
-import { ENDPOINT_MAINNET_RPC, ENDPOINT_TESTNET_RPC } from "../com.static";
 import { Address, toNano } from "@ton/core";
-import { buildBurnTokenMsg } from "../service/ton/dex/message/walletMsg";
+import { buildBurnNanoTokenMsg } from "../service/ton/dex/message/walletMsg";
 import {
   addTGReturnStrategy,
   pTimeout,
@@ -17,6 +15,7 @@ import { Prisma } from "@prisma/client";
 import { updateBuyOrSellReward } from "../service/user/user.dao";
 import { ActionTypes } from "../com.enums";
 import { getJettonWalletInfo } from "../service/jetton/get.jetton.balance";
+import { BASE_NANO_BIGINT } from "../com.static";
 
 export async function clickSellWithPercentage(
   ctx: MyContext,
@@ -69,12 +68,6 @@ export async function handlerSellWithPercentage(
     return;
   }
 
-  //    ==================================================================
-
-  const client = new TonClient({
-    endpoint: isMainnet() ? ENDPOINT_MAINNET_RPC : ENDPOINT_TESTNET_RPC,
-  });
-
   // ------------
   let userWalletAddressStr = connector.account?.address;
   if (!userWalletAddressStr) {
@@ -97,7 +90,7 @@ export async function handlerSellWithPercentage(
     );
     return;
   }
-  if (jettonBalanceResult.success && jettonBalanceResult.balance == 0) {
+  if (jettonBalanceResult.success && jettonBalanceResult.nanoBalance == 0n) {
     await ctx.reply(
       `🤡You don't have any balance of ${findMeme.name}(${findMeme.ticker}) to sell.`,
     );
@@ -105,11 +98,23 @@ export async function handlerSellWithPercentage(
   }
 
   let sell_gas = 0.1;
-  let burnAmount = (jettonBalanceResult.balance! * sellPercentage) / 100;
+  let nanoBurnAmount = jettonBalanceResult.nanoBalance!;
+  if (sellPercentage != 100) {
+    nanoBurnAmount = toNano(
+      (Number(jettonBalanceResult.nanoBalance! / BASE_NANO_BIGINT) *
+        sellPercentage) /
+        100,
+    );
+  }
+  console.info("nanoBalance", jettonBalanceResult.nanoBalance!);
   console.info("sellPercentage", sellPercentage);
-  console.info("burnAmount", burnAmount);
+  console.info("burnAmount", nanoBurnAmount);
 
-  let payloadCell = buildBurnTokenMsg(burnAmount, userWalletAddress, 3n);
+  let payloadCell = buildBurnNanoTokenMsg(
+    nanoBurnAmount,
+    userWalletAddress,
+    3n,
+  );
   let payloadBase64 = payloadCell.toBoc().toString("base64");
   pTimeout(
     connector.sendTransaction({
