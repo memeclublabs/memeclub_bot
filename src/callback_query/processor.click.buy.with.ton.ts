@@ -46,7 +46,7 @@ async function handlerBuyWithTon(
     await ctx.reply("Connect wallet to send transaction");
     return;
   }
-
+  let userAddress: string | undefined = connector.account?.address;
   let findMeme = await prisma.memecoin.findUnique({
     where: { id: memecoinId },
   });
@@ -91,7 +91,6 @@ async function handlerBuyWithTon(
     Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS),
   )
     .then(async () => {
-      let userAddress: string | undefined = connector.account?.address;
       if (!userAddress) {
         userAddress = toAddress.toString();
       }
@@ -144,12 +143,28 @@ async function handlerBuyWithTon(
     })
     .catch(async (e) => {
       if (e === pTimeoutException) {
-        await ctx.reply(`❗️Transaction was not confirmed`);
+        await ctx.reply(
+          `🔸Transaction was not confirmed.\nPlease refer to TON network for the final result.`,
+          {
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "🌐 View Transaction",
+                    url: tonviewerUrl(userAddress),
+                  },
+                ],
+              ],
+            },
+          },
+        );
         return;
       }
 
       if (e instanceof UserRejectsError) {
-        await ctx.reply(`🔸You rejected the transaction`);
+        await ctx.reply(
+          `🔸You rejected the transaction.\nPlease refer to TON network for the final result.`,
+        );
         return;
       }
       console.error(e);

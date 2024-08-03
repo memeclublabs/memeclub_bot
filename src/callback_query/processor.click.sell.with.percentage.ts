@@ -57,6 +57,7 @@ export async function handlerSellWithPercentage(
     await ctx.reply("Connect wallet to send transaction");
     return;
   }
+  let userAddress: string | undefined = connector.account?.address;
 
   let findMeme = await prisma.memecoin.findUnique({
     where: { id: memecoinId },
@@ -105,15 +106,13 @@ export async function handlerSellWithPercentage(
   );
   let jetton_wallet_result = jetton_wallet_tx.stack;
   let jettonBalanceNanoBigint = jetton_wallet_result.readBigNumber();
+  if (!jettonBalanceNanoBigint && jettonBalanceNanoBigint === 0n) {
+    await ctx.reply(
+      `You don't have any balance of ${findMeme.name}(${findMeme.ticker}) to sell.`,
+    );
+    return;
+  }
 
-  //    ==================================================================
-  //   todo:
-  //   todo: 没有余额，卖个毛线
-  //   todo: 没有余额，卖个毛线
-  //   todo: 没有余额，卖个毛线
-  //   todo: 没有余额，卖个毛线
-  //   todo:
-  //   todo:
   let sell_gas = 0.1;
   let burnAmount =
     (Number(jettonBalanceNanoBigint) * sellPercentage) / 100 / BASE_NANO_NUMBER;
@@ -143,7 +142,6 @@ export async function handlerSellWithPercentage(
     Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS),
   )
     .then(async () => {
-      let userAddress: string | undefined = connector.account?.address;
       if (!userAddress) {
         userAddress = jettonWalletAddress.toString();
       }
@@ -200,7 +198,21 @@ export async function handlerSellWithPercentage(
     })
     .catch((e) => {
       if (e === pTimeoutException) {
-        ctx.reply(`🔸Sell transaction was not confirmed.`);
+        ctx.reply(
+          `🔸Sell transaction was not confirmed. \nPlease refer to TON network for the final result.`,
+          {
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "🌐 View Transaction",
+                    url: tonviewerUrl(userAddress),
+                  },
+                ],
+              ],
+            },
+          },
+        );
         return;
       }
 
