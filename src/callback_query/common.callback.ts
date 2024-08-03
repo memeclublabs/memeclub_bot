@@ -12,6 +12,7 @@ import { triggerGetReferralLink } from "./trigger.get.referral.link";
 import { triggerViewMyFriends } from "./trigger.view.my.friends";
 import { triggerViewPointsHistory } from "./trigger.view.points.history";
 import { triggerCoinsCreated } from "./trigger.coins.created";
+import { triggerCoinsBought } from "./trigger.coins.bought";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   const callbacks = {
@@ -26,6 +27,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
     triggerViewMyFriends: triggerViewMyFriends,
     triggerViewPointsHistory: triggerViewPointsHistory,
     triggerCoinsCreated: triggerCoinsCreated,
+    triggerCoinsBought: triggerCoinsBought,
     ...walletMenuCallbacks,
   };
 

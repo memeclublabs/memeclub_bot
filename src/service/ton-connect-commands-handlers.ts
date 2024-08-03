@@ -44,7 +44,7 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
       `You have already connect ${connectedName} wallet\nYour address: ${toUserFriendlyAddress(
         connector.wallet!.account.address,
         connector.wallet!.account.chain === CHAIN.TESTNET,
-      )}\n\n Disconnect wallet firstly to connect a new one`,
+      )}\n\nDisconnect wallet firstly to connect a new one.`,
     );
 
     return;
