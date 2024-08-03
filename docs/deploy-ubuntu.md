@@ -38,7 +38,21 @@ git
 ```bash
 apt-get install git
 
-# 可以根据需要，将本机的密钥配置到 github 中，方便 git clone 
+# 可以根据需要，将本机的密钥配置到 github 中，方便 git clone
+https://docs.github.com/zh/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
+
+1. 生成新的 SSH 密钥并将其添加到 ssh-agent
+ssh-keygen -t ed25519 -C "gandrew.sideby@gmail.com"
+#ubuntu/.ssh/id_ed25519.pub
+
+#将 SSH 密钥添加到 ssh-agent
+eval "$(ssh-agent -s)"     ## 在后台启动 ssh 代理。
+ssh-add ~/.ssh/id_ed25519  ## 将 SSH 私钥添加到 ssh-agent。
+
+
+2. 向你的Github帐户添加新的 SSH 密钥
+https://docs.github.com/zh/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
+
 ```
 
 
@@ -46,21 +60,17 @@ node
 ```bash
 # 安装 20+ 版本的 nodejs
 https://nodejs.org/en/download/package-managernode
+https://nodejs.org/en/download/package-manager
 
-apt install ts-node
-apt install node-typescript
+sudo apt install ts-node
+sudo apt install node-typescript
 ```
 
 npm
 ```bash
 npm install -g pnpm
 npm install pm2 -g
-
-
 ```
-
-
-
 
 
 ## 一、安装和配置 postgresql
