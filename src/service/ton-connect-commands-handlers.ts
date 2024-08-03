@@ -60,7 +60,7 @@ export async function handleConnectCommand(ctx: MyContext): Promise<void> {
         (await getWalletInfo(wallet.device.appName))?.name ||
         wallet.device.appName;
       await ctx.reply(
-        `<b>💎${walletName} wallet connected successfully</b>\n ${toFriendlyAddress(wallet.account.address)}`,
+        `<b>💎 ${walletName} wallet connected successfully</b>\n ${toFriendlyAddress(wallet.account.address)}`,
         {
           parse_mode: "HTML",
         },

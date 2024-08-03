@@ -32,10 +32,10 @@ export async function waitNextSeqNo(
 ) {
   let nextSeqno: number = lastSeqNo;
   let counter = 0;
-  var start = performance.now();
+  const start = performance.now();
   while (nextSeqno < lastSeqNo + 1) {
     console.info("⚠️  before sleep ======>", Date.now());
-    await sleep(5000);
+    await sleep(2000);
     console.info("⚠️  after sleep ======>", Date.now());
     nextSeqno = await wallet_contract.getSeqno();
     counter = counter + 1;
