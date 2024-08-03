@@ -3,14 +3,18 @@ twitter -  𝕏 Twitter
 group - 👥 Chat Group
 news - 🎉 Announcement
 
-start - start
-connect -  connect
-my_wallet - my_wallet
-send_tx - send_tx
-disconnect - disconnect
+start - Start
+connect -  Connect wallet
+my_wallet - My wallet
+disconnect - Disconnect
+
 
 referral - referral
+
+
 profile - profile
+
+send_tx - send_tx
 
 
 

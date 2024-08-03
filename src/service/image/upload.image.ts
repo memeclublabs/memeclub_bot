@@ -10,9 +10,7 @@ export const uploadImageToGetUrl = async (
   const localFilePath = path.join(__dirname, filename);
 
   try {
-    console.log(`Downloading image from ${imageUrl}...`);
     await downloadImage(imageUrl, localFilePath);
-    console.log(`Image downloaded to ${localFilePath}`);
 
     console.log("Uploading image to the server...");
     const uploadResponse = await uploadImage(localFilePath);
@@ -55,6 +53,7 @@ const uploadImage = async (filepath: string): Promise<string> => {
       headers: {
         ...form.getHeaders(),
       },
+      timeout: 5000,
     },
   );
 
