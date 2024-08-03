@@ -35,8 +35,9 @@ export async function clickSellWithPercentage(
     let memecoinId = Number(split[0]);
     let percentage = Number(split[1]);
     await handlerSellWithPercentage(ctx, memecoinId, percentage);
-  } catch {
+  } catch (e) {
     console.error("ERROR: clickSellWithPercentage", data);
+    console.error(e);
     return;
   }
 }
