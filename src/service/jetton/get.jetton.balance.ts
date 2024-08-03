@@ -57,6 +57,12 @@ export async function getJettonWalletInfo(
       bounceable: true,
       testOnly: tonTestOnly(),
     });
+
+    console.info("============ getJettonWalletInfo =================");
+    console.info(jettonBalanceNanoBigint);
+    console.info(result);
+    console.info("=============================");
+
     return result;
   } catch (e) {
     let oneMsg = "Fail to get user's memecoin balance.";
