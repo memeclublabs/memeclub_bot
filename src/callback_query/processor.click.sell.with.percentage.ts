@@ -228,8 +228,9 @@ export async function handlerSellWithPercentage(
   }
 
   await ctx.reply(
-    `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`,
+    `<b>💎 Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction.</b>\n\n Refer to TON explorers for the final result.`,
     {
+      parse_mode: "HTML",
       reply_markup: {
         inline_keyboard: [
           [
