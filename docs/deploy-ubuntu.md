@@ -4,6 +4,9 @@ Ubuntu 22
 
 ## 一、 包管理器
 
+
+
+
 ```bash
 #更新软件包列表：
 sudo apt-get update
@@ -36,7 +39,7 @@ apt-get autoclean
 
 git
 ```bash
-apt-get install git
+sudo apt-get install git
 
 # 可以根据需要，将本机的密钥配置到 github 中，方便 git clone
 https://docs.github.com/zh/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account
@@ -68,8 +71,8 @@ sudo apt install node-typescript
 
 npm
 ```bash
-npm install -g pnpm
-npm install pm2 -g
+sudo npm install -g pnpm
+sudo npm install pm2 -g
 ```
 
 

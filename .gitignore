@@ -6,5 +6,6 @@ node_modules/
 .wrangler
 .env
 .env.aws
+.env.local
 !/dist/
 /dist/

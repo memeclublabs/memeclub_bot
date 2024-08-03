@@ -61,6 +61,7 @@ export async function getJettonWalletInfo(
 
     return result;
   } catch (e) {
+    console.error(e);
     let oneMsg = "Fail to get user's memecoin balance.";
     if (e instanceof Error) {
       oneMsg = e.message;
