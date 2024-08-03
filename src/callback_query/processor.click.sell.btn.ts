@@ -4,6 +4,7 @@ import prisma from "../prisma";
 import { InlineKeyboard } from "grammy";
 import { getJettonWalletInfo } from "../service/jetton/get.jetton.balance";
 import { getConnector } from "../service/ton-connect/connector";
+import { handleConnectCommand } from "../service/ton-connect-commands-handlers";
 
 export async function processorClickSellBtn(
   ctx: MyContext,
@@ -68,6 +69,7 @@ export async function handlerClickSellBtn(ctx: MyContext, memecoinId: number) {
   await connector.restoreConnection();
   if (!connector.connected) {
     await ctx.reply("💎 Connect wallet to sell.");
+    await handleConnectCommand(ctx);
     return;
   }
   let jettonBalanceResult = await getJettonWalletInfo(
