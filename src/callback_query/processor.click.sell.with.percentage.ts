@@ -1,18 +1,9 @@
 import { MyContext } from "../global.types";
-import {
-  contactAdminWithError,
-  isMainnet,
-  tonTestOnly,
-  tonviewerUrl,
-} from "../com.utils";
+import { contactAdminWithError, isMainnet, tonviewerUrl } from "../com.utils";
 import prisma from "../prisma";
-import { TonClient, TupleItem } from "@ton/ton";
-import {
-  BASE_NANO_NUMBER,
-  ENDPOINT_MAINNET_RPC,
-  ENDPOINT_TESTNET_RPC,
-} from "../com.static";
-import { Address, beginCell, toNano } from "@ton/core";
+import { TonClient } from "@ton/ton";
+import { ENDPOINT_MAINNET_RPC, ENDPOINT_TESTNET_RPC } from "../com.static";
+import { Address, toNano } from "@ton/core";
 import { buildBurnTokenMsg } from "../service/ton/dex/message/walletMsg";
 import {
   addTGReturnStrategy,
@@ -25,6 +16,7 @@ import { getConnector } from "../service/ton-connect/connector";
 import { Prisma } from "@prisma/client";
 import { updateBuyOrSellReward } from "../service/user/user.dao";
 import { ActionTypes } from "../com.enums";
+import { getJettonWalletInfo } from "../service/jetton/get.jetton.balance";
 
 export async function clickSellWithPercentage(
   ctx: MyContext,
@@ -93,31 +85,27 @@ export async function handlerSellWithPercentage(
     return;
   }
   let userWalletAddress = Address.parse(userWalletAddressStr!);
-
-  let jettonWalletAddress = await getJettonAddress(
+  let jettonBalanceResult = await getJettonWalletInfo(
+    connector,
     findMeme.masterAddress!,
-    userWalletAddressStr!,
-    client,
   );
-  // ------------
 
-  const jetton_wallet_tx = await client.runMethod(
-    jettonWalletAddress,
-    "get_wallet_data",
-  );
-  let jetton_wallet_result = jetton_wallet_tx.stack;
-  let jettonBalanceNanoBigint = jetton_wallet_result.readBigNumber();
-  if (!jettonBalanceNanoBigint && jettonBalanceNanoBigint === 0n) {
+  if (!jettonBalanceResult.success) {
     await ctx.reply(
-      `You don't have any balance of ${findMeme.name}(${findMeme.ticker}) to sell.`,
+      `♦️Fail to get balance of ${findMeme.name}(${findMeme.ticker}). \n ` +
+        jettonBalanceResult.msg,
+    );
+    return;
+  }
+  if (jettonBalanceResult.success && jettonBalanceResult.balance == 0) {
+    await ctx.reply(
+      `🤡You don't have any balance of ${findMeme.name}(${findMeme.ticker}) to sell.`,
     );
     return;
   }
 
   let sell_gas = 0.1;
-  let burnAmount =
-    (Number(jettonBalanceNanoBigint) * sellPercentage) / 100 / BASE_NANO_NUMBER;
-  console.info("jettonBalanceNanoBigint", jettonBalanceNanoBigint);
+  let burnAmount = (jettonBalanceResult.balance! * sellPercentage) / 100;
   console.info("sellPercentage", sellPercentage);
   console.info("burnAmount", burnAmount);
 
@@ -131,10 +119,7 @@ export async function handlerSellWithPercentage(
       ),
       messages: [
         {
-          address: jettonWalletAddress.toString({
-            bounceable: true,
-            testOnly: tonTestOnly(),
-          }),
+          address: jettonBalanceResult.jettonWalletAddress!,
           amount: "" + toNano(sell_gas),
           payload: payloadBase64,
         },
@@ -144,7 +129,7 @@ export async function handlerSellWithPercentage(
   )
     .then(async () => {
       if (!userAddress) {
-        userAddress = jettonWalletAddress.toString();
+        userAddress = jettonBalanceResult.jettonWalletAddress;
       }
       await ctx.reply(`✅ Sell transaction sent successfully`, {
         parse_mode: "HTML",
@@ -257,27 +242,4 @@ export async function handlerSellWithPercentage(
       },
     },
   );
-}
-
-async function getJettonAddress(
-  masterAddress: string,
-  walletAddress: string,
-  client: TonClient,
-): Promise<Address> {
-  let ownerAddressCell = beginCell()
-    .storeAddress(Address.parse(walletAddress))
-    .endCell();
-  let stack: TupleItem[] = [];
-  stack.push({ type: "slice", cell: ownerAddressCell });
-  const queryResult = await client.runMethod(
-    Address.parse(masterAddress),
-    "get_wallet_address",
-    stack,
-  );
-  if (queryResult && queryResult) {
-  }
-
-  let jetton_master_result = queryResult.stack;
-  console.info(jetton_master_result);
-  return jetton_master_result.readAddress();
 }
