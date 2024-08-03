@@ -196,9 +196,9 @@ export async function handlerSellWithPercentage(
 
       //   sell alert end
     })
-    .catch((e) => {
+    .catch(async (e) => {
       if (e === pTimeoutException) {
-        ctx.reply(
+        await ctx.reply(
           `🔸Sell transaction was not confirmed. \nPlease refer to TON network for the final result.`,
           {
             reply_markup: {
@@ -217,7 +217,7 @@ export async function handlerSellWithPercentage(
       }
 
       if (e instanceof UserRejectsError) {
-        ctx.reply(`🔸You rejected the sell transaction.`);
+        await ctx.reply(`🔸You rejected the sell transaction.`);
         return;
       }
 

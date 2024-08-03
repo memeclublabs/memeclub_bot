@@ -137,21 +137,21 @@ export async function handleSendTXCommand(ctx: MyContext): Promise<void> {
     }),
     Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS),
   )
-    .then(() => {
-      ctx.reply(`Transaction sent successfully`);
+    .then(async () => {
+      await ctx.reply(`Transaction sent successfully`);
     })
-    .catch((e) => {
+    .catch(async (e) => {
       if (e === pTimeoutException) {
-        ctx.reply(`Transaction was not confirmed`);
+        await ctx.reply(`Transaction was not confirmed`);
         return;
       }
 
       if (e instanceof UserRejectsError) {
-        ctx.reply(`You rejected the transaction`);
+        await ctx.reply(`You rejected the transaction`);
         return;
       }
 
-      ctx.reply(`Unknown error happened`);
+      await ctx.reply(`Unknown error happened`);
     })
     .finally(() => connector.pauseConnection());
 
