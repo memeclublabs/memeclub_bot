@@ -29,7 +29,7 @@ export async function getJettonWalletInfo(
         : "https://testnet.toncenter.com/api/v2/jsonRPC",
       apiKey:
         "aa74010f1ee273a1dcdfa6827f5b8265f9ea816876e52f90b4eec31ef40020af",
-      timeout: 60000, // 60s 超时
+      timeout: 2000, // 2s 超时
     });
 
     // ------------
