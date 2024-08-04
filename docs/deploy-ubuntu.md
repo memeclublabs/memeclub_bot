@@ -10,6 +10,7 @@ Ubuntu 22
 ```bash
 #更新软件包列表：
 sudo apt-get update
+sudo apt-get upgrade
 
 #升级已安装的软件包：
 apt list --upgradable
@@ -65,7 +66,7 @@ node
 https://nodejs.org/en/download/package-managernode
 https://nodejs.org/en/download/package-manager
 
-sudo apt install ts-node
+sudo apt install ts-node node-typescript
 sudo apt install node-typescript
 ```
 
