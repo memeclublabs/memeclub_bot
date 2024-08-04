@@ -7,7 +7,22 @@ export async function listMyMemes(ctx: MyContext): Promise<void> {
   let tgId = ctx.from?.id;
 
   let devCount = await prisma.memecoin.count({ where: { devTgId: tgId } });
-  let buyCount = await prisma.buyOrder.count({ where: { buyerTgId: tgId } });
+  let buyCount = 0;
+
+  let findBuyOrdersDistinct = await prisma.buyOrder.findMany({
+    where: { buyerTgId: ctx.from?.id },
+    distinct: ["memecoinId"],
+    select: {
+      memecoinId: true,
+    },
+    orderBy: {
+      createDt: "desc",
+    },
+    take: 30,
+  });
+  if (findBuyOrdersDistinct.length > 0) {
+    buyCount = findBuyOrdersDistinct.length;
+  }
 
   inlineKeyboard
     .text(

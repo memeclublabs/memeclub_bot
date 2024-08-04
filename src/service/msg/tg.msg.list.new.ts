@@ -1,9 +1,10 @@
 import { MyContext } from "../../global.types";
 import prisma from "../../prisma";
 import { InlineKeyboard } from "grammy";
-import { BuyOrder, Memecoin } from "@prisma/client";
+import { Memecoin } from "@prisma/client";
+import { DistinctMemecoin } from "../../callback_query/trigger.coins.bought";
 
-export function buildKeyboardWithBuyOrder(buyOrders: BuyOrder[]) {
+export function buildKeyboardWithBuyOrder(buyOrders: DistinctMemecoin[]) {
   const inlineKeyboard = new InlineKeyboard();
   let i = 0;
   for (const buyOrder of buyOrders) {
