@@ -13,6 +13,7 @@ import { triggerViewMyFriends } from "./trigger.view.my.friends";
 import { triggerViewPointsHistory } from "./trigger.view.points.history";
 import { triggerCoinsCreated } from "./trigger.coins.created";
 import { triggerCoinsBought } from "./trigger.coins.bought";
+import { triggerClaimPoints } from "./trigger.claim.points";
 
 export function on_callback_query(bot: Bot<MyContext>) {
   const callbacks = {
@@ -28,6 +29,7 @@ export function on_callback_query(bot: Bot<MyContext>) {
     triggerViewPointsHistory: triggerViewPointsHistory,
     triggerCoinsCreated: triggerCoinsCreated,
     triggerCoinsBought: triggerCoinsBought,
+    triggerClaimPoints: triggerClaimPoints,
     ...walletMenuCallbacks,
   };
 

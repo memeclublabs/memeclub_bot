@@ -20,14 +20,6 @@ export async function listAirdrop(ctx: MyContext): Promise<void> {
   const inlineKeyboard = new InlineKeyboard();
   inlineKeyboard
     .text(
-      "🔗 Get Referral Link",
-      JSON.stringify({
-        method: "triggerGetReferralLink",
-        data: `${ctx.from?.id}`,
-      }),
-    )
-    .row()
-    .text(
       "👬 My Friends",
       JSON.stringify({
         method: "triggerViewMyFriends",
@@ -39,6 +31,24 @@ export async function listAirdrop(ctx: MyContext): Promise<void> {
       JSON.stringify({
         method: "triggerViewPointsHistory",
         data: `${ctx.from?.id}`,
+      }),
+    )
+    .row()
+
+    .text(
+      "🔗 Get Referral Link",
+      JSON.stringify({
+        method: "triggerGetReferralLink",
+        data: `${ctx.from?.id}`,
+      }),
+    )
+
+    .row()
+    .text(
+      "⭐️ Claim Points to TON 💎",
+      JSON.stringify({
+        method: "triggerClaimPoints",
+        data: ``,
       }),
     );
   let startReferralLink = getStartReferralLink(findUser.refCode);
