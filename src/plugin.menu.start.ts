@@ -20,7 +20,7 @@ export function use_menu_plugin_start(bot: Bot<MyContext>) {
     })
     .row()
     .dynamic(async (ctx, range) => {
-      let referCode = ctx.session.referCode;
+      let referCode = ctx.session?.referCode;
 
       if (!referCode) {
         if (ctx.chat?.id) {
