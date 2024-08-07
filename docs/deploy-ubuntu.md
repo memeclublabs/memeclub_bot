@@ -87,16 +87,30 @@ apt install postgresql
 >  Homebrew 是 Ruby 编写的 macOS 包管理器，其中 formula（复数形式为 formulae） 是其软件包描述文件。
 
 ### 1.1 配置
+https://dev.to/johndotowl/postgresql-16-installation-on-ubuntu-2204-51ia
 
 PostgreSQL配置文件存储在/etc/postgresql/<version>/main目录中。
 例如，如果您安装 PostgreSQL 14，则配置文件存储在/etc/postgresql/14/main目录中。
 
 https://ubuntu.com/server/docs/install-and-configure-postgresql
 
+sudo -u postgres psql template1
 ALTER USER postgres with encrypted password 'memeclub2024localDB';
 
+echo memeclub2024localDB
+sudo -u postgres psql postgres
+
+sudo systemctl restart postgresql.service
+sudo apt install postgresql-client
+
+memeclub2024ps
+
+ssh ubuntu@52.76.112.159
+
 ```bash
-psql --host localhost --username postgres --password --dbname template1
+psql --host localhost --username postgres --password --dbname postgres
+
+
 \c postgres
 postgres=# SELECT * FROM public."User";
 postgres=#
@@ -134,7 +148,39 @@ template1=# \l
 ```
 
 
+## 数据导出导入
+
+DATABASE_URL=postgresql://postgres:vfqz6Ca7ZUHTgRm9Yyoe@database-meme-1.cluster-cz8a6es2i8of.ap-southeast-1.rds.amazonaws.com:5432/postgres?schema=public
+
+pg_dump -h your-aurora-endpoint -U your-username -d your-database-name -F c -b -v -f backup.dump
+pg_dump -h database-meme-1.cluster-cz8a6es2i8of.ap-southeast-1.rds.amazonaws.com -U postgres -d postgres -F c -b -v -f backup.dump
+
+
+pg_restore -h localhost -U your-local-username -d your-local-database-name -v /local/path/to/backup.dump
+pg_restore -h localhost -U postgres -d postgres -v ./backup.dump
+
+memeclub2024localDB
+
 
 ## PM2
 
 pm2 start app.js --name tgbot
+
+
+
+## Redis
+https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-linux/
+
+```bash
+
+apt update
+apt install redis
+systemctl start redis
+systemctl stop redis
+
+
+redis-cli
+ping
+
+
+```

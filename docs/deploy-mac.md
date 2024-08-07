@@ -193,3 +193,16 @@ brew services restart postgresql@16
 
 
 
+# 二、安装 Redis
+
+
+```bash
+brew install redis
+
+brew services start redis
+
+brew services info redis
+
+brew services stop redis
+
+```

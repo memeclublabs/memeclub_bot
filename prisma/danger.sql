@@ -3,6 +3,9 @@ select * from "User";
 select * from "UserAction";
 select * from "Group";
 select * from "Memecoin";
+
+delete from "Memecoin" where id =3;
+
 drop table if exists _prisma_migrations cascade;
 drop table if exists "User" cascade;
 drop table if exists "UserAction" cascade;
